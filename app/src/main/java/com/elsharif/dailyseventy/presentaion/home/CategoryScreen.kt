@@ -19,7 +19,9 @@ import androidx.navigation.NavController
 
 @Composable
 fun CategoryScreen(navController: NavController) {
-    val categories = listOf("Morning", "Evening", "Prayer", "Sleep") // Example categories
+
+    val categories = listOf("أذكار الصباح", "أذكار المساء", "أذكار بعد السلام من الصلاة المفروضة",
+        "تسابيح" ,"أذكار النوم" ,"أذكار الاستيقاظ" ,"أدعية قرآنية" ,"أدعية الأنبياء")
 
     Scaffold(
         topBar = { DashboardScreenTopBar() }

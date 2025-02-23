@@ -15,7 +15,7 @@ fun AppNavHost(navController: NavHostController) {
         }
         composable("zekkr_screen/{category}") { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: ""
-         //   ZekkrScreen(navController, category)
+            //ZekkrScreen(navController, category)
         }
     }
 }

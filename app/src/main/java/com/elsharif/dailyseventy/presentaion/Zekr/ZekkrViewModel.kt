@@ -13,8 +13,6 @@ class ZekkrViewModel @Inject constructor(
     private val zekrRepository: ZekrRepository
 ) : ViewModel() {
 
-    val categories = listOf("أذكار الصباح", "أذكار المساء", "أذكار بعد السلام من الصلاة المفروضة",
-        "تسابيح" ,"أذكار النوم" ,"أذكار الاستيقاظ" ,"أدعية قرآنية" ,"أدعية الأنبياء")
 
     private val _state = MutableStateFlow(ZekkrState()) // Holds UI state
     val state: StateFlow<ZekkrState> = _state.asStateFlow()
