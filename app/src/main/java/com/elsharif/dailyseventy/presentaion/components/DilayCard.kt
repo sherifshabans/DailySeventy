@@ -102,7 +102,7 @@ fun DailyTopBar(title:String) {
 }
 
 @Composable
-fun DropdownExample(
+fun dropdownExample(
     labelText: String,
     items: List<String>
 ):Pair<String,String>{

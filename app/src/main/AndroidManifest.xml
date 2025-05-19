@@ -17,10 +17,10 @@
         android:name=".DilayApp"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/doaa"
         android:label="@string/app_name"
         android:usesCleartextTraffic="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/doaa"
         android:supportsRtl="true"
         android:theme="@style/Theme.DailySeventy"
         tools:targetApi="31">
@@ -41,7 +41,7 @@
         <meta-data android:name="osmdroid.basePath" android:value="osmdroid"/>
         <meta-data android:name="osmdroid.cachePath" android:value="osmdroid/cache"/>
 
-        <receiver android:name=".util.SimpleCounterWidgetReceiver" android:exported="true">
+        <receiver android:name=".presentaion.widget.WidgetReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -52,8 +52,23 @@
 
         <!-- Register the refresh BroadcastReceiver -->
         <receiver
-            android:name=".util.WidgetRefreshReceiver"
+            android:name=".presentaion.widget.WidgetRefreshReceiver"
             android:exported="true"/>
+
+
+
+        <!-- Required for sharing file URIs -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
     </application>
 
 </manifest>

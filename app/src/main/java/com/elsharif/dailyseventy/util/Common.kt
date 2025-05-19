@@ -1,0 +1,55 @@
+package com.elsharif.dailyseventy.util
+
+import android.annotation.SuppressLint
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Build
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.FloatRange
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toBitmap
+import androidx.glance.BitmapImageProvider
+import androidx.glance.GlanceModifier
+import androidx.glance.LocalContext
+import androidx.glance.action.clickable
+import androidx.glance.appwidget.cornerRadius
+import androidx.glance.background
+import androidx.glance.layout.Box
+import androidx.glance.layout.padding
+import com.elsharif.dailyseventy.util.workmanager.LocationTrackerService.Action
+
+/**
+ * Adds rounded corners for the current view.
+ *
+ * On S+ it uses [GlanceModifier.cornerRadius]
+ * on <S it creates [ShapeDrawable] and sets background
+ *
+ * @param cornerRadius [Int] radius set to all corners of the view.
+ * @param color [Int] value of a color that will be set as background
+ * @param backgroundAlpha [Float] value of an alpha that will be set to background color - defaults to 1f
+ */
+@SuppressLint("RestrictedApi")
+fun GlanceModifier.cornerRadiusCompat(
+    cornerRadius: Int,
+    color: Color = Color(0xFFCDDDFF),
+    @FloatRange(from = 0.0, to = 1.0) backgroundAlpha: Float = 1f,
+): GlanceModifier {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        // For Android 12+ use native corner radius and background support
+        this.background(color.copy(alpha = backgroundAlpha))
+            .cornerRadius(cornerRadius.dp)
+    } else {
+        // For older Android versions, create a rounded ShapeDrawable
+        val radii = FloatArray(8) { cornerRadius.toFloat() }
+        val shape = ShapeDrawable(RoundRectShape(radii, null, null)).apply {
+            paint.color = ColorUtils.setAlphaComponent(color.toArgb(), (255 * backgroundAlpha).toInt())
+        }
+        val bitmap = shape.toBitmap(width = 150, height = 75)
+        this.background(BitmapImageProvider(bitmap))
+    }
+}

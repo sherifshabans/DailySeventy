@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.ui.theme.ubuntuFontFamily
-import com.elsharif.dailyseventy.util.CurvedScrollView
+import com.elsharif.dailyseventy.presentaion.components.CurvedScrollView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

@@ -138,7 +138,10 @@ dependencies {
 
     //For Widgets
 
-    implementation ("androidx.glance:glance:1.0.0-alpha05")
-    implementation ("androidx.glance:glance-appwidget:1.0.0-alpha05")
+    implementation ("androidx.glance:glance:1.1.1")
+    implementation ("androidx.glance:glance-appwidget:1.1.1")
+
+
+
 
 }

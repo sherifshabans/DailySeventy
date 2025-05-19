@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,7 +43,7 @@ fun CountCard(
 
     var localCount by remember { mutableStateOf(0) }
     var count by remember { mutableStateOf(zekkr.count.toInt()) }
-    val defaultColor = MaterialTheme.colorScheme.secondaryContainer
+    val defaultColor =   MaterialTheme.colorScheme.secondaryContainer
     var dominantColor by remember {
         mutableStateOf(defaultColor)
     }
@@ -110,7 +111,20 @@ fun CountCard(
 
             }
 
-            Box(
+            Row{
+
+                Box(
+                    modifier = Modifier
+                        .size(40.dp).padding(4.dp), // Set a fixed size for alignment
+                    contentAlignment = Alignment.BottomStart // Center the content inside
+                ) {
+                    val shareText = "${zekkr.content}\n\n${zekkr.description}"
+
+
+                    ShareTextIcon(text = shareText)
+
+                }
+                Box(
                 modifier = Modifier
                     .size(40.dp).padding(4.dp), // Set a fixed size for alignment
                 contentAlignment = Alignment.Center // Center the content inside
@@ -144,6 +158,8 @@ fun CountCard(
                     Box(modifier = Modifier.fillMaxSize()) // Empty box to handle click inside the circle
                 }
             }
+        }
+
         }
 
 
