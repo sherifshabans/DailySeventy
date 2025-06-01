@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.FloatRange
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
@@ -15,13 +12,8 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import androidx.glance.BitmapImageProvider
 import androidx.glance.GlanceModifier
-import androidx.glance.LocalContext
-import androidx.glance.action.clickable
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
-import androidx.glance.layout.Box
-import androidx.glance.layout.padding
-import com.elsharif.dailyseventy.util.workmanager.LocationTrackerService.Action
 
 /**
  * Adds rounded corners for the current view.
@@ -53,3 +45,22 @@ fun GlanceModifier.cornerRadiusCompat(
         this.background(BitmapImageProvider(bitmap))
     }
 }
+
+
+//MAlmahdy
+/*
+fun Calendar.getDayMonthYear(): Triple<Int, Int, Int> {
+    val calendar = Calendar.getInstance()
+    val year = calendar[Calendar.YEAR]
+    val month = calendar[Calendar.MONTH] + 1
+    val day = calendar[Calendar.DAY_OF_MONTH]
+    return Triple(day, month, year)
+}
+
+
+fun getTodayExact(): HijriCalendar = SystemClock.inLocalView().now(
+    HijriCalendar.family(), HijriCalendar.VARIANT_UMALQURA,
+    StartOfDay.EVENING // simple approximation => 18:00
+).toDate()
+
+*/

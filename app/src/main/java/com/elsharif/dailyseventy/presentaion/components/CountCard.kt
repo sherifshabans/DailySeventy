@@ -1,5 +1,6 @@
 package com.elsharif.dailyseventy.presentaion.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
@@ -25,13 +27,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.model.Zakker
-import com.elsharif.dailyseventy.presentaion.zekr.ZekkrViewModel
 import com.elsharif.dailyseventy.ui.theme.RadiusContainer
 
 
@@ -53,23 +55,47 @@ fun CountCard(
         modifier = modifier.padding(
             bottom = 8.dp,
             start = 8.dp,
-            end = 8.dp
+            end = 8.dp,
+            top = 4.dp
         )
+            .shadow(elevation = 2.dp, shape = RoundedCornerShape(RadiusContainer.dp)) // ⬅️ Add shadow
+            .clip(RoundedCornerShape(RadiusContainer.dp)) // ⬅️ Optional to match shadow shape
+            .background(Color.White)
+
+
     ) {
+
+        Image(
+            painter = painterResource(id = R.drawable.rightcorner), // ⬅️ Make sure you have this drawable
+            contentDescription = null,
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.TopStart)
+        )
+        Image(
+            painter = painterResource(id = R.drawable.leftcorner), // ⬅️ Make sure you have this drawable
+            contentDescription = null,
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.TopEnd)
+        )
+
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 12.dp)
                 .clip(RoundedCornerShape(RadiusContainer.dp))
-                .background(
+                /*.background(
                     Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.secondaryContainer,
                             dominantColor
                         )
                     )
-                ).clickable {
+                )*/
+                .background(Color.White)
+                .clickable {
                     if (count > 0) {  // Prevent negative values
                         count -= 1
                     }
@@ -82,7 +108,8 @@ fun CountCard(
                 modifier = Modifier.padding(12.dp),
                 text = zekkr.content,
                 style = MaterialTheme.typography.bodyLarge,
-           //     maxLines = 5
+           //     maxLines = 5,
+                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -92,7 +119,9 @@ fun CountCard(
                     modifier = Modifier.padding(12.dp),
                     //   maxLines = 2,
                     text = zekkr.description,   // Remove single quotes,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.scrim,
+
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -104,7 +133,8 @@ fun CountCard(
                     modifier = Modifier.padding(12.dp),
                     maxLines = 2,
                     text = zekkr.reference,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.scrim,
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -115,7 +145,7 @@ fun CountCard(
 
                 Box(
                     modifier = Modifier
-                        .size(40.dp).padding(4.dp), // Set a fixed size for alignment
+                        .size(50.dp).padding(4.dp), // Set a fixed size for alignment
                     contentAlignment = Alignment.BottomStart // Center the content inside
                 ) {
                     val shareText = "${zekkr.content}\n\n${zekkr.description}"
@@ -126,13 +156,13 @@ fun CountCard(
                 }
                 Box(
                 modifier = Modifier
-                    .size(40.dp).padding(4.dp), // Set a fixed size for alignment
+                    .size(50.dp).padding(4.dp), // Set a fixed size for alignment
                 contentAlignment = Alignment.Center // Center the content inside
             ) {
                 // Circular Progress Indicator
                 CircularProgressIndicator(
                     progress = { localCount.toFloat() / zekkr.count.toFloat() },
-                    modifier = Modifier.size(40.dp),
+                    modifier = Modifier.size(50.dp).padding(2.dp),
                     color = MaterialTheme.colorScheme.inverseSurface,
                     strokeWidth = 4.dp,
                     trackColor = MaterialTheme.colorScheme.inverseOnSurface,
@@ -142,7 +172,7 @@ fun CountCard(
                 Text(
                     text = "$count",
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 16.sp),
-                    color = Color.Black
+                    color = Color.Black,
                 )
 
                 // Clickable IconButton to decrement count
@@ -157,11 +187,11 @@ fun CountCard(
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) // Empty box to handle click inside the circle
                 }
+
             }
         }
 
         }
-
 
     }
 }

@@ -6,10 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
-import androidx.navigation.compose.rememberNavController
-import com.elsharif.dailyseventy.presentaion.home.AppNavHost
-import com.elsharif.dailyseventy.presentaion.zekr.ZekkrScreen
 import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
+import com.elsharif.dailyseventy.util.Navigation.UnifiedNavigationScaffold
 import com.elsharif.dailyseventy.util.workmanager.LocationManager
 import dagger.hilt.android.AndroidEntryPoint
 

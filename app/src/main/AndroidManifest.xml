@@ -41,7 +41,7 @@
         <meta-data android:name="osmdroid.basePath" android:value="osmdroid"/>
         <meta-data android:name="osmdroid.cachePath" android:value="osmdroid/cache"/>
 
-        <receiver android:name=".presentaion.widget.WidgetReceiver" android:exported="true">
+        <receiver android:name=".presentaion.widgets.ZekrWidget.WidgetReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -52,7 +52,7 @@
 
         <!-- Register the refresh BroadcastReceiver -->
         <receiver
-            android:name=".presentaion.widget.WidgetRefreshReceiver"
+            android:name=".presentaion.widgets.ZekrWidget.WidgetRefreshReceiver"
             android:exported="true"/>
 
 
@@ -68,6 +68,17 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+
+        <receiver
+            android:name=".presentaion.widgets.HijriDateWidget.MyClockWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget" />
+        </receiver>
 
     </application>
 

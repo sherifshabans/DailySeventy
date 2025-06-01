@@ -36,13 +36,12 @@ import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.ui.theme.ubuntuFontFamily
 import com.elsharif.dailyseventy.presentaion.components.CurvedScrollView
+import com.elsharif.dailyseventy.presentaion.components.DashboardScreenTopBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CategoryScreen(navController: NavController) {
 
-    val categories = listOf("أذكار الصباح", "أذكار المساء", "أذكار بعد السلام من الصلاة المفروضة",
-        "تسابيح" ,"أذكار النوم" ,"أذكار الاستيقاظ" ,"أدعية قرآنية" ,"أدعية الأنبياء")
 
     Scaffold(
         topBar = { DashboardScreenTopBar() }
@@ -135,25 +134,7 @@ fun CategoryScreen(navController: NavController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DashboardScreenTopBar () {
 
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = "سبعون مرة",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White // Optional: change text color
-            )
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFF294878) // Example: dark golden brown
-        )
-    )
-
-
-}
 @Composable
 fun CurvedScroll(navController: NavController) {
 
