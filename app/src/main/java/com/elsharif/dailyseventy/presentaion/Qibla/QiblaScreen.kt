@@ -1,5 +1,10 @@
 package com.elsharif.dailyseventy.presentaion.Qibla
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -7,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -22,6 +29,7 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QiblaScreen(
     viewModel: MainViewModel = hiltViewModel()
@@ -50,21 +58,41 @@ fun QiblaScreen(
             else -> "Turn left ${(360 - it).toInt()}°"
         }
     }
+    val isFacingQibla = angleToQibla != null && (angleToQibla <= 5f || angleToQibla >= 355f)
+    var feedbackTriggered by remember { mutableStateOf(false) }
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+    // Trigger vibration/sound when facing Qibla
+    LaunchedEffect(isFacingQibla) {
+        if (isFacingQibla && !feedbackTriggered) {
+            vibrator.vibrate(VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE))
+            feedbackTriggered = true
+        } else if (!isFacingQibla) {
+            feedbackTriggered = false
+        }
+    }
+    val needleColor = if (isFacingQibla) Color(0xFF93000A) else Color(0xFFDAD4A6)
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Azimuth (device): ${azimuth.toInt()}°")
+        Text("اتجاه الجهاز: ${azimuth.toInt()}°")
         qiblaDirection?.let {
-            Text("Qibla direction: ${it.toInt()}°")
-            Text("Turn: ${angleToQibla?.toInt()}°")
-            direction?.let { dir ->
-                Text("Direction: $direction")
+            Text("اتجاه القبلة: ${it.toInt()}°")
+            Text("الانحراف: ${angleToQibla?.toInt()}°")
+            direction?.let {
+                val dirArabic = when {
+                    it == "You're facing the Qibla" -> "أنت تواجه القبلة"
+                    it.contains("Turn right") -> "اتجه يمينًا ${angleToQibla?.toInt()}°"
+                    it.contains("Turn left") -> "اتجه يسارًا ${(360 - angleToQibla!!).toInt()}°"
+                    else -> ""
+                }
+                Text("الاتجاه: $dirArabic")
             }
         }
-
         Spacer(modifier = Modifier.height(40.dp))
 
         Box(
@@ -72,7 +100,7 @@ fun QiblaScreen(
             modifier = Modifier.size(500.dp)
         ) {
             val compassSize = 350.dp
-            val kabaaSize = 10.dp
+            val kabaaSize = 50.dp
             val radiusDp = compassSize / 2 - kabaaSize / 2
             val density = LocalDensity.current
             val radiusPx = with(density) { radiusDp.toPx() }
@@ -111,23 +139,24 @@ fun QiblaScreen(
                 textAlign = TextAlign.Center
             )
 
-            // Qibla needle
-            angleToQibla?.let { angle ->
-                Image(
-                    painter = painterResource(id = R.drawable.needle),
-                    contentDescription = "Qibla Needle",
-                    modifier = Modifier
-                        .size(172.dp)
-                        .graphicsLayer {
-                            rotationZ = angle
-                        }
-                )
-            }
+            // Needle that rotates with azimuth
+            Image(
+                painter = painterResource(id = R.drawable.needle),
+                contentDescription = "Qibla Needle",
+                modifier = Modifier
+                    .size(172.dp)
+                    .graphicsLayer {
+                        rotationZ = -azimuth
+                    },
+                colorFilter = ColorFilter.tint(needleColor)
 
-            /*angleToQibla?.let { qibla ->
-                val angleRad = Math.toRadians(qibla.toDouble())
+            )
+
+            // Kaaba at fixed Qibla direction
+            qiblaDirection?.let { direction ->
+                val angleRad = Math.toRadians(direction.toDouble())
                 val xPx = (radiusPx * cos(angleRad)).toFloat()
-                val yPx = (radiusPx * sin(angleRad)).toFloat()
+                val yPx = (-radiusPx * sin(angleRad)).toFloat()
 
                 Image(
                     painter = painterResource(id = R.drawable.kabaa),
@@ -142,8 +171,6 @@ fun QiblaScreen(
                         }
                 )
             }
-       */
-
         }
     }
 }
