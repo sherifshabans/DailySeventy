@@ -9,7 +9,6 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.elsharif.dailyseventy.R
@@ -30,17 +29,31 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class RegisterPrayerTimesWorker(private val context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+class RegisterPrayerTimesWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted params: WorkerParameters
+) : CoroutineWorker(context, params) {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted appContext: Context,
+            @Assisted params: WorkerParameters
+        ): RegisterPrayerTimesWorker
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         return try {
+            Log.d(TAG, "doWork: Starting prayer times registration")
+            
             val preferences = AppPreferences(applicationContext)
             val location = preferences.currentLocation
             val method = preferences.method
 
+            Log.d(TAG, "doWork: Got preferences, location: $location, method: $method")
 
-             val prayerTimes: GetPrayerTimesUseCase by lazy {
+            val prayerTimes: GetPrayerTimesUseCase by lazy {
                 val appContext = applicationContext
                 val entryPoint = EntryPointAccessors.fromApplication(appContext, WorkerEntryPoint::class.java)
                 entryPoint.getPrayerTimesUseCase()
@@ -58,8 +71,12 @@ class RegisterPrayerTimesWorker(private val context: Context, params: WorkerPara
             val prayerTimingsList = withContext(Dispatchers.IO) {
                 prayerTimings.first()
             }
+            
+            Log.d(TAG, "doWork: Got prayer timings: ${prayerTimingsList.size} prayers")
 
             prayerTimingsList.forEachIndexed { idx, prayerTiming ->
+                Log.d(TAG, "Processing prayer: ${prayerTiming.prayer.name}, time: ${prayerTiming.time}, date: ${prayerTiming.date}")
+                
                 val imgId = context.resources.getIdentifier(
                     prayerTiming.prayer.imageId, "drawable",
                     context.packageName
@@ -82,32 +99,40 @@ class RegisterPrayerTimesWorker(private val context: Context, params: WorkerPara
 
                 val prayerTag = "${prayerTiming.prayer.name} $prayerTime"
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
-                val timeInMillis =
-                    LocalDateTime
-                        .from(formatter.parse("$prayerDate $prayerTime"))
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant()
-                        .toEpochMilli()
-                Log.d(TAG, "Parsed time string: ${prayerDate} ${prayerTime}")
+                val dateTimeString = "$prayerDate $prayerTime"
+                Log.d(TAG, "Parsing date time string: $dateTimeString")
+                
+                try {
+                    val timeInMillis =
+                        LocalDateTime
+                            .from(formatter.parse(dateTimeString))
+                            .atZone(ZoneId.systemDefault())
+                            .toInstant()
+                            .toEpochMilli()
+                    Log.d(TAG, "Parsed time in millis: $timeInMillis")
+                    Log.d(TAG, "Current time in millis: ${System.currentTimeMillis()}")
 
-                Log.d(TAG, "doWork: $timeInMillis")
+                    if (timeInMillis > System.currentTimeMillis()) {
+                        Log.d(TAG, "Setting alarm for: $prayerTag at $timeInMillis")
 
-                if (timeInMillis > System.currentTimeMillis()) {
-                    Log.d(TAG, "didn't pass: $prayerTag $timeInMillis")
-
-                    setAlarm(
-                        id = idx,
-                        time = timeInMillis,
-                        icon = imgId,
-                        title = "${context.getString(R.string.prayer)} $prayerName " + context.getString(
-                            R.string.prayer_is_now
-                        ),
-                        content = "${context.getString(R.string.prayer_is_now)} ${
-                            context.getString(
+                        setAlarm(
+                            id = idx,
+                            time = timeInMillis,
+                            icon = imgId,
+                            title = "${context.getString(R.string.prayer)} $prayerName " + context.getString(
                                 R.string.prayer_is_now
-                            )
-                        }"
-                    )
+                            ),
+                            content = "${context.getString(R.string.prayer_is_now)} ${
+                                context.getString(
+                                    R.string.prayer_is_now
+                                )
+                            }"
+                        )
+                    } else {
+                        Log.d(TAG, "Prayer time already passed: $prayerTag at $timeInMillis")
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error parsing date time: ${e.message}")
                 }
             }
 
@@ -124,20 +149,38 @@ class RegisterPrayerTimesWorker(private val context: Context, params: WorkerPara
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun parseTime(inputTime: String): String {
+        Log.d(TAG, "parseTime: Input time string: $inputTime")
+        
         val timeStartIndex = inputTime.indexOf(':') - 2
         val timeEndIndex = inputTime.indexOf('(') - 1
+        
+        Log.d(TAG, "parseTime: timeStartIndex: $timeStartIndex, timeEndIndex: $timeEndIndex")
+        
+        if (timeStartIndex < 0 || timeEndIndex <= timeStartIndex) {
+            Log.e(TAG, "parseTime: Invalid time format, using fallback")
+            return "12:00 PM"
+        }
+        
         val extractedTime = inputTime.substring(timeStartIndex, timeEndIndex)
+        Log.d(TAG, "parseTime: Extracted time: $extractedTime")
 
-        val inputFormat = DateTimeFormatter.ofPattern("HH:mm")
-        val time = LocalTime.parse(extractedTime, inputFormat)
+        try {
+            val inputFormat = DateTimeFormatter.ofPattern("HH:mm")
+            val time = LocalTime.parse(extractedTime, inputFormat)
 
-
-        val outputFormat = DateTimeFormatter.ofPattern("hh:mm a")
-        return outputFormat.format(time)
+            val outputFormat = DateTimeFormatter.ofPattern("hh:mm a")
+            val result = outputFormat.format(time)
+            Log.d(TAG, "parseTime: Parsed result: $result")
+            return result
+        } catch (e: Exception) {
+            Log.e(TAG, "parseTime: Error parsing time: ${e.message}")
+            return "12:00 PM"
+        }
     }
 
     @SuppressLint("ObsoleteSdkInt")
     private fun setAlarm(id: Int, time: Long, icon: Int, title: String, content: String) {
+        Log.d(TAG, "setAlarm: Setting alarm for id=$id, time=$time, title=$title")
         runCatching {
             val alarmManager =
                 context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -160,8 +203,10 @@ class RegisterPrayerTimesWorker(private val context: Context, params: WorkerPara
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi)
+                Log.d(TAG, "setAlarm: Used setExactAndAllowWhileIdle for API ${Build.VERSION.SDK_INT}")
             } else {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pi)
+                Log.d(TAG, "setAlarm: Used setExact for API ${Build.VERSION.SDK_INT}")
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

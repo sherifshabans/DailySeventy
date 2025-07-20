@@ -1,8 +1,12 @@
 package com.elsharif.dailyseventy.di.binds
 
+import com.elsharif.dailyseventy.domain.data.datasource.AzkarDatasourceImp
+import com.elsharif.dailyseventy.domain.data.datasource.NamesOfAllahDatasourceImp
 import com.elsharif.dailyseventy.domain.data.datasource.PrayerTimesDataSourceImp
 import com.elsharif.dailyseventy.domain.data.datasource.QuranDatasourceDatabaseImp
 import com.elsharif.dailyseventy.domain.data.datasource.TasbeehDatasourceLocalImp
+import com.example.core.data.datasource.AzkarDatasource
+import com.example.core.data.datasource.NamesOfAllahDatasource
 import com.example.core.data.datasource.PrayerTimesDatasource
 import com.example.core.data.datasource.QuranDatasource
 import com.example.core.data.datasource.TasbeehDatasource
@@ -34,6 +38,16 @@ abstract class DatasourceModule {
         impl: TasbeehDatasourceLocalImp
     ): TasbeehDatasource
 
+    @Binds
+    @Singleton
+    abstract fun bindAzkarDatasource(
+        impl: AzkarDatasourceImp
+    ): AzkarDatasource
 
+    @Binds
+    @Singleton
+    abstract fun bindNamesOfAllahDatasource(
+        impl: NamesOfAllahDatasourceImp
+    ): NamesOfAllahDatasource
 
 }

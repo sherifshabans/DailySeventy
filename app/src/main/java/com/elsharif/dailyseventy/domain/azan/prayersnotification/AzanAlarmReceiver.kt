@@ -19,6 +19,8 @@ class AzanAlarmReceiver : BroadcastReceiver() {
 
     private val TAG = "AzanAlarmReceiver"
     override fun onReceive(context: Context, intent: Intent) {
+        Log.d(TAG, "onReceive: Alarm received with action: ${intent.action}")
+        
         val i = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
@@ -26,6 +28,8 @@ class AzanAlarmReceiver : BroadcastReceiver() {
         val title = intent.getStringExtra("TITLE")
         val icon = intent.getIntExtra("ICON", R.mipmap.ic_launcher)
         val id = intent.getIntExtra("ID",0)
+        
+        Log.d(TAG, "onReceive: Received prayer notification - title: $title, content: $content, id: $id")
 
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(
@@ -44,12 +48,16 @@ class AzanAlarmReceiver : BroadcastReceiver() {
         sound: Uri,
         pendingIntent: PendingIntent
     ) {
+        Log.d(TAG, "sendNotification: Sending notification - title: $title, content: $content")
+        
         val manager = context
             .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationBuilder =
             createNotificationBuilder(context, iconId, title, content, sound, pendingIntent)
         createNotificationChannel(manager, sound)
         manager.notify(0, notificationBuilder.build())
+        
+        Log.d(TAG, "sendNotification: Notification sent successfully")
     }
 
     private fun createNotificationBuilder(

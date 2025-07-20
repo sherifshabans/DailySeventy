@@ -5,8 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import androidx.work.WorkManager
+import com.elsharif.dailyseventy.domain.azan.prayersnotification.PrayerTimesWorkerFactory
 import com.elsharif.dailyseventy.util.workmanager.LocationTrackerService
 import com.example.core.usecase.GetQuranPageAyaWithTafseerUseCase
 import com.example.core.usecase.GetSoraByPageNumberUseCase
@@ -19,7 +20,10 @@ import net.time4j.android.ApplicationStarter
 import javax.inject.Inject
 
 @HiltAndroidApp
-class DilayApp : Application(){
+class DilayApp : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: PrayerTimesWorkerFactory
 
 
 
@@ -55,6 +59,12 @@ class DilayApp : Application(){
             getSora = entryPoint.getSora(),
             getQuran = entryPoint.getQuran()
         )
+    }
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
     }
 }
 

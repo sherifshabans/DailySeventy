@@ -28,6 +28,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
+import com.elsharif.dailyseventy.domain.azan.prayersnotification.PrayerTimesTestUtil
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -49,33 +50,7 @@ class MainActivity : ComponentActivity() {
     )
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ActivityCompat.requestPermissions(
-            this, permissions, 100
-        )
-        MainScope().launch {
-            appPreferences.isFirstTime.collect {
-                if (it) {
-                    setCurrentLanguage("ar")
-                    AppPreferences(this@MainActivity).setIsFirstTime()
-                }
-            }
-        }
 
-        enableEdgeToEdge()
-        requestIgnoreBatteryOptimization()
-
-        setContent {
-            DailySeventyTheme {
-
-                val context = LocalContext.current
-
-                UnifiedNavigationScaffold(context)
-            }
-        }
-    }
 
 
     private fun registerPrayersAzan() {
@@ -108,10 +83,50 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ActivityCompat.requestPermissions(
+            this, permissions, 100
+        )
+        MainScope().launch {
+            appPreferences.isFirstTime.collect {
+                if (it) {
+                    setCurrentLanguage("ar")
+                    AppPreferences(this@MainActivity).setIsFirstTime()
+                }
+            }
+        }
+
+        enableEdgeToEdge()
+        requestIgnoreBatteryOptimization()
         registerPrayersAzan()
 
+        setContent {
+            DailySeventyTheme {
+
+                val context = LocalContext.current
+
+                UnifiedNavigationScaffold(context)
+                
+                // Add test buttons for debugging (remove in production)
+                androidx.compose.material3.Button(
+                    onClick = { 
+                        PrayerTimesTestUtil.testPrayerTimesWorker(context)
+                    }
+                ) {
+                    androidx.compose.material3.Text("Test Prayer Worker")
+                }
+                
+                androidx.compose.material3.Button(
+                    onClick = { 
+                        PrayerTimesTestUtil.testAlarmManager(context)
+                    }
+                ) {
+                    androidx.compose.material3.Text("Test Alarm Manager")
+                }
+            }
+        }
     }
 
 }
