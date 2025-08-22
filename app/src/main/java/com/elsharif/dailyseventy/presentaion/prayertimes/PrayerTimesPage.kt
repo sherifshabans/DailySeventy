@@ -71,6 +71,7 @@ private const val TAG = "PrayerTimesPage"
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PrayerTimesPage(viewModel: PrayerTimeViewModel = hiltViewModel()) {
+
     val currentLocation by viewModel.currentLocationFlow.collectAsState(GeoPoint(30.0, 30.0))
     val selectedDate by viewModel.currentDateFlow.collectAsState(LocalDate.now())
     val prayerTimesAuthorities by viewModel.prayerTimesAuthoritiesFlow.collectAsState(listOf())
@@ -208,11 +209,12 @@ private fun PrayerTimesViews(
     }
 }
 
+// I need to find
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun PrayerTimeListItem(uiPrayerTime: UiPrayerTime) {
+internal fun PrayerTimeListItem(uiPrayerTime: UiPrayerTime) {
     var remainingTime by remember { mutableStateOf("00:00:00") }
-    val fontSize = 19.sp
+    val fontSize = 14.sp
     val currentTime = LocalTime.now()
     var remainingDuration =
         Duration.between(

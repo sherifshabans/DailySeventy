@@ -43,7 +43,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.elsharif.dailyseventy.presentaion.components.DashboardScreenTopBar
+import com.elsharif.dailyseventy.util.Screen
 import java.time.LocalDate
 import java.time.chrono.HijrahDate
 import java.time.format.DateTimeFormatter
@@ -59,6 +61,7 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HijriCalendar(
+    navController: NavController,
     selectedDate: HijrahDate,
     daysColor: Color = MaterialTheme.colorScheme.primary,
     selectedDayTextColor: Color = MaterialTheme.colorScheme.primary,
@@ -88,7 +91,7 @@ fun HijriCalendar(
     )
 
     Scaffold(
-        topBar = { DashboardScreenTopBar() }
+        topBar = { DashboardScreenTopBar(Screen.Hijri.route, navController =navController ) }
     ) { paddingValues ->
 
 
@@ -109,7 +112,7 @@ fun HijriCalendar(
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(16.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(16.dp))
                     .padding(8.dp),
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = 4.dp
@@ -118,7 +121,8 @@ fun HijriCalendar(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.secondary),
                     horizontalAlignment = Alignment.CenterHorizontally,
 
                     ) {
@@ -262,7 +266,8 @@ fun HijriCalendar(
                         .fillMaxWidth()
                         .padding(8.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, Color.LightGray, shape = RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.secondary)
+                        .border(1.dp, MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(16.dp))
                         .padding(8.dp),
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 4.dp
@@ -275,7 +280,6 @@ fun HijriCalendar(
                         style = TextStyle(fontSize = 18.sp, color = Color.White),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                          .background(MaterialTheme.colorScheme.primary, CircleShape)
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     )
 

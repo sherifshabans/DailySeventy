@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.elsharif.dailyseventy.domain.friday.scheduleFridayReminders
 import com.elsharif.dailyseventy.presentaion.prayertimes.model.UiPrayerTime
 import com.elsharif.dailyseventy.presentaion.prayertimes.model.UiPrayerTimesAuthority
 import com.example.core.domain.prayertiming.DomainPrayerTiming
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
@@ -60,7 +62,7 @@ class PrayerTimeViewModel @Inject constructor(
         getCurrentPrayerTimesAuthorityUseCase().map { UiPrayerTimesAuthority(it.id, it.name) }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    val prayerTimesFlow =
+    internal val prayerTimesFlow =
         combine(
             currentLocationFlow,
             currentDateFlow,
@@ -100,6 +102,8 @@ class PrayerTimeViewModel @Inject constructor(
             }
         }
 
+
+
     fun updateLocation(location: GeoPoint) = viewModelScope.launch {
         setUserLocationUseCase(location.latitude, location.longitude).collect()
     }
@@ -111,6 +115,52 @@ class PrayerTimeViewModel @Inject constructor(
         setCurrentPrayerTimesAuthorityUseCase(
             DomainPrayerTimingSchool(prayerTimesAuthority.idx, prayerTimesAuthority.name)
         ).collect()
+    }
+
+
+    // 🔔 Schedule Friday Reminders using Dhuhr & Asr
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun scheduleFridayRemindersFromPrayerTimes() {
+        viewModelScope.launch {
+            prayerTimesFlow.collect { prayers ->
+                val duhr = prayers.firstOrNull { it.name.contains("Dhuhr", true) }
+                val asr = prayers.firstOrNull { it.name.contains("Asr", true) }
+
+                if (duhr != null && asr != null) {
+                    val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+                    val duhrTime = LocalTime.parse(duhr.time, formatter)
+                    val asrTime = LocalTime.parse(asr.time, formatter)
+
+                    scheduleFridayReminders(
+                        context,
+                        duhrTime.hour, duhrTime.minute,
+                        asrTime.hour, asrTime.minute
+                    )
+                }
+            }
+        }
+    }
+
+
+    // for third times of night
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getNightPrayerTimes(): Pair<LocalTime, LocalTime>? {
+        val prayersToday = runCatching {
+            prayerTimesFlow.firstOrNull()
+        }.getOrNull() ?: return null
+
+        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
+
+        val maghribTime = prayersToday.firstOrNull { it.name.contains("Maghrib", true) }?.time
+            ?.let { LocalTime.parse(it, formatter) }
+
+        val fajrTime = prayersToday.firstOrNull { it.name.contains("Fajr", true) }?.time
+            ?.let { LocalTime.parse(it, formatter) }
+
+        if (maghribTime != null && fajrTime != null) {
+            return Pair(maghribTime, fajrTime)
+        }
+        return null
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

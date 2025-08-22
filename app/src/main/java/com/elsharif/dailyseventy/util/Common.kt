@@ -6,6 +6,7 @@ import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
 import androidx.annotation.FloatRange
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
@@ -78,3 +79,26 @@ fun getTodayExact(): HijriCalendar = SystemClock.inLocalView().now(
 ).toDate()
 
 */
+
+
+fun Color.adjustBrightness(factor: Float): Color {
+    return Color(
+        red = (red * factor).coerceIn(0f, 1f),
+        green = (green * factor).coerceIn(0f, 1f),
+        blue = (blue * factor).coerceIn(0f, 1f),
+        alpha = alpha
+    )
+}
+
+fun getAdaptiveGradient(baseColor: Color): Brush {
+    // simple luminance check
+    val luminance = 0.299f * baseColor.red + 0.587f * baseColor.green + 0.114f * baseColor.blue
+    val endColor = if (luminance < 0.5f) {
+        // dark → make lighter
+        baseColor.adjustBrightness(1.4f)
+    } else {
+        // light → make darker
+        baseColor.adjustBrightness(0.7f)
+    }
+    return Brush.horizontalGradient(listOf(baseColor, endColor))
+}

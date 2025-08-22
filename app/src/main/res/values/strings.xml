@@ -17,6 +17,12 @@
     <string name="dark_mode">Night mode</string>
     <string name="hijri_calendar">Hijri Calendar</string>
     <string name="prayer">prayer</string>
+
+    <string name="prayer_is_in_10_minutes">prayer is in 10 minutes</string>
+
+    <string name="is_coming_soon">Is Coming Soon</string>
+
+
     <string name="prayer_is_now">Prayer is NOW!</string>
     <string name="search">Search</string>
     <string name="search_icon">Search Icon</string>
@@ -29,6 +35,6 @@
     <string name="sun_rise">Sunrise</string>
     <string name="prayers_time_authorization">Prayers Time Authority</string>
     <string name="pick_location_acurrately">Pick Location Acurrately</string>
-    <string name="ZEKR">الأذكار</string>
+    <string name="ZEKR">الصفحة الرئيسية</string>
 
 </resources>

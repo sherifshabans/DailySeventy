@@ -35,6 +35,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.elsharif.dailyseventy.R
+import com.elsharif.dailyseventy.presentaion.home.view.remembrances
 import com.elsharif.dailyseventy.util.cornerRadiusCompat
 
 object ZekerWidget : GlanceAppWidget() {
@@ -58,19 +59,6 @@ object ZekerWidget : GlanceAppWidget() {
 
 
 
-    private val remembrances = listOf(
-        "المُحبّ ينبغي أن لا يتركَ وردَ الصَّلاة والسّلام على سيدنا رسولِ الله صلى الله عليه وسلّم، فإنّ المحبّ لا يغفل عن حبيبه...",
-        "سبحان الله",
-        "الحمد لله",
-        "لا إله إلا الله",
-        "الله أكبر",
-        "أستغفر الله",
-        "اللهم صل وسلم على نبينا محمد",
-        "لا حول ولا قوة إلا بالله",
-        "سبحان الله وبحمده، سبحان الله العظيم",
-        "اللهم اغفر لي",
-        "اللهم اجعلني من التوابين"
-    )
 
     private fun getCurrentZikr(): String {
         val currentTime = System.currentTimeMillis()

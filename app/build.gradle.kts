@@ -115,7 +115,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-
     // Gson ,serialization
     implementation ("com.google.code.gson:gson:2.8.8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")

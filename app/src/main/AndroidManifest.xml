@@ -15,8 +15,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-     <uses-permission
+
+    <uses-permission
         android:name="android.permission.USE_EXACT_ALARM"
         tools:ignore="ExactAlarm" />
 
@@ -56,6 +58,10 @@
 
 
 
+
+        <receiver
+            android:name=".domain.friday.FridayReceiver"
+            android:exported="true" />
 
         <service
             android:name=".util.workmanager.LocationTrackerService"
@@ -104,6 +110,8 @@
         </receiver>
 
 
+
+
         <receiver
             android:name=".domain.zekr.ZekrAlarmReceiver"
             android:exported="false"/>
@@ -111,12 +119,24 @@
         <receiver
             android:name=".domain.azan.prayersnotification.AzanAlarmReceiver"
             android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </receiver>
+            android:exported="false"/>
 
+        <receiver
+            android:name=".domain.preAzan.PreAzanAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+
+        <!--
+                //PreAzanReminderReceiver-->
+<!--
+        <receiver
+
+            android:name=".domain.preAzan.PreAzanAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+-->
 
 
 

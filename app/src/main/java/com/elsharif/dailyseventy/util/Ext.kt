@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.core.os.LocaleListCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import com.elsharif.dailyseventy.presentaion.widgets.PrayerWidget.PrayerTimesWidget
 import com.elsharif.dailyseventy.util.emit
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.FlowCollector
@@ -98,3 +100,11 @@ private val negative = floatArrayOf(
 )
 
 fun ColorFilter.Companion.inverse() = colorMatrix(ColorMatrix(negative).apply { setToSaturation(1f) })
+
+
+suspend fun Context.updatePrayerTimesWidget() {
+    val ids = GlanceAppWidgetManager(this).getGlanceIds(PrayerTimesWidget::class.java)
+    ids.forEach {
+        PrayerTimesWidget.update(this, it)
+    }
+}

@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.presentaion.components.CountCard
 import com.elsharif.dailyseventy.presentaion.components.DashboardScreenTopBar
+import com.elsharif.dailyseventy.util.getAdaptiveGradient
 
 @Composable
 fun ZekkrScreen(
@@ -36,21 +37,27 @@ fun ZekkrScreen(
 
 
 
+
     LaunchedEffect(category) {
         viewModel.onEvent(ZekkrEvent.SelectCategory(category)) // ✅ Fetch azkaar for category
     }
+    val primary = MaterialTheme.colorScheme.primary
+    val gradient = getAdaptiveGradient(primary)
 
 
     Scaffold(
         //snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        topBar = {DashboardScreenTopBar()}
+        topBar = {DashboardScreenTopBar(
+            name = category,
+            navController =navController
+        )}
     ) {paddingValues ->
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.inversePrimary)
+                .background(gradient)
         ) {
             items(state.azkaar.size) { index ->
                 val zekr = state.azkaar[index]

@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,8 +23,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.core.presentationSensor.MainViewModel
+import com.elsharif.dailyseventy.presentaion.components.DashboardScreenTopBar
+import com.elsharif.dailyseventy.util.Screen
 import com.elsharif.dailyseventy.util.workmanager.LocationManager
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -32,6 +36,7 @@ import kotlin.math.sin
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QiblaScreen(
+    navController: NavController,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -72,6 +77,11 @@ fun QiblaScreen(
         }
     }
     val needleColor = if (isFacingQibla) Color(0xFF93000A) else Color(0xFFDAD4A6)
+
+    Scaffold(
+        topBar = { DashboardScreenTopBar(Screen.Hijri.route, navController =navController ) }
+    ) { paddingValues ->
+
 
 
     Column(
@@ -172,5 +182,6 @@ fun QiblaScreen(
                 )
             }
         }
+    }
     }
 }

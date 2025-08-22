@@ -34,7 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.data.model.Zakker
+import com.elsharif.dailyseventy.ui.theme.Black
 import com.elsharif.dailyseventy.ui.theme.RadiusContainer
+import com.elsharif.dailyseventy.ui.theme.White
+import com.elsharif.dailyseventy.util.getAdaptiveGradient
 
 
 @Composable
@@ -42,6 +45,9 @@ fun CountCard(
      modifier: Modifier=Modifier,
      zekkr:Zakker,
 ) {
+
+
+
 
     var localCount by remember { mutableStateOf(0) }
     var count by remember { mutableStateOf(zekkr.count.toInt()) }
@@ -109,7 +115,7 @@ fun CountCard(
                 text = zekkr.content,
                 style = MaterialTheme.typography.bodyLarge,
            //     maxLines = 5,
-                color = MaterialTheme.colorScheme.primary
+                color = Black
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -120,7 +126,7 @@ fun CountCard(
                     //   maxLines = 2,
                     text = zekkr.description,   // Remove single quotes,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.scrim,
+                    color = MaterialTheme.colorScheme.primary,
 
                 )
 
@@ -134,7 +140,7 @@ fun CountCard(
                     maxLines = 2,
                     text = zekkr.reference,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.scrim,
+                    color = Black,
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -163,16 +169,16 @@ fun CountCard(
                 CircularProgressIndicator(
                     progress = { localCount.toFloat() / zekkr.count.toFloat() },
                     modifier = Modifier.size(50.dp).padding(2.dp),
-                    color = MaterialTheme.colorScheme.inverseSurface,
+                    color = White,
                     strokeWidth = 4.dp,
-                    trackColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    trackColor = Black,
                 )
 
                 // Number of remaining counts inside the progress indicator
                 Text(
                     text = "$count",
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 16.sp),
-                    color = Color.Black,
+                    color = Black,
                 )
 
                 // Clickable IconButton to decrement count

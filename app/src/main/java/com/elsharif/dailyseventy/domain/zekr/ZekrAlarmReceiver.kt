@@ -32,10 +32,10 @@ class ZekrAlarmReceiver : BroadcastReceiver() {
                 context, id, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-        val zekrSound = ("android.resource://${context.packageName}/${R.raw.salahalaelnaby}")
+        val zekrSound = ("android.resource://${context.packageName}/${R.raw.tazker}")
             .toUri()
 
-        sendNotification(context, icon, title, content, zekrSound, pendingIntent)
+        sendNotification(context, icon, title, content, zekrSound, pendingIntent,id)
     }
 
     private fun sendNotification(
@@ -44,12 +44,13 @@ class ZekrAlarmReceiver : BroadcastReceiver() {
         title: String?,
         content: String?,
         sound: Uri,
-        pendingIntent: PendingIntent
+        pendingIntent: PendingIntent,
+        id:Int,
     ) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel(manager, sound)
         val notificationBuilder = createNotificationBuilder(context, iconId, title, content, sound, pendingIntent)
-        manager.notify(1, notificationBuilder.build())
+        manager.notify(id, notificationBuilder.build())
     }
 
     private fun createNotificationBuilder(
@@ -66,7 +67,7 @@ class ZekrAlarmReceiver : BroadcastReceiver() {
             .setContentTitle(title)
             .setContentText(content)
             .setSound(sound)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
     }

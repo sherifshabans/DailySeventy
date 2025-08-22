@@ -12,23 +12,30 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.compose.rememberNavController
 import com.elsharif.dailyseventy.domain.AppPreferences
+import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
+import com.elsharif.dailyseventy.domain.data.shardprefernces.ThemePreferences
+import com.elsharif.dailyseventy.domain.zekr.ZekkrAlarmUtil
+import com.elsharif.dailyseventy.presentaion.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
-import com.elsharif.dailyseventy.util.Navigation.UnifiedNavigationScaffold
+import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
+import com.elsharif.dailyseventy.util.Navigation.AppNavHost
+import com.elsharif.dailyseventy.util.Permissions.requestExactAlarmPermission
+import com.elsharif.dailyseventy.util.Permissions.requestNotificationPermission
 import com.elsharif.dailyseventy.util.setCurrentLanguage
 import com.elsharif.dailyseventy.util.workmanager.LocationManager
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.migration.CustomInjection.inject
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
-import com.elsharif.dailyseventy.domain.zekr.ZekkrAlarmUtil
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -38,9 +45,20 @@ class MainActivity : ComponentActivity() {
         LocationManager(applicationContext)
     }
 
+    private val themeViewModel by viewModels<ThemeViewModel> {
+        val prefs = ThemePreferences(applicationContext)
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return ThemeViewModel(prefs) as T
+            }
+        }
+    }
 
     @Inject lateinit var appPreferences: AppPreferences
 
+    // Friday ViewModel
+    private val prayerTimeViewModel: PrayerTimeViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val permissions = arrayOf(
@@ -68,15 +86,22 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+
         enableEdgeToEdge()
         requestIgnoreBatteryOptimization()
+        requestExactAlarmPermission(this)
+        requestNotificationPermission(this)
 
         setContent {
-            DailySeventyTheme {
+            DailySeventyTheme(
+                userPrimary = themeViewModel.userColor.value
+            ) {
+
+                val navController = rememberNavController()
 
                 val context = LocalContext.current
 
-                UnifiedNavigationScaffold(context)
+                AppNavHost(context = context, themeViewModel = themeViewModel,navController= navController)
             }
         }
     }
@@ -90,6 +115,9 @@ class MainActivity : ComponentActivity() {
             iconResId = R.drawable.doaa // or R.mipmap.ic_launcher
         )
     }
+
+
+
 
     private fun registerPrayersAzan() {
 
@@ -106,7 +134,7 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @SuppressLint("BatteryLife")
+    @SuppressLint("BatteryLife", "UseKtx", "ObsoleteSdkInt")
     private fun requestIgnoreBatteryOptimization() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val intent = Intent()
@@ -121,10 +149,14 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @SuppressLint("NewApi")
     override fun onResume() {
         super.onResume()
         registerPrayersAzan()
         registerZekr()
+
+        prayerTimeViewModel.scheduleFridayRemindersFromPrayerTimes()
+
     }
 
 }

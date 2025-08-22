@@ -40,7 +40,7 @@ object ZekkrAlarmUtil {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
         val startTimeMillis = System.currentTimeMillis() // ⏰ start now
-        val intervalMillis = 5 * 60 * 1000L // 5 minutes
+        val intervalMillis = 15 * 60 * 1000L // 5 minutes
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,

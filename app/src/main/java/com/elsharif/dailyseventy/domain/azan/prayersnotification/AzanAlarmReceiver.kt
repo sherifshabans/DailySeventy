@@ -19,27 +19,23 @@ import com.elsharif.dailyseventy.R
 class AzanAlarmReceiver : BroadcastReceiver() {
 
     private val TAG = "AzanAlarmReceiver"
-
     override fun onReceive(context: Context, intent: Intent) {
+
         val i = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-
         val content = intent.getStringExtra("CONTENT")
         val title = intent.getStringExtra("TITLE")
-        val icon = intent.getIntExtra("ICON", R.mipmap.ic_launcher)
-        val id = intent.getIntExtra("ID", 0)
+        val icon = intent.getIntExtra("ICON", R.drawable.doaa)
+        val id = intent.getIntExtra("ID",0)
 
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(
-                context, id, i,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                context, id, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
-
-        // Your Azan sound in res/raw
-        val azanSound = ("android.resource://${context.packageName}/${R.raw.elmola}").toUri()
-
+        val azanSound = ("android.resource://" + context.packageName + "/" + R.raw.azan).toUri()
         sendNotification(context, icon, title, content, azanSound, pendingIntent)
+
     }
 
     private fun sendNotification(
@@ -50,61 +46,70 @@ class AzanAlarmReceiver : BroadcastReceiver() {
         sound: Uri,
         pendingIntent: PendingIntent
     ) {
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        // 1️⃣ Create channel first (with sound)
+        val manager = context
+            .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationBuilder =
+            createNotificationBuilder(context, iconId, title, content, sound, pendingIntent)
         createNotificationChannel(manager, sound)
+        manager.notify(0, notificationBuilder.build())
+    }
 
-        // 2️⃣ Build notification
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+    private fun createNotificationBuilder(
+        context: Context,
+        iconId: Int,
+        title: String?,
+        content: String?,
+        sound: Uri,
+        pendingIntent: PendingIntent
+    ): NotificationCompat.Builder {
+        val notificationBuilder = NotificationCompat.Builder(
+            context,
+            CHANNEL_ID
+        )
+        Log.d(TAG, "createNotificationBuilder: $title $content ${sound.path}")
+        notificationBuilder
             .setSmallIcon(iconId)
-            .setLargeIcon(BitmapFactory.decodeResource(context.resources, iconId))
-            .setContentTitle(title)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    iconId
+                )
+            ).setContentTitle(title)
+            .setSound(sound)
+          //  .setDefaults(NotificationCompat.DEFAULT_SOUND)
+            .setDefaults(NotificationCompat.DEFAULT_LIGHTS or NotificationCompat.DEFAULT_VIBRATE) // Keep other defaults except sound
+
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
             .setColorized(true)
 
-        // 3️⃣ For pre-O devices, set sound on builder
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            builder.setSound(sound)
-        }
-
-        manager.notify(0, builder.build())
+        return notificationBuilder
     }
 
     private fun createNotificationChannel(manager: NotificationManager, sound: Uri) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val existingChannel = manager.getNotificationChannel(CHANNEL_ID)
+            val notificationChannel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH
+            )
             val audioAttributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
                 .build()
+            notificationChannel.importance = NotificationManager.IMPORTANCE_HIGH
+            notificationChannel.setSound(sound, audioAttributes)
+            notificationChannel.enableVibration(true) // Optional: enable vibration
+            notificationChannel.enableLights(true) // Optional: enable LED lights
 
-            // Delete if sound is different
-            if (existingChannel != null && existingChannel.sound != sound) {
-                manager.deleteNotificationChannel(CHANNEL_ID)
-            }
-
-            // Create new channel if it doesn't exist
-            if (manager.getNotificationChannel(CHANNEL_ID) == null) {
-                val channel = NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_HIGH
-                ).apply {
-                    setSound(sound, audioAttributes)
-                    enableVibration(true)
-                }
-                manager.createNotificationChannel(channel)
-            }
+            manager.createNotificationChannel(notificationChannel)
         }
     }
 
     companion object {
         private const val CHANNEL_ID = "AZAN_CHANNEL"
-        private const val CHANNEL_NAME = "Azan Channel"
+        private const val CHANNEL_NAME = "azan channel"
     }
 }
