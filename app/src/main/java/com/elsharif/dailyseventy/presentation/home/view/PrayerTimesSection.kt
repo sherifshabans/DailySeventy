@@ -1,21 +1,11 @@
+// PrayerTimesSection.kt
 package com.elsharif.dailyseventy.presentation.home.view
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -25,37 +15,27 @@ import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeListItem
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
 
-@SuppressLint("NewApi")
+@SuppressLint("NewApi", "UnusedBoxWithConstraintsScope")
 @Composable
-fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()){
+fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
 
-    val prayerTimes by viewModel.prayerTimesFlow.collectAsState(listOf())
+    val state by viewModel.prayerTimesState.collectAsState()
 
-
-    var isVisible by remember {
-        mutableStateOf(false)
-    }
-    var iconState by remember {
-        mutableStateOf(Icons.Rounded.KeyboardArrowUp)
-    }
+    var isVisible by remember { mutableStateOf(false) }
+    var iconState by remember { mutableStateOf(Icons.Rounded.KeyboardArrowUp) }
 
     Box(
         modifier = Modifier
@@ -68,9 +48,7 @@ fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()){
                 .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                 .background(MaterialTheme.colorScheme.secondary)
                 .animateContentSize()
-
         ) {
-
             Row(
                 modifier = Modifier
                     .padding(16.dp)
@@ -84,109 +62,134 @@ fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()){
                         .background(MaterialTheme.colorScheme.secondary)
                         .clickable {
                             isVisible = !isVisible
-                            iconState = if (isVisible) {
-                                Icons.Rounded.KeyboardArrowUp
-                            } else {
-                                Icons.Rounded.KeyboardArrowDown
-                            }
+                            iconState = if (isVisible) Icons.Rounded.KeyboardArrowUp
+                            else Icons.Rounded.KeyboardArrowDown
                         }
                 ) {
                     Icon(
                         modifier = Modifier.size(25.dp),
                         imageVector = iconState,
-                        contentDescription = "Currencies",
+                        contentDescription = "Toggle",
                         tint = MaterialTheme.colorScheme.onSecondary
                     )
-
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Text(
                     text = "مواقيت الصلاة",
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onPrimary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                 )
-
             }
-            
-            
 
             Spacer(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .height(1.dp)
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.secondaryContainer)
             )
 
             if (isVisible) {
-                BoxWithConstraints(
+                Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
-                        .background(MaterialTheme.colorScheme.secondary)
                 ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            modifier = Modifier.weight(0.5f),
+                            text = "الصلاة",
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            modifier = Modifier.weight(0.5f),
+                            text = "موعد الصلاة",
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                            maxLines = 1
+                        )
+                        Text(
+                            modifier = Modifier.weight(0.5f),
+                            text = "الوقت المتبقي",
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                            maxLines = 1
+                        )
+                    }
 
-                    val boxWithConstraintsScope = this
-                    val width = boxWithConstraintsScope.maxWidth / 3
+                    Spacer(modifier = Modifier.height(12.dp))
 
-
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    ) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                modifier = Modifier.weight(0.5f) ,// نفس اللي مستخدمه في PrayerTimeListItem
-                                text = "الصلاة",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Text(
-                                modifier = Modifier.weight(0.5f) ,// نفس اللي مستخدمه في PrayerTimeListItem
-                                text = "موعد الصلاة",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                textAlign = TextAlign.End,
-                                maxLines = 1
-                            )
-                            Text(
-                                modifier = Modifier.weight(0.5f), // نفس اللي مستخدمه في PrayerTimeListItem
-                                text = "الوقت المتبقي",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                textAlign = TextAlign.End,
-                                maxLines = 1
-                            )
-
-
-                        }
-
-                        Log.d("PrayerTimes ", "$prayerTimes")
-
-                        Spacer(modifier = Modifier.height(12.dp))
-                        LazyColumn {
-
-                            items(prayerTimes) { index ->
-                                PrayerTimeListItem(
-                                    index
+                    when (state) {
+                        is PrayerUiState.Loading -> {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                androidx.compose.material3.CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    strokeWidth = 2.dp,
+                                    modifier = Modifier.size(24.dp)
                                 )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(
+                                    text = "نستعد لمواقيت الصلاة… 🌙",
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp
+                                )
+                            }
+                        }
+                        is PrayerUiState.Error -> {
+                            Text(
+                                text = (state as PrayerUiState.Error).message.toString(),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                        is PrayerUiState.Success -> {
+                            val prayers = (state as PrayerUiState.Success).prayers
+                            val formatter = java.time.format.DateTimeFormatter.ofPattern("hh:mm a")
+                            val now = remember { mutableStateOf(java.time.LocalTime.now()) }
+
+                            // تحديث الوقت كل ثانية
+                            LaunchedEffect(Unit) {
+                                while (true) {
+                                    now.value = java.time.LocalTime.now()
+                                    kotlinx.coroutines.delay(1000)
+                                }
+                            }
+
+                            // حساب الصلاة القادمة بناءً على الوقت الحالي
+                            val nextPrayer = remember(prayers, now.value) {
+                                prayers.minByOrNull { prayer ->
+                                    val time = runCatching { java.time.LocalTime.parse(prayer.time, formatter) }.getOrNull()
+                                    if (time != null) {
+                                        val duration = java.time.Duration.between(now.value, time)
+                                        if (!duration.isNegative) duration else java.time.Duration.ofDays(1)
+                                    } else java.time.Duration.ofDays(1)
+                                }
+                            }
+
+                            LazyColumn {
+                                items(prayers) { prayer ->
+                                    PrayerTimeListItem(
+                                        uiPrayerTime = prayer,
+                                        isNextPrayer = prayer == nextPrayer
+                                    )                                }
                             }
                         }
                     }
                 }
             }
         }
-
     }
-
 }

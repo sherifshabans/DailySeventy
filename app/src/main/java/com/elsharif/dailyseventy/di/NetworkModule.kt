@@ -1,7 +1,7 @@
 package com.elsharif.dailyseventy.di
 
 
-import com.elsharif.dailyseventy.domain.remote.PrayerAPI
+import com.elsharif.dailyseventy.domain.azan.remote.PrayerAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

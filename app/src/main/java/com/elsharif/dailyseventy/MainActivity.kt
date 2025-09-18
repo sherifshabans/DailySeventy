@@ -3,12 +3,16 @@ package com.elsharif.dailyseventy
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -34,12 +38,12 @@ import com.elsharif.dailyseventy.domain.data.sharedpreferences.NightThird
 import com.elsharif.dailyseventy.domain.data.sharedpreferences.ThemePreferences
 import com.elsharif.dailyseventy.domain.zekr.ZekrWorker
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
-import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehViewModel
 import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
 import com.elsharif.dailyseventy.util.Navigation.AppNavHost
 import com.elsharif.dailyseventy.util.Permissions.requestExactAlarmPermission
 import com.elsharif.dailyseventy.util.Permissions.requestNotificationPermission
+import com.elsharif.dailyseventy.util.Permissions.requestSensorPermission
 import com.elsharif.dailyseventy.util.setCurrentLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
@@ -64,10 +68,14 @@ class MainActivity : ComponentActivity() {
 
     @Inject lateinit var appPreferences: AppPreferences
 
-    // Friday ViewModel
     private val prayerTimeViewModel: PrayerTimeViewModel by viewModels()
 
-  //  private val tasbeehViewModel : TasbeehViewModel by viewModels ()
+
+    private lateinit var sensorManager: SensorManager
+    private var stepCounter: Sensor? = null
+    private var initialSteps = -1
+
+    //  private val tasbeehViewModel : TasbeehViewModel by viewModels ()
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -118,12 +126,29 @@ class MainActivity : ComponentActivity() {
         }
 */
 
+        val context = applicationContext
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+
+        Log.d("StepSensor", "stepCounter = $stepCounter")
+
         enableEdgeToEdge()
         requestIgnoreBatteryOptimization()
         requestExactAlarmPermission(this)
         requestNotificationPermission(this)
+        // للتأكد إننا فعلاً فعلنا المنبه في preferences (لأن scheduleStepAlarm يبدأ فقط لو enabled)
+    //    AlarmPreferences.setAlarmEnabled(this, true)
+        Log.d("MainActivityDebug", "DEBUG: AlarmPreferences.setAlarmEnabled -> true")
 
+// اطبع حالة إمكانية exact alarms
+        val am = getSystemService(ALARM_SERVICE) as AlarmManager
+        val canExact = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) am.canScheduleExactAlarms() else true
+        Log.d("MainActivityDebug", "DEBUG: canScheduleExactAlarms = $canExact")
 
+// نفّذ اختبار سريع (سيجعل المنبه يرن بعد 30 ثانية)
+        //AlarmScheduler.scheduleImmediateTest(this, 30_000L)
+        Log.d("MainActivityDebug", "DEBUG: Called scheduleImmediateTest(30s)")
         setContent {
             DailySeventyTheme(
                 userPrimary = themeViewModel.userColor.value
@@ -136,6 +161,11 @@ class MainActivity : ComponentActivity() {
                 AppNavHost(context = context, themeViewModel = themeViewModel,navController= navController, prayerTimeViewModel = prayerTimeViewModel)
             }
         }
+        Log.d("PermissionCheck", "Requesting ACTIVITY_RECOGNITION permission...")
+        requestSensorPermission(this)
+
+
+
     }
 
     private fun registerZekr() {
@@ -223,6 +253,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
 
     @SuppressLint("NewApi")

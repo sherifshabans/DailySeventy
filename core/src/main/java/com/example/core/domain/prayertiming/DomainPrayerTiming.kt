@@ -9,3 +9,4 @@ data class DomainPrayerTiming(
     val lng: Double,
     val school: DomainPrayerTimingSchool,
 )
+

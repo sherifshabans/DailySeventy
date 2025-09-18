@@ -33,7 +33,7 @@ object NightThirdNotifier {
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.doaa)
+            .setSmallIcon(R.drawable.prayday)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)

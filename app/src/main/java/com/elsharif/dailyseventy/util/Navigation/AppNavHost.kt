@@ -13,15 +13,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.elsharif.dailyseventy.MainActivity
+import com.elsharif.dailyseventy.presentation.sensor.StepAlarmScreen
+import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
 import com.elsharif.dailyseventy.presentation.Qibla.QiblaPage
-import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
 import com.elsharif.dailyseventy.presentation.azkarcategories.CategoryScreen
+import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
 import com.elsharif.dailyseventy.presentation.home.view.HomePage
+import com.elsharif.dailyseventy.presentation.prayertimes.MonthlyPrayerTimesPage
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimesPage
 import com.elsharif.dailyseventy.presentation.settings.SettingsScreen
 import com.elsharif.dailyseventy.presentation.tasbeeh.CustomZikrSebhaPage
-import com.elsharif.dailyseventy.presentation.tasbeeh.CustomizableSebhaPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.ImageSebhaPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehLandingPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehViewModel
@@ -35,12 +37,18 @@ import java.time.chrono.HijrahDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(navController: NavHostController,context: Context,themeViewModel: ThemeViewModel,prayerTimeViewModel: PrayerTimeViewModel) {
+    // التحقق من Intent للمنبه
+    val startCategoryFromIntent = (context as? MainActivity)?.intent?.getStringExtra("category") ?: ""
+    val stepAlarmCategory = (context as? MainActivity)?.intent?.getStringExtra("step_alarm") ?: ""
 
-    val startCategory = (context as? MainActivity)?.intent?.getStringExtra("category") ?: ""
-
+    val startDestination = when {
+        stepAlarmCategory == "step_alarm" -> Screen.AalarmRoute.route
+        startCategoryFromIntent.isNotEmpty() -> "zekkr_screen/$startCategoryFromIntent"
+        else -> Screen.HomeScreen.route
+    }
     NavHost(
         navController,
-        startDestination = if (startCategory.isNotEmpty()) "zekkr_screen/$startCategory" else Screen.HomeScreen.route
+        startDestination = startDestination
     ) {
         composable(Screen.HomeScreen.route) {
             HomePage(navController)
@@ -50,7 +58,11 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
             ZekkrScreen(navController, category)
         }
         composable(Screen.PrayerTimes.route) {
-            PrayerTimesPage()
+            PrayerTimesPage(navController)
+
+        }
+        composable(Screen.MonthlyPrayerTimes.route) {
+            MonthlyPrayerTimesPage(navController)
 
         }
         composable(Screen.Azkar.route) {
@@ -69,8 +81,9 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
            QiblaPage(navController)
         }
         composable(Screen.Settings.route) {
+            val viewModel: StepAlarmViewModel = hiltViewModel()
 
-            SettingsScreen(navController,themeViewModel, context, prayerTimeViewModel)
+            SettingsScreen(navController,themeViewModel, context, prayerTimeViewModel,viewModel)
 
         }
         composable(Screen.NightThirdRoute.route) {
@@ -83,9 +96,10 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
             TasbeehLandingPage(navController)
 
         }
-        composable(Screen.ColorPicker.route) {
+        composable(Screen.AalarmRoute.route) {
+            val viewModel: StepAlarmViewModel = hiltViewModel()
 
-
+            StepAlarmScreen(viewModel,navController)
         }
         composable(Screen.TasbeehImages.route) {
             val viewModel: TasbeehViewModel = hiltViewModel()

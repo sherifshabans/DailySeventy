@@ -31,6 +31,7 @@ import com.elsharif.dailyseventy.domain.thirdnight.cancelNightThirdNotifications
 import com.elsharif.dailyseventy.domain.thirdnight.scheduleNightThirdNotifications
 
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -56,36 +57,37 @@ fun NightThirdContent(
         )
     }
 
-    // Collect prayer times
+    // ✅ جمع مواقيت الصلاة
     LaunchedEffect(Unit) {
-        viewModel.prayerTimesFlow.collect { prayers ->
-            val mag = prayers.firstOrNull { it.name.contains("Maghrib", true) }?.time
-                ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
-            val fajrTime = prayers.firstOrNull { it.name.contains("Fajr", true) }?.time
-                ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
+        viewModel.prayerTimesState.collect { state ->
+            if (state is PrayerUiState.Success) {
+                val prayers = state.prayers
+                val mag = prayers.firstOrNull { it.name.contains("Maghrib", true) }?.time
+                    ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
+                val fajrTime = prayers.firstOrNull { it.name.contains("Fajr", true) }?.time
+                    ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
 
-            if (mag != null && fajrTime != null) {
-                maghrib = mag
-                fajr = fajrTime
+                if (mag != null && fajrTime != null) {
+                    maghrib = mag
+                    fajr = fajrTime
 
-                val now = LocalTime.now()
-
-                nightThirdText = if (now.isAfter(fajrTime)) {
-                    "النهار 🌞"
-                } else {
-                    getNightThird(mag, fajrTime)
+                    val now = LocalTime.now()
+                    nightThirdText = if (now.isAfter(fajrTime)) {
+                        "النهار 🌞"
+                    } else {
+                        getNightThird(mag, fajrTime)
+                    }
                 }
             }
-
         }
     }
-
 
     Column {
         Text("الثلث الحالي: $nightThirdText", style = MaterialTheme.typography.bodyLarge)
 
         Spacer(Modifier.height(16.dp))
 
+        // ✅ سويتش التفعيل
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("تفعيل التذكير")
             Spacer(Modifier.width(8.dp))
@@ -94,7 +96,11 @@ fun NightThirdContent(
                 onCheckedChange = { isOn ->
                     enabled = isOn
                     NightThirdPrefs.saveEnabled(context, isOn)
-                    if (!isOn) cancelNightThirdNotifications(context)
+
+                    if (!isOn) {
+                        // ✨ لو اتقفل السويتش → امسح أي جدولة قديمة
+                        cancelNightThirdNotifications(context)
+                    }
                 }
             )
         }
@@ -135,8 +141,13 @@ fun NightThirdContent(
 
         Button(
             onClick = {
+                // ✨ احفظ الاختيارات
                 NightThirdPrefs.saveSelection(context, selection)
+
                 if (enabled && maghrib != null && fajr != null) {
+                    // ✅ امسح القديم قبل ما تعمل جدولة جديدة
+                    cancelNightThirdNotifications(context)
+
                     scheduleNightThirdNotifications(
                         context = context,
                         maghrib = maghrib!!,
@@ -144,6 +155,7 @@ fun NightThirdContent(
                         selection = selection
                     )
                 }
+
                 onSaved()
             },
             modifier = Modifier.fillMaxWidth()

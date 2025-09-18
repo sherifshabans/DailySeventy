@@ -18,7 +18,6 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -47,25 +46,46 @@ class RegisterPrayerTimesWorker(
                 entryPoint.getPrayerTimesUseCase()
             }
 
-            val timingsFlow = combine(location, method) { loc, meth ->
-                prayerTimes(loc.first, loc.second, LocalDate.now(), meth).single()
+            val prayerTimingsList = withContext(Dispatchers.IO) {
+                val locationData = location.first()
+                val methodData = method.first()
+                prayerTimes(locationData.first, locationData.second, LocalDate.now(), methodData).first()
             }
 
-            val prayerTimingsList = withContext(Dispatchers.IO) { timingsFlow.first() }
+            // الصلوات الخمس الأساسية فقط (بالأسماء الصحيحة)
+            val mainPrayers = setOf("fajr", "dhuhr", "asr", "maghrib", "isha")
 
-            prayerTimingsList.forEachIndexed { idx, prayerTiming ->
+            Log.d("TimePrayer", "Total prayers: ${prayerTimingsList.size}")
+            Log.d("TimePrayer", "Prayer names: ${prayerTimingsList.map { it.prayer.name }}")
+
+            val filteredPrayers = prayerTimingsList.filter { prayerTiming ->
+                val cleanName = if (prayerTiming.prayer.name.contains(":string/")) {
+                    prayerTiming.prayer.name.substringAfter(":string/")
+                } else {
+                    prayerTiming.prayer.name
+                }
+                mainPrayers.contains(cleanName.lowercase())
+            }
+
+            Log.d("TimePrayer", "Filtered prayers: ${filteredPrayers.size}")
+
+            filteredPrayers.forEachIndexed { idx, prayerTiming ->
+                val cleanName = if (prayerTiming.prayer.name.contains(":string/")) {
+                    prayerTiming.prayer.name.substringAfter(":string/")
+                } else {
+                    prayerTiming.prayer.name
+                }
+
                 val imgId = context.resources.getIdentifier(
                     prayerTiming.prayer.imageId, "drawable", context.packageName
                 )
 
-                val nameId = context.resources.getIdentifier(
-                    prayerTiming.prayer.name, "string", context.packageName
-                )
-
+                val nameRes = getPrayerNameResource(cleanName)
                 val prayerTime = parseTime(prayerTiming.time)
                 val prayerDate = prayerTiming.date
-                val prayerName = if (nameId != 0) context.getString(nameId) else prayerTiming.prayer.name
+                val prayerName = context.getString(nameRes)
 
+                Log.d("TimePrayer", "Setting alarm for: $prayerName at $prayerTime on $prayerDate")
 
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a")
                 val azanMillis = LocalDateTime
@@ -74,30 +94,25 @@ class RegisterPrayerTimesWorker(
                     .toInstant()
                     .toEpochMilli()
 
-                if (prayerName != "Sunrise" && prayerName != "الشروق") {
+                // Main Azan
+                if (azanMillis > System.currentTimeMillis()) {
+                    setAlarm(
+                        AzanAlarmReceiver::class.java,
+                        idx,
+                        azanMillis,
+                        imgId,
+                        "${context.getString(R.string.prayer)} $prayerName",
+                        context.getString(R.string.prayer_is_now),
+                        type = "MAIN",
+                        prayerName = prayerName
+                    )
 
-                    // Main Azan
-                    if (azanMillis > System.currentTimeMillis()) {
-                        setAlarm(
-                            AzanAlarmReceiver::class.java,
-                            idx,
-                            azanMillis,
-                            imgId,
-                            "${context.getString(R.string.prayer)} $prayerName",
-                            context.getString(R.string.prayer_is_now),
-                            type = "MAIN",  // ممكن نخليها MAIN
-                            prayerName = prayerName
-                        )
-
-                    }
-
-// Pre-Azan (10 min before)
+                    // Pre-Azan (10 min before)
                     val preAzanMillis = azanMillis - (10 * 60 * 1000)
                     if (preAzanMillis > System.currentTimeMillis()) {
-
                         setAlarm(
                             PreAndPostAzanAlarmReceiver::class.java,
-                            1000 + idx, // unique ID
+                            1000 + idx,
                             preAzanMillis,
                             imgId,
                             "${context.getString(R.string.prayer)} $prayerName",
@@ -107,13 +122,13 @@ class RegisterPrayerTimesWorker(
                         )
                     }
 
-// Post-Azan (5 min for Maghrib, 20 min otherwise)
-                    val delayMinutes = if (prayerName == "Maghrib") 5 else 20
+                    // Post-Azan (5 min for Maghrib, 20 min otherwise)
+                    val delayMinutes = if (cleanName.lowercase() == "maghrib") 5 else 20
                     val postAzanMillis = azanMillis + (delayMinutes * 60 * 1000)
                     if (postAzanMillis > System.currentTimeMillis()) {
                         setAlarm(
                             PreAndPostAzanAlarmReceiver::class.java,
-                            2000 + idx, // different unique ID
+                            2000 + idx,
                             postAzanMillis,
                             imgId,
                             "${context.getString(R.string.prayer)} $prayerName",
@@ -122,10 +137,9 @@ class RegisterPrayerTimesWorker(
                             prayerName = prayerName
                         )
                     }
-
+                } else {
+                    Log.d("TimePrayer", "Skipping past prayer: $prayerName")
                 }
-
-
             }
 
             Result.success()
@@ -133,6 +147,16 @@ class RegisterPrayerTimesWorker(
             Log.e("RegisterPrayerTimes", "Error: ${e.message}", e)
             Result.retry()
         }
+    }
+
+    // دالة مساعدة لتحويل أسماء الصلوات إلى Resource IDs
+    private fun getPrayerNameResource(prayerName: String): Int = when (prayerName.lowercase()) {
+        "fajr" -> R.string.fajr
+        "dhuhr" -> R.string.dhuhr
+        "asr" -> R.string.asr
+        "maghrib" -> R.string.maghrib
+        "isha" -> R.string.isha
+        else -> R.string.fajr // قيمة افتراضية
     }
 
     @SuppressLint("NewApi")
@@ -180,6 +204,7 @@ class RegisterPrayerTimesWorker(
             triggerAtMillis,
             pendingIntent
         )
-    }
 
+        Log.d("TimePrayer", "Alarm set for $prayerName ($type) at ${java.util.Date(triggerAtMillis)}")
+    }
 }

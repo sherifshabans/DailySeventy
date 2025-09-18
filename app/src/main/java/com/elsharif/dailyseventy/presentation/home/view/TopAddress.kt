@@ -1,3 +1,4 @@
+// TopAddressSection.kt
 package com.elsharif.dailyseventy.presentation.home.view
 
 import android.annotation.SuppressLint
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
 import com.elsharif.dailyseventy.presentation.prayertimes.model.UiPrayerTime
 import kotlinx.coroutines.delay
 import java.time.Duration
@@ -27,7 +29,7 @@ import java.util.Locale
 @Composable
 fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
 
-    val prayerTimes by viewModel.prayerTimesFlow.collectAsState(listOf())
+    val state by viewModel.prayerTimesState.collectAsState()
     val currentHijrahDate = HijrahDate.now()
 
     val hijriDateFormatted = currentHijrahDate.format(
@@ -36,19 +38,19 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
 
     val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
 
-    // Track remaining time as state
-    var remainingTime by remember { mutableStateOf("") }
+    var remainingTime by remember { mutableStateOf("00:00:00") }
 
-    // Find next upcoming prayer dynamically
-    val upcomingPrayer: UiPrayerTime? = remember(prayerTimes) {
-        val now = LocalTime.now()
-        prayerTimes.firstOrNull {
-            val time = LocalTime.parse(it.time, timeFormatter)
-            time.isAfter(now)
-        }
+    val upcomingPrayer: UiPrayerTime? = remember(state) {
+        if (state is PrayerUiState.Success) {
+            val prayers = (state as PrayerUiState.Success).prayers
+            val now = LocalTime.now()
+            prayers.firstOrNull {
+                val time = LocalTime.parse(it.time, timeFormatter)
+                time.isAfter(now)
+            }
+        } else null
     }
 
-    // Update countdown every second
     LaunchedEffect(upcomingPrayer) {
         if (upcomingPrayer != null) {
             val targetTime = LocalTime.parse(upcomingPrayer.time, timeFormatter)
@@ -74,7 +76,6 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
             .fillMaxWidth()
             .height(100.dp)
     ) {
-        // Background image
         Image(
             painter = androidx.compose.ui.res.painterResource(id = R.drawable.mosque01),
             contentDescription = null,
@@ -82,7 +83,6 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxSize()
         )
 
-        // Overlay content
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -90,7 +90,6 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Hijri Date
             Text(
                 textAlign = TextAlign.Center,
                 text = "اليوم: $hijriDateFormatted هـ",
@@ -102,42 +101,72 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // Upcoming Prayer
-            if (upcomingPrayer != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    // Prayer Icon
-                    Image(
-                        painter = androidx.compose.ui.res.painterResource(id = upcomingPrayer.iconRes),
-                        contentDescription = upcomingPrayer.name,
+            when (state) {
+                is PrayerUiState.Loading -> {
+                    Row(
                         modifier = Modifier
-                            .size(36.dp)
-                            .padding(end = 8.dp)
-                    )
-
-                    Column {
-                        Text(
-                            text = upcomingPrayer.name,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        androidx.compose.material3.CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.primary,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(20.dp)
                         )
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "متبقي: $remainingTime",
-                            fontSize = 14.sp,
+                            text = "نقوم بتحميل أوقات الصلاة بدقة… 🌙",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        )
+                    }
+                }
+                is PrayerUiState.Error -> {
+                    Text(
+                        text = (state as PrayerUiState.Error).message.toString(),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+                is PrayerUiState.Success -> {
+                    if (upcomingPrayer != null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Image(
+                                painter = androidx.compose.ui.res.painterResource(id = upcomingPrayer.iconRes),
+                                contentDescription = upcomingPrayer.name,
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .padding(end = 8.dp)
+                            )
+
+                            Column {
+                                Text(
+                                    text = upcomingPrayer.name,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                                Text(
+                                    text = "متبقي: $remainingTime",
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "لا توجد صلاة قادمة",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
-            } else {
-                Text(
-                    text = "لا توجد صلاة قادمة",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
             }
         }
     }

@@ -48,7 +48,7 @@ android {
         arg("room.incremental", "true")
         arg("room.expandProjection", "true")
     }
-    
+
 
     buildTypes {
         release {
@@ -165,12 +165,12 @@ dependencies {
     //Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
-/*
-    //compose destination
-    val destinationVersion = "1.9.52"
-    implementation("io.github.raamcosta.compose-destinations:core:$destinationVersion")
-    ksp("io.github.raamcosta.compose-destinations:ksp:$destinationVersion")
-*/
+    /*
+        //compose destination
+        val destinationVersion = "1.9.52"
+        implementation("io.github.raamcosta.compose-destinations:core:$destinationVersion")
+        ksp("io.github.raamcosta.compose-destinations:ksp:$destinationVersion")
+    */
 
 
     // SnackbarEvent

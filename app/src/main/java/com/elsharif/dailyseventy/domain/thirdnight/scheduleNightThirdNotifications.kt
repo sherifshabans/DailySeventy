@@ -22,6 +22,8 @@ fun scheduleNightThirdNotifications(
 ) {
     val workManager = WorkManager.getInstance(context)
 
+    workManager.cancelAllWorkByTag("night_third")
+
     val today = LocalDate.now()
     val maghribDateTime = LocalDateTime.of(today, maghrib)
     val fajrDateTime = LocalDateTime.of(today.plusDays(1), fajr)

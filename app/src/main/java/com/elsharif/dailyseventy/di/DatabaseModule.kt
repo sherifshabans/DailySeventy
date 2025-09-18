@@ -2,6 +2,8 @@ package com.elsharif.dailyseventy.di
 
 import android.content.Context
 import androidx.room.Room
+import com.elsharif.dailyseventy.domain.azan.local.database.AppDatabase
+import com.elsharif.dailyseventy.domain.azan.local.database.PrayerTimesDao
 import com.elsharif.dailyseventy.domain.data.database.quran.QuranDao
 import com.elsharif.dailyseventy.domain.data.database.quran.QuranDatabase
 import dagger.Module
@@ -31,5 +33,21 @@ object DatabaseModule {
     @Provides
     fun provideQuranDao(database: QuranDatabase): QuranDao {
         return database.quranDao()
+    }
+
+    @Provides
+    fun providePrayerDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "prayer_times_db"
+        )
+            .fallbackToDestructiveMigration() // هذا يمسح البيانات القديمة ويعمل قاعدة جديدة
+            .build()
+    }
+
+    @Provides
+    fun providePrayerTimesDao(database: AppDatabase): PrayerTimesDao {
+        return database.prayerTimesDao()
     }
 }

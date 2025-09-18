@@ -14,8 +14,7 @@ import com.elsharif.dailyseventy.domain.azan.prayersnotification.updateAzanChann
 @Composable
 fun AzanSoundSelectorDialog(
     context: Context,
-    onDismiss: () -> Unit,
-    onSoundSelected: () -> Unit
+    onDismiss: () -> Unit
 ) {
     val sounds = listOf(
         AzanSound("علي الملا", R.raw.elmola),
@@ -28,8 +27,25 @@ fun AzanSoundSelectorDialog(
         mutableIntStateOf(AzanSoundPrefs.loadSelectedSound(context))
     }
 
+    // MediaPlayer حالة
+    var mediaPlayer by remember { mutableStateOf<android.media.MediaPlayer?>(null) }
+
+    // لو الـDialog اتقفل → نوقف الصوت
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
     AlertDialog(
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = {
+            onDismiss()
+            mediaPlayer?.stop()
+            mediaPlayer?.release()
+            mediaPlayer = null
+        },
         title = {
             Text(
                 text = "اختر صوت الأذان",
@@ -61,11 +77,12 @@ fun AzanSoundSelectorDialog(
                                 selectedSoundResId.intValue = sound.resId
                                 AzanSoundPrefs.saveSelectedSound(context, sound.resId)
 
-                                // تحديث القناة فورًا
-                                updateAzanChannel(context)
-
-                                onSoundSelected()
-                                onDismiss()
+                                // تحديث الصوت أثناء الاختيار
+                                mediaPlayer?.stop()
+                                mediaPlayer?.release()
+                                mediaPlayer = android.media.MediaPlayer.create(context, sound.resId)
+                                mediaPlayer?.isLooping = true
+                                mediaPlayer?.start()
                             },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = MaterialTheme.colorScheme.primary
@@ -76,8 +93,13 @@ fun AzanSoundSelectorDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text("إلغاء")
+            TextButton(onClick = {
+                onDismiss()
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+                mediaPlayer = null
+            }) {
+                Text("إغلاق")
             }
         }
     )

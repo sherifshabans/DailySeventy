@@ -6,6 +6,8 @@ sealed class  Screen(val route: String) {
 
     object HomeScreen : Screen("الصفحة الرئيسية")
     object PrayerTimes : Screen("مواقيت الصلاة")
+
+    object MonthlyPrayerTimes : Screen("مواقيت الصلاة الشهرية")
     object Hijri: Screen("التاريخ الهجري")
     object Qible: Screen("القبلة")
 
@@ -22,5 +24,8 @@ sealed class  Screen(val route: String) {
     object ColorPicker: Screen("سمات البرنامج")
 
     object NightThirdRoute: Screen("إعدادات حساب الوقت")
+
+    object AalarmRoute: Screen("منبه القيام/الفجر")
+
 
 }

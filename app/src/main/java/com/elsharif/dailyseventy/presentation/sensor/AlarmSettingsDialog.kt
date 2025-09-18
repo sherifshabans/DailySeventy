@@ -1,0 +1,369 @@
+package com.elsharif.dailyseventy.presentation.sensor
+
+import android.app.TimePickerDialog
+import android.util.Log
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
+import com.elsharif.dailyseventy.domain.sensordomain.AlarmScheduler
+
+@Composable
+fun StepAlarmSettingsDialog(
+    viewModel: StepAlarmViewModel,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+
+    // اقرأ القيم المخزنة في البريفيرنس
+    val savedHour = AlarmPreferences.getAlarmHour(context)
+    val savedMinute = AlarmPreferences.getAlarmMinute(context)
+    val savedSteps = AlarmPreferences.getRequiredSteps(context)
+    val savedAlarmType = AlarmPreferences.getAlarmType(context)
+
+    // حطها في state عشان تتحكم فيها
+    var tempHour by remember { mutableStateOf(savedHour) }
+    var tempMinute by remember { mutableStateOf(savedMinute) }
+    var tempSteps by remember { mutableStateOf(savedSteps) }
+    var selectedAlarmType by remember { mutableStateOf(savedAlarmType) }
+
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "ضبط إعدادات المنبه",
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                // اختيار نوع المنبه
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = "🔧 نوع المنبه",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(bottom = 12.dp)
+                        )
+
+                        // منبه الحركة
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedAlarmType == AlarmPreferences.ALARM_TYPE_MOVEMENT,
+                                onClick = { selectedAlarmType = AlarmPreferences.ALARM_TYPE_MOVEMENT }
+                            )
+                            Column {
+                                Text(
+                                    text = "🚶 منبه الحركة",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = "يحتاج لعدد خطوات محدد لإيقافه",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+
+                        // منبه الإضاءة
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedAlarmType == AlarmPreferences.ALARM_TYPE_LIGHT,
+                                onClick = { selectedAlarmType = AlarmPreferences.ALARM_TYPE_LIGHT }
+                            )
+                            Column {
+                                Text(
+                                    text = "💡 منبه الإضاءة",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Text(
+                                    text = "يعمل في الظلام ويتوقف في الضوء",
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // إعدادات منبه الحركة (تظهر فقط إذا تم اختيار منبه الحركة)
+                if (selectedAlarmType == AlarmPreferences.ALARM_TYPE_MOVEMENT) {
+                    // ضبط الوقت
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "⏰ وقت المنبه",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("الوقت الحالي:")
+
+                                OutlinedButton(
+                                    onClick = {
+                                        TimePickerDialog(
+                                            context,
+                                            { _, hour, minute ->
+                                                tempHour = hour
+                                                tempMinute = minute
+                                            },
+                                            tempHour,
+                                            tempMinute,
+                                            true // استخدام نظام 24 ساعة
+                                        ).show()
+                                    }
+                                ) {
+                                    Text(
+                                        text = "${tempHour.toString().padStart(2, '0')}:${tempMinute.toString().padStart(2, '0')}",
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // ضبط عدد الخطوات
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "🚶 عدد الخطوات المطلوبة",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("الخطوات:")
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    IconButton(
+                                        onClick = {
+                                            if (tempSteps > 10) tempSteps -= 10
+                                        }
+                                    ) {
+                                        Icon(Icons.Default.Remove, contentDescription = "تقليل")
+                                    }
+
+                                    Text(
+                                        text = "$tempSteps",
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        modifier = Modifier.padding(horizontal = 20.dp)
+                                    )
+
+                                    IconButton(
+                                        onClick = {
+                                            if (tempSteps < 1000) tempSteps += 10
+                                        }
+                                    ) {
+                                        Icon(Icons.Default.Add, contentDescription = "زيادة")
+                                    }
+                                }
+                            }
+
+                            // أزرار سريعة لقيم شائعة
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 8.dp)
+                            ) {
+                                val quickValues = listOf(5, 10, 20, 50)
+                                quickValues.forEach { value ->
+                                    FilterChip(
+                                        onClick = { tempSteps = value },
+                                        label = { Text(text = "$value", maxLines = 1) },
+                                        selected = tempSteps == value,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }else {
+
+                    // ضبط الوقت
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "⏰ وقت المنبه",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("الوقت الحالي:")
+
+                                OutlinedButton(
+                                    onClick = {
+                                        TimePickerDialog(
+                                            context,
+                                            { _, hour, minute ->
+                                                tempHour = hour
+                                                tempMinute = minute
+                                            },
+                                            tempHour,
+                                            tempMinute,
+                                            true // استخدام نظام 24 ساعة
+                                        ).show()
+                                    }
+                                ) {
+                                    Text(
+                                        text = "${tempHour.toString().padStart(2, '0')}:${tempMinute.toString().padStart(2, '0')}",
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+
+                    // معلومات إضافية
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                    )
+                ) {
+
+
+                    Column(
+                        modifier = Modifier.padding(12.dp)
+                    ) {
+                        Text(
+                            text = "📌 ملاحظة:",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+
+                        val noteText = if (selectedAlarmType == AlarmPreferences.ALARM_TYPE_MOVEMENT) {
+                            "• سيتم تشغيل المنبه يوميًا في الوقت المحدد\n" +
+                                    "• لا يمكن إيقاف الموسيقى إلا بإنجاز عدد الخطوات\n" +
+                                    "• المنبه سيُجدول تلقائيًا لليوم التالي"
+                        } else {
+                            "• سيعمل المنبه عند الظلام تلقائيًا\n" +
+                                    "• لا يمكن إيقاف الموسيقى إلا بالتعرض للضوء\n" +
+                                    "• يعمل على مدار اليوم حسب الإضاءة المحيطة"
+                        }
+
+                        Text(
+                            text = noteText,
+                            fontSize = 12.sp,
+                            lineHeight = 16.sp
+                        )
+                    }
+                }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    // حفظ نوع المنبه
+
+                    Log.d("Dialog","selectedAlarmType, $selectedAlarmType")
+
+                    AlarmPreferences.saveAlarmType(context, selectedAlarmType)
+                    // حدث النوع في الـ ViewModel كمان
+                    viewModel.switchAlarmType(context, selectedAlarmType)
+
+                    viewModel.setAlarmTime(context, tempHour, tempMinute)
+
+                    if (selectedAlarmType == AlarmPreferences.ALARM_TYPE_MOVEMENT) {
+                        // حفظ إعدادات منبه الحركة
+                        viewModel.setTargetSteps(context, tempSteps)
+
+                        // فعل المنبه + جدولة جديدة
+                        viewModel.enableDailyAlarm(context, true)
+                        AlarmScheduler.scheduleStepAlarm(context)
+                    } else {
+                        // منبه الإضاءة لا يحتاج جدولة وقت، يعمل فوري
+                        viewModel.enableLightAlarm(context, true)
+                    }
+
+                    onDismiss()
+                }
+            ) {
+                Text("💾 حفظ الإعدادات")
+            }
+        },
+        dismissButton = {
+            OutlinedButton(onClick = onDismiss) {
+                Text("إلغاء")
+            }
+        }
+    )
+}

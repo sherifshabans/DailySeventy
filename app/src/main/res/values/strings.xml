@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">سبعين مرة</string>
+    <string name="app_name">سبعون مرة</string>
     <string name="MorningZekr">أذكار الصباح</string>
     <string name="NightZekr">أذكار المساء</string>
     <string name="AfterPrey">أذكار بعد السلام من الصلاة المفروضة</string>
@@ -37,6 +37,13 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="sun_rise">Sunrise</string>
+
+    <!-- إضافات جديدة -->
+    <string name="imsak">Imsak</string>
+    <string name="sunset">Sunset</string>
+    <string name="midnight">Midnight</string>
+
+
     <string name="prayers_time_authorization">Prayers Time Authority</string>
     <string name="pick_location_acurrately">Pick Location Acurrately</string>
     <string name="ZEKR">الصفحة الرئيسية</string>

@@ -17,6 +17,11 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
 
 
     <uses-permission
@@ -58,14 +63,22 @@
         </activity>
 
 
+        <!-- Receiver (بدون intent-filter لأننا نستخدم PendingIntent بالـ component الصريح) -->
+        <receiver
+            android:name=".domain.sensordomain.AlarmBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
-
-
-
+        <!-- Service الموسيقى -->
+        <service
+            android:name=".domain.sensordomain.AlarmMusicService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 <!--
         <receiver
             android:name=".domain.nightthird.NightThirdReceiver"
-            android:exported="false" /-->>
+            android:exported="false" /-->
 
 <!--
         <receiver

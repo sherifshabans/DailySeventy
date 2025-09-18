@@ -6,7 +6,7 @@ import com.elsharif.dailyseventy.util.Screen
 
 data class CategoriesName(
     val title: String,
-    @DrawableRes val iconRes: Int, // SVG in drawable
+    val iconRes: Int, // drawable or SVG resource
     val route :String
 )
 
@@ -19,13 +19,18 @@ internal val listOfCategories=listOf(
     ),
     CategoriesName(
         title = "التاريخ الهجري",
-        iconRes = R.drawable.hijriicon,
+        iconRes = R.drawable.calendar,
         route = Screen.Hijri.route
     ),
     CategoriesName(
         title = "تحديد الموقع",
-        iconRes = R.drawable.mosque,
+        iconRes = R.drawable.locationselect,
         route = Screen.PrayerTimes.route
+    ),
+    CategoriesName(
+        title = "مواقيت الصلاة",
+        iconRes = R.drawable.mosque,
+        route = Screen.MonthlyPrayerTimes.route
     ),
     CategoriesName(
         title = "المسبحة",
@@ -34,7 +39,7 @@ internal val listOfCategories=listOf(
     ),
     CategoriesName(
         title = "القبلة",
-        iconRes = R.drawable.qiblaicon,
+        iconRes = R.drawable.mecca,
         route = Screen.Qible.route
     )
 
