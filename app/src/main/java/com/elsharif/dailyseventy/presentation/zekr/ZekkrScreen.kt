@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.elsharif.dailyseventy.presentation.azkarcategories.getCategoryResId
 import com.elsharif.dailyseventy.presentation.components.CountCard
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.util.getAdaptiveGradient
@@ -23,19 +24,12 @@ fun ZekkrScreen(
     category:String
 ) {
 
-    /*
-    * عايز أضيف إمكانية الشير للنص
-    * عايز أغير لون التيكست التاني
-    * عايز أغير باك جراوند الصفجة الرئيسية
-    *
-    * */
-
 
     val viewModel: ZekkrViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val count by viewModel.count.collectAsStateWithLifecycle()
 
-
+    val categoryResId = getCategoryResId(category)
 
 
     LaunchedEffect(category) {
@@ -48,7 +42,7 @@ fun ZekkrScreen(
     Scaffold(
         //snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {DashboardScreenTopBar(
-            name = category,
+            name = categoryResId,
             navController =navController
         )}
     ) {paddingValues ->

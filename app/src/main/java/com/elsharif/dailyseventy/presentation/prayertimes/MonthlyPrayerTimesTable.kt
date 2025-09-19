@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,8 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
+import com.elsharif.dailyseventy.R
+
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
@@ -47,27 +50,26 @@ data class MonthlyPrayerData(
     val isToday: Boolean
 )
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "LocalContextConfigurationRead")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MonthlyPrayerTimesPage(
     navController: NavController,
     viewModel: PrayerTimeViewModel = hiltViewModel()
 ) {
+    val locale = currentLocale()
     var selectedMonth by remember { mutableStateOf(YearMonth.now()) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
 
-    // States للبيانات
     var monthlyData by remember { mutableStateOf<List<MonthlyPrayerData>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val monthPickerState = rememberUseCaseState()
 
-    // جلب بيانات الشهر
     LaunchedEffect(selectedMonth) {
         isLoading = true
         errorMessage = null
@@ -79,15 +81,11 @@ fun MonthlyPrayerTimesPage(
 
             for (day in 1..daysInMonth) {
                 val date = selectedMonth.atDay(day)
-                val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("ar"))
+                val dayOfWeek = date.dayOfWeek.getDisplayName(TextStyle.SHORT, locale) // ✅
 
-                // تغيير التاريخ في الـ ViewModel وجلب المواقيت
                 viewModel.setDate(date)
-
-                // انتظار قصير للحصول على البيانات
                 kotlinx.coroutines.delay(100)
 
-                // جلب المواقيت من الـ ViewModel
                 val prayerTimesState = viewModel.prayerTimesState.value
                 val prayers = when (prayerTimesState) {
                     is PrayerUiState.Success -> prayerTimesState.prayers
@@ -106,82 +104,53 @@ fun MonthlyPrayerTimesPage(
 
             monthlyData = monthData
 
-            // التمرير لليوم الحالي
             val todayIndex = monthData.indexOfFirst { it.isToday }
             if (todayIndex >= 0) {
-                scope.launch {
-                    lazyListState.animateScrollToItem(todayIndex)
-                }
+                scope.launch { lazyListState.animateScrollToItem(todayIndex) }
             }
 
         } catch (e: Exception) {
-            errorMessage = "حدث خطأ في تحميل مواقيت الشهر: ${e.message}"
+            errorMessage = context.getString(R.string.error_loading_month_prayer_times, e.message ?: "")
         } finally {
             isLoading = false
         }
     }
 
-
     Scaffold(
-        topBar = {
-            DashboardScreenTopBar(Screen.MonthlyPrayerTimes.route,navController)
-        }
-    )
-    { paddingValues -> 
-            CalendarDialog(
-                state = monthPickerState,
-                selection = CalendarSelection.Date { date ->
-                    selectedMonth = YearMonth.from(date)
-                }
-            )
+        topBar = { DashboardScreenTopBar(Screen.MonthlyPrayerTimes.titleRes, navController) }
+    ) { paddingValues ->
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues )
-            ) {
-                // شريط اختيار الشهر
-                MonthSelector(
-                    selectedMonth = selectedMonth,
-                    onMonthClick = { monthPickerState.show() }
-                )
+        CalendarDialog(
+            state = monthPickerState,
+            selection = CalendarSelection.Date { date ->
+                selectedMonth = YearMonth.from(date)
+            }
+        )
 
-                Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            MonthSelector(selectedMonth = selectedMonth, locale = locale, onMonthClick = { monthPickerState.show() })
 
-                when {
-                    isLoading -> {
-                        LoadingView()
-                    }
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    errorMessage != null -> {
-                        ErrorView(
-                            message = errorMessage!!,
-                            onRetry = {
-                                selectedMonth = selectedMonth // إعادة تشغيل LaunchedEffect
-                            }
-                        )
-                    }
-
-                    monthlyData.isEmpty() -> {
-                        EmptyView()
-                    }
-
-                    else -> {
-                        MonthlyPrayerTimesTable(
-                            monthlyData = monthlyData,
-                            lazyListState = lazyListState
-                        )
-                    }
-                }
+            when {
+                isLoading -> LoadingView()
+                errorMessage != null -> ErrorView(message = errorMessage!!, onRetry = { selectedMonth = selectedMonth })
+                monthlyData.isEmpty() -> EmptyView()
+                else -> MonthlyPrayerTimesTable(monthlyData = monthlyData, lazyListState = lazyListState)
             }
         }
-
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun MonthSelector(
     selectedMonth: YearMonth,
+    locale: Locale,
     onMonthClick: () -> Unit
 ) {
     Card(
@@ -189,9 +158,7 @@ private fun MonthSelector(
             .fillMaxWidth()
             .padding(bottom = 8.dp),
         onClick = onMonthClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Row(
             modifier = Modifier
@@ -200,31 +167,20 @@ private fun MonthSelector(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.CalendarMonth,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-
+            Icon(Icons.Default.CalendarMonth, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.width(8.dp))
-
             Text(
-                text = "${selectedMonth.month.getDisplayName(TextStyle.FULL, Locale("ar"))} ${selectedMonth.year}",
+                text = "${selectedMonth.month.getDisplayName(TextStyle.FULL, locale)} ${selectedMonth.year}", // ✅
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
-
             Spacer(modifier = Modifier.width(8.dp))
-
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
+            Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
+
 
 @Composable
 private fun LoadingView() {
@@ -242,7 +198,7 @@ private fun LoadingView() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "جاري تحميل مواقيت الشهر...",
+                text = stringResource(R.string.loading_month_prayer_times),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -291,7 +247,7 @@ private fun ErrorView(
             ) {
                 Icon(Icons.Default.Refresh, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("إعادة المحاولة")
+                Text(stringResource(R.string.retry))
             }
         }
     }
@@ -319,7 +275,7 @@ private fun EmptyView() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "لا توجد مواقيت متاحة لهذا الشهر",
+                text = stringResource(R.string.no_prayer_times),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -367,7 +323,16 @@ private fun TableHeader() {
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        val headers = listOf("اليوم", "التاريخ", "الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء")
+        val headers = listOf(
+            stringResource(R.string.header_day),
+            stringResource(R.string.header_date),
+            stringResource(R.string.header_fajr),
+            stringResource(R.string.header_sunrise),
+            stringResource(R.string.header_dhuhr),
+            stringResource(R.string.header_asr),
+            stringResource(R.string.header_maghrib),
+            stringResource(R.string.header_isha)
+        )
 
         headers.forEach { header ->
             Text(
@@ -444,7 +409,7 @@ private fun TableRow(
         prayerNames.forEach { prayerName ->
             val prayer = dayData.prayers.find {
                 it.name.contains(prayerName, ignoreCase = true) ||
-                        getPrayerArabicName(prayerName).contains(it.name, ignoreCase = true)
+                        getPrayerName(prayerName).contains(it.name, ignoreCase = true)
             }
 
             Text(
@@ -456,17 +421,21 @@ private fun TableRow(
                 fontWeight = if (dayData.isToday) FontWeight.Bold else FontWeight.Normal
             )
         }
+
     }
 }
 
-private fun getPrayerArabicName(prayerName: String): String = when (prayerName.lowercase()) {
-    "fajr" -> "الفجر"
-    "sunrise" -> "الشروق"
-    "dhuhr" -> "الظهر"
-    "asr" -> "العصر"
-    "maghrib" -> "المغرب"
-    "isha" -> "العشاء"
-    else -> ""
+@Composable
+private fun getPrayerName(prayerName: String): String {
+    return when (prayerName.lowercase()) {
+        "fajr" -> stringResource(R.string.header_fajr)
+        "sunrise" -> stringResource(R.string.header_sunrise)
+        "dhuhr" -> stringResource(R.string.header_dhuhr)
+        "asr" -> stringResource(R.string.header_asr)
+        "maghrib" -> stringResource(R.string.header_maghrib)
+        "isha" -> stringResource(R.string.header_isha)
+        else -> prayerName
+    }
 }
 
 private fun parseTime(time: String): String {
@@ -477,5 +446,18 @@ private fun parseTime(time: String): String {
         matchResult?.value ?: time
     } catch (e: Exception) {
         time
+    }
+}
+@SuppressLint("LocalContextConfigurationRead", "ObsoleteSdkInt")
+@Composable
+fun currentLocale(): Locale {
+    val context = LocalContext.current
+    return remember(context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales[0]
+        } else {
+            @Suppress("DEPRECATION")
+            context.resources.configuration.locale
+        }
     }
 }

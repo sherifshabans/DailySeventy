@@ -20,10 +20,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeListItem
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
@@ -75,7 +77,7 @@ fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Text(
-                    text = "مواقيت الصلاة",
+                    text = stringResource(R.string.prayertimes),
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
@@ -99,14 +101,14 @@ fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             modifier = Modifier.weight(0.5f),
-                            text = "الصلاة",
+                            text = stringResource(R.string.pray),
                             fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         Text(
                             modifier = Modifier.weight(0.5f),
-                            text = "موعد الصلاة",
+                            text = stringResource(R.string.praytime),
                             fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onBackground,
@@ -115,7 +117,7 @@ fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
                         )
                         Text(
                             modifier = Modifier.weight(0.5f),
-                            text = "الوقت المتبقي",
+                            text = stringResource(R.string.remainingtime),
                             fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onBackground,

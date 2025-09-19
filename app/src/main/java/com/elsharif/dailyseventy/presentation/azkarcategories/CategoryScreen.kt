@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,7 @@ fun CategoryScreen(navController: NavController) {
 
 
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.Azkar.route,navController) }
+        topBar = { DashboardScreenTopBar(Screen.Azkar.titleRes,navController) }
     ) { //paddingValues ->
 
         CurvedScroll(navController)
@@ -99,7 +100,7 @@ fun CurvedScroll(navController: NavController) {
                     ) {
 
                         Text(
-                            text = categories[category],
+                            text = stringResource(getCategoryResId(categories[category])), // العرض حسب اللغة
                             modifier = Modifier.fillMaxWidth(), // Make the text span full width
                             textAlign = TextAlign.Center,       // Center-align the text
                             style = MaterialTheme.typography.bodyLarge,

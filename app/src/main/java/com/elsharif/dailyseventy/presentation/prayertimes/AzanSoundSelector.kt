@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.prayertimes.model.AzanSound
@@ -17,11 +18,12 @@ fun AzanSoundSelectorDialog(
     onDismiss: () -> Unit
 ) {
     val sounds = listOf(
-        AzanSound("علي الملا", R.raw.elmola),
-        AzanSound("أبو العينين", R.raw.aboelenin),
-        AzanSound("عبدالباسط عبدالصمد", R.raw.abdelbasset),
-        AzanSound("مشاري راشد", R.raw.mosharyfajr)
+        AzanSound(stringResource(R.string.azan_ali_elmola), R.raw.elmola),
+        AzanSound(stringResource(R.string.azan_abo_elenin), R.raw.aboelenin),
+        AzanSound(stringResource(R.string.azan_abdelbasset), R.raw.abdelbasset),
+        AzanSound(stringResource(R.string.azan_mosharyfajr), R.raw.mosharyfajr)
     )
+
 
     val selectedSoundResId = remember {
         mutableIntStateOf(AzanSoundPrefs.loadSelectedSound(context))
@@ -48,7 +50,7 @@ fun AzanSoundSelectorDialog(
         },
         title = {
             Text(
-                text = "اختر صوت الأذان",
+                text = stringResource(R.string.select_azan_sound),
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -99,7 +101,7 @@ fun AzanSoundSelectorDialog(
                 mediaPlayer?.release()
                 mediaPlayer = null
             }) {
-                Text("إغلاق")
+                Text(stringResource(R.string.close))
             }
         }
     )

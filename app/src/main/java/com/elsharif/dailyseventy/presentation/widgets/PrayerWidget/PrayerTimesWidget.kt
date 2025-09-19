@@ -102,9 +102,10 @@ object PrayerTimesWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.background(if (isDarkSystem) Black else White),
                 contentAlignment = Alignment.TopCenter
             ) {
+
+
                 Column(
-                    modifier = GlanceModifier.fillMaxSize()
-                        .background(imageProvider = ImageProvider(R.drawable.shape_gold_outlined)),
+                    modifier = GlanceModifier.fillMaxSize() ,
                     horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
                     verticalAlignment = if (prayerTiming.isNotEmpty()) Alignment.Vertical.Top else Alignment.Vertical.CenterVertically,
 
@@ -120,13 +121,13 @@ object PrayerTimesWidget : GlanceAppWidget() {
                                 verticalAlignment = Alignment.Vertical.CenterVertically
                             ) {
                                 Image(
-                                    provider = ImageProvider(R.drawable.top_left_corner_small),
+                                    provider = ImageProvider(R.drawable.leftcorner),
                                     contentDescription = null
                                 )
                                 Spacer(modifier = GlanceModifier.defaultWeight())
                                 Spacer(modifier = GlanceModifier.defaultWeight())
                                 Image(
-                                    provider = ImageProvider(R.drawable.top_right_corner_small),
+                                    provider = ImageProvider(R.drawable.rightcorner),
                                     contentDescription = null
                                 )
                             }

@@ -17,8 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.util.Screen
 
@@ -30,7 +32,7 @@ fun CustomZikrSebhaPage(viewModel: TasbeehViewModel,navController: NavController
     val count by viewModel.getTasbeehCount().collectAsState(initial = 0)
 
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.TasbeehCustom.route,navController) }
+        topBar = { DashboardScreenTopBar(Screen.TasbeehCustom.titleRes,navController) }
     ) { paddingValues ->
 
         Column(
@@ -40,7 +42,7 @@ fun CustomZikrSebhaPage(viewModel: TasbeehViewModel,navController: NavController
                 modifier = Modifier.padding(top = 16.dp),
                 value = customZikr,
                 onValueChange = { customZikr = it },
-                label = { Text("اكتب الذكر") }
+                label = { Text(text = stringResource(R.string.write_zirk)) }
             )
 
             CustomizableSebhaPage(

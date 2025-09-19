@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +36,7 @@ import com.elsharif.dailyseventy.presentation.home.model.listOfCategories
 fun CategorySection(navController: NavController){
     Column {
         Text(
-            text = "دليل المسلم اليومي",
+            text = stringResource(R.string.muslimzikr),
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
@@ -73,7 +74,7 @@ fun CategoryItem(
                 .clip(RoundedCornerShape(25.dp))
                 .background(MaterialTheme.colorScheme.secondary)
                 .size(120.dp)
-                .clickable {    navController.navigate(category.route) }
+                .clickable { navController.navigate(category.route) }
                 .padding(13.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -93,7 +94,7 @@ fun CategoryItem(
             )
 
             Text(
-                text = category.title,
+                text = stringResource(category.routeInt),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp

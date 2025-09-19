@@ -331,6 +331,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 sealed class MapUiState {
@@ -354,6 +355,8 @@ class PrayerTimeViewModel @Inject constructor(
 
     private val _mapState = MutableStateFlow<MapUiState>(MapUiState.Loading)
     val mapState: StateFlow<MapUiState> = _mapState
+    private val _addressText = MutableStateFlow("")
+    val addressText: StateFlow<String> = _addressText
 
     init {
         fetchCurrentLocation()
@@ -375,13 +378,38 @@ class PrayerTimeViewModel @Inject constructor(
         }
     }
 
+    fun updateAddressFromGeoPoint(geoPoint: GeoPoint) {
+        val newAddress = getAddressFromGeoPoint(context, geoPoint)
+        _addressText.value = newAddress
+    }
+
+    private fun getAddressFromGeoPoint(context: Context, geoPoint: GeoPoint): String {
+        return try {
+            val geocoder = android.location.Geocoder(context, Locale.getDefault())
+            val addresses = geocoder.getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val adminArea = addresses[0].adminArea ?: ""   // المحافظة / المنطقة
+                val city = addresses[0].locality ?: ""         // المدينة
+                val country = addresses[0].countryName ?: ""   // الدولة
+                listOf(city,adminArea,  country)
+                    .filter { it.isNotEmpty() }
+                    .joinToString(" - ")
+            } else {
+                "موقع غير معروف"
+            }
+        } catch (e: Exception) {
+            "تعذر تحديد الموقع"
+        }
+    }
     private fun fetchCurrentLocation() = viewModelScope.launch {
         _mapState.value = MapUiState.Loading
         try {
             val locationPair = getUserLocationUseCase().first()
             val location = GeoPoint(locationPair.first, locationPair.second)
 
-            // فحص حالة الإنترنت وتحديد الـ state المناسب
+            // ✅ تحديث العنوان مباشرة بعد جلب الموقع
+            updateAddressFromGeoPoint(location)
+
             if (isNetworkAvailable()) {
                 _mapState.value = MapUiState.Success(location)
             } else {
@@ -389,8 +417,11 @@ class PrayerTimeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("PrayerViewModel", "Error fetching location: ${e.message}")
-            // في حالة الخطأ، نجرب نجيب موقع افتراضي
-            val defaultLocation = GeoPoint(30.0444, 31.2357) // القاهرة كموقع افتراضي
+            val defaultLocation = GeoPoint(30.0444, 31.2357) // القاهرة افتراضي
+
+            // ✅ كمان هنا نجيب العنوان الافتراضي
+            updateAddressFromGeoPoint(defaultLocation)
+
             if (isNetworkAvailable()) {
                 _mapState.value = MapUiState.Error("تعذر جلب الموقع الحالي")
             } else {
@@ -597,6 +628,27 @@ class PrayerTimeViewModel @Inject constructor(
     fun scheduleNightThirdNotificationsFromPrayerTimes(context: Context, selection: Set<NightThird>) {
         viewModelScope.launch {
             try {
+                // ✅ خذ البيانات مرة واحدة واجدول
+                val prayers = prayerTimesFlow.first()
+
+                val maghrib = prayers.firstOrNull { it.name.contains("Maghrib", true) }?.time
+                    ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
+                val fajr = prayers.firstOrNull { it.name.contains("Fajr", true) }?.time
+                    ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
+
+                if (maghrib != null && fajr != null) {
+                    // ✅ الجدولة تحصل مرة واحدة بس
+                    scheduleNightThirdNotifications(context, maghrib, fajr, selection)
+                    Log.d("PrayerViewModel", "Night third notifications scheduled for: $selection")
+                }
+            } catch (e: Exception) {
+                Log.e("PrayerViewModel", "Error scheduling night third notifications: ${e.message}")
+            }
+        }
+    }
+    /*fun scheduleNightThirdNotificationsFromPrayerTimes(context: Context, selection: Set<NightThird>) {
+        viewModelScope.launch {
+            try {
                 prayerTimesFlow.collect { prayers ->
                     val maghrib = prayers.firstOrNull { it.name.contains("Maghrib", true) }?.time
                         ?.let { LocalTime.parse(it, DateTimeFormatter.ofPattern("hh:mm a")) }
@@ -612,7 +664,7 @@ class PrayerTimeViewModel @Inject constructor(
                 Log.e("PrayerViewModel", "Error scheduling night third notifications: ${e.message}")
             }
         }
-    }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun scheduleSunriseAzkar(context: Context) {

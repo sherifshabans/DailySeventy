@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -108,7 +109,7 @@ fun PrayerTimesPage(
     val prayerTimesState by viewModel.prayerTimesState.collectAsState()
     Scaffold(
         topBar = {
-            DashboardScreenTopBar(Screen.PrayerTimes.route,navController)
+            DashboardScreenTopBar(Screen.PrayerTimes.titleRes,navController)
         }
     ) { paddingValues ->
 
@@ -129,7 +130,7 @@ fun PrayerTimesPage(
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "نستعد لمواقيت الصلاة… 🌙",
+                        text = stringResource(R.string.loading_prayer_times),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp
@@ -143,13 +144,13 @@ fun PrayerTimesPage(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = (prayerTimesState as PrayerUiState.Error).message
-                            ?: "تعذر تحميل المواقيت ⚠️",
+                            ?: stringResource(R.string.error_loading_prayer_times),
                         textAlign = TextAlign.Center,
                         color = Color.Red
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "تأكد من اتصالك بالإنترنت وأعد المحاولة",
+                        text = stringResource(R.string.check_internet),
                         color = Color.Gray,
                         fontSize = 14.sp
                     )
@@ -175,6 +176,7 @@ fun PrayerTimesPage(
     }}
 }
 
+@SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -193,6 +195,7 @@ private fun PrayerTimesViews(
     val datePickerState = rememberUseCaseState()
     val authorityDialogListState = rememberUseCaseState()
     val context = LocalContext.current
+    val addressText by viewModel.addressText.collectAsState()
 
     // تحقق من حالة الاتصال
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -223,7 +226,7 @@ private fun PrayerTimesViews(
 
     ListDialog(
         state = authorityDialogListState,
-        header = Header.Default("اختر التفويض"),
+        header = Header.Default(stringResource(R.string.choose_authority)),
         selection = ListSelection.Single(options = authorityListOptions) { index, _ ->
             if (index < prayerTimesAuthorities.size) {
                 onAuthorityChange(prayerTimesAuthorities[index])
@@ -237,12 +240,60 @@ private fun PrayerTimesViews(
             .padding(paddingValues)
             .verticalScroll(rememberScrollState())
     ) {
-        PrayerTimesMapView(viewModel = viewModel, onMapClick = onMapClick)
+        // الخريطة
+        PrayerTimesMapView(
+            viewModel = viewModel,
+            onMapClick = { geoPoint ->
+                onMapClick(geoPoint)
+                // 🟢 تحديث العنوان من الفيو موديل مباشرة
+                viewModel.updateAddressFromGeoPoint(geoPoint)
+            }
+        )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // زر جلب الموقع الحالي
+            Button(
+                onClick = {
+                    val fused = com.google.android.gms.location.LocationServices
+                        .getFusedLocationProviderClient(context)
+                    fused.lastLocation.addOnSuccessListener { loc ->
+                        if (loc != null) {
+                            val geo = GeoPoint(loc.latitude, loc.longitude)
+                            onMapClick(geo)
+                            // 🟢 كمان هنا نخلي التحديث من الفيو موديل
+                            viewModel.updateAddressFromGeoPoint(geo)
+                        }
+                    }
+                },
+                modifier = Modifier.weight(1f) // ياخد مساحة كويسة
+            ) {
+                Text(stringResource(R.string.GetMyLocation))
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // عرض المنطقة + المدينة + الدولة
+              Text(
+                    text = addressText,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.weight(1f)
+                )
+
+        }
+
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "اختر الموقع بدقة",
+            text = stringResource(R.string.choose_location),
             fontSize = 16.sp,
             fontWeight = FontWeight.ExtraBold,
             textAlign = TextAlign.Center,
@@ -252,7 +303,7 @@ private fun PrayerTimesViews(
         // Date Picker Row
         OutlinedRow(
             Modifier
-                .padding(top = 16.dp, start = 12.dp, end = 12.dp)
+                .padding(top = 8.dp, start = 12.dp, end = 12.dp)
                 .clickable { datePickerState.show() }
         ) {
             Text(text = pickedDate, modifier = Modifier.padding(horizontal = 16.dp))
@@ -294,8 +345,8 @@ private fun PrayerTimesViews(
 
                 Text(
                     text = when {
-                        !isNetworkAvailable && selectedAuthority.name.isEmpty() -> "غير متاح أثناء عدم الاتصال"
-                        selectedAuthority.name.isEmpty() -> "لا يوجد تفويض متاح"
+                        !isNetworkAvailable && selectedAuthority.name.isEmpty() -> stringResource(R.string.not_available_offline)
+                        selectedAuthority.name.isEmpty() -> stringResource(R.string.no_authority_available)
                         else -> selectedAuthority.name
                     },
                     color = if (!isNetworkAvailable || selectedAuthority.name.isEmpty()) Color.Gray else Color.Unspecified
@@ -339,7 +390,7 @@ private fun PrayerTimesViews(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "يتم عرض آخر المواقيت المحفوظة محلياً",
+                        text = stringResource(R.string.last_saved_prayer_times),
                         color = Color(0xFFE65100),
                         fontSize = 12.sp
                     )
@@ -380,17 +431,14 @@ private fun PrayerTimesViews(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "لا توجد مواقيت متاحة",
+                        text = stringResource(R.string.no_prayer_times_available),
                         color = Color(0xFFC62828),
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = if (!isNetworkAvailable) {
-                            "تأكد من الاتصال بالإنترنت وأعد المحاولة"
-                        } else {
-                            "حاول اختيار تاريخ أو موقع مختلف"
-                        },
+                        text = if (!isNetworkAvailable) stringResource(R.string.check_internet_try_again)
+                        else stringResource(R.string.try_different_date_or_location),
                         color = Color.Gray,
                         fontSize = 12.sp,
                         textAlign = TextAlign.Center
@@ -425,7 +473,7 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator()
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("جارٍ تحميل الخريطة…")
+                    Text(text = stringResource(R.string.loading_map))
                 }
             }
         }
@@ -440,23 +488,19 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = (mapState as MapUiState.Error).message
-                            ?: "تعذر تحميل الخريطة ⚠️",
+                        text = (mapState as MapUiState.Error).message ?: stringResource(R.string.map_loading_error),
                         color = Color.White,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "تأكد من اتصالك بالإنترنت",
-                        color = Color.LightGray,
-                        fontSize = 12.sp
-                    )
+                    Text(text = stringResource(R.string.check_internet), color = Color.LightGray, fontSize = 12.sp)
+
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = { viewModel.retryConnection() },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                     ) {
-                        Text("إعادة المحاولة", color = Color.White)
+                        Text(stringResource(R.string.retry), color = Color.White)
                     }
                 }
             }
@@ -478,26 +522,14 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
                         modifier = Modifier.size(48.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "وضع عدم الاتصال 📴",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
+                    Text(text = stringResource(R.string.offline_mode), color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "المواقيت محفوظة محلياً",
-                        color = Color.LightGray,
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center
-                    )
+                    Text(text = stringResource(R.string.prayer_times_saved_locally), color = Color.LightGray, fontSize = 14.sp, textAlign = TextAlign.Center)
+
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "📍 آخر موقع محفوظ",
-                        color = Color.LightGray,
-                        fontSize = 12.sp
-                    )
+                    Text(text = stringResource(R.string.last_saved_location), color = Color.LightGray, fontSize = 12.sp)
+
                     Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = { viewModel.retryConnection() },
@@ -509,7 +541,7 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("تحقق من الاتصال", color = Color.White)
+                        Text(text = stringResource(R.string.check_connection), color = Color.White)
                     }
                 }
             }
@@ -553,10 +585,20 @@ internal fun PrayerTimeListItem(
         }
     }
 
+    val backgroundColor = when {
+        isNextPrayer -> MaterialTheme.colorScheme.primaryContainer
+        else  -> MaterialTheme.colorScheme.surface
+    }
+
+    val textColor = when {
+        isNextPrayer -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(if (isNextPrayer) Color(0xFFE3F2FD) else Color.Transparent)
+            .background(backgroundColor)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -595,6 +637,8 @@ internal fun PrayerTimeListItem(
                 text = uiPrayerTime.name,
                 fontSize = 14.sp,
                 fontWeight = if (isNextPrayer) FontWeight.Bold else FontWeight.Normal,
+                color = textColor,
+                maxLines = 1,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .weight(0.5f)
@@ -604,6 +648,8 @@ internal fun PrayerTimeListItem(
                 text = uiPrayerTime.time,
                 fontSize = 14.sp,
                 fontWeight = if (isNextPrayer) FontWeight.Bold else FontWeight.Normal,
+                color = textColor,
+                maxLines = 1,
                 modifier = Modifier.weight(0.5f)
             )
 
@@ -611,8 +657,10 @@ internal fun PrayerTimeListItem(
                 text = remainingTime,
                 fontSize = 14.sp,
                 fontWeight = if (isNextPrayer) FontWeight.Bold else FontWeight.Normal,
+                color = textColor,
                 modifier = Modifier.weight(0.5f),
-                textAlign = TextAlign.End
+                textAlign = TextAlign.End,
+                maxLines = 1
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -625,4 +673,3 @@ internal fun PrayerTimeListItem(
         PrimaryColorDivider(horizontalPadding = 10.dp)
     }
 }
-

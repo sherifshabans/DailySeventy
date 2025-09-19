@@ -14,9 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -42,7 +44,7 @@ fun NightThirdDialog(
             ) {
                 // Header
                 Text(
-                    text = "إعدادات حساب الثلث الأخير",
+                    text = stringResource(R.string.thirdsSettings),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -62,7 +64,7 @@ fun NightThirdDialog(
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("إغلاق")
+                    Text(stringResource(R.string.close))
                 }
             }
         }

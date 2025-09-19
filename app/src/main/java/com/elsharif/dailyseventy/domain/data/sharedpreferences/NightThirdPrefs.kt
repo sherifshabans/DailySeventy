@@ -3,13 +3,14 @@ package com.elsharif.dailyseventy.domain.data.sharedpreferences
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.annotation.StringRes
+import com.elsharif.dailyseventy.R
 
-enum class NightThird(val arabic: String) {
-    FIRST("الثلث الأول"),
-    SECOND("الثلث الثاني"),
-    THIRD("الثلث الأخير")
+enum class NightThird(@StringRes val labelRes: Int) {
+    FIRST(R.string.night_third_first),
+    SECOND(R.string.night_third_second),
+    THIRD(R.string.night_third_third)
 }
-
 object NightThirdPrefs {
     private const val PREF = "night_third_prefs"
     private const val KEY_ENABLED = "enabled"

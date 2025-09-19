@@ -2,6 +2,7 @@ package com.elsharif.dailyseventy.presentation.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,18 +39,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.elsharif.dailyseventy.R
+import com.elsharif.dailyseventy.domain.data.sharedpreferences.IslamicReminderPreferences
+import com.elsharif.dailyseventy.domain.islamicReminder.ReminderSettingsDialog
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmSettingsDialog
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
 import com.elsharif.dailyseventy.presentation.colorselection.ColorPickerDialog
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.presentation.friday.FridayReminderDialog
+import com.elsharif.dailyseventy.presentation.language.LanguageViewModel
+import com.elsharif.dailyseventy.presentation.language.LanguageSelectionDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.AzanSoundSelectorDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.thirdofthenight.NightThirdDialog
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
 import com.elsharif.dailyseventy.util.Screen
+import kotlinx.coroutines.delay
 
 @SuppressLint("NewApi")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +69,8 @@ fun SettingsScreen(
     themeViewModel: ThemeViewModel,
     context: Context,
     prayerTimeViewModel: PrayerTimeViewModel,
-    stepAlarmViewModel: StepAlarmViewModel
+    stepAlarmViewModel: StepAlarmViewModel,
+    languageViewModel: LanguageViewModel = hiltViewModel(),
 ) {
 
     var showNightThirdDialog by remember { mutableStateOf(false) }
@@ -67,15 +79,50 @@ fun SettingsScreen(
     var showFridayDialog by remember { mutableStateOf(false) }
     var showOverlayDialog by remember { mutableStateOf(false) }
     var showStepAlarmDialog by remember { mutableStateOf(false) }
+    var showSettingsDialog by remember { mutableStateOf(false) }
 
+    // إنشاء الـ preferences مرة واحدة فقط
+    val preferences = remember { IslamicReminderPreferences(context) }
+
+    // Language Dialog States
+    val showLanguageDialog: Boolean by languageViewModel.showLanguageDialog.collectAsStateWithLifecycle()
+    val currentLanguage by languageViewModel.currentLanguage.collectAsStateWithLifecycle()
+    val shouldRecreateActivity: Boolean by languageViewModel.shouldRecreateActivity.collectAsStateWithLifecycle()
+    val isChangingLanguage: Boolean by languageViewModel.isChangingLanguage.collectAsStateWithLifecycle()
+
+    // Handle activity recreation after language change with delay
+    LaunchedEffect(shouldRecreateActivity) {
+        if (shouldRecreateActivity) {
+            // Add a small delay to ensure preference is saved
+            delay(200)
+
+            // Recreate the activity to apply language changes immediately
+            (context as? ComponentActivity)?.recreate()
+            languageViewModel.acknowledgeActivityRecreation()
+        }
+    }
+
+    // Show Language Selection Dialog
+    if (showLanguageDialog) {
+        LanguageSelectionDialog(
+            currentLanguage = currentLanguage,
+            onLanguageSelected = { language ->
+                languageViewModel.changeLanguage(language)
+            },
+            onDismiss = {
+                languageViewModel.hideLanguageSelectionDialog()
+            },
+            isChangingLanguage = isChangingLanguage
+        )
+    }
 
     Scaffold(
         topBar = {
-            DashboardScreenTopBar(Screen.Settings.route,navController)
+            DashboardScreenTopBar(Screen.Settings.titleRes, navController)
         }
     ) { padding ->
 
-        LazyColumn( // ✅ instead of Column
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -83,10 +130,16 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
-                SettingsItem("إعدادات اللغة", Icons.Default.Language) {}
+                SettingsItem(
+                    title = stringResource(R.string.languageSettings),
+                    icon = Icons.Default.Language,
+                    subtitle = "${stringResource(R.string.current_language)}: ${currentLanguage.displayName}"
+                ) {
+                    languageViewModel.showLanguageSelectionDialog()
+                }
             }
             item {
-                SettingsItem("إعدادات حساب الوقت", Icons.Default.AccessTime) {
+                SettingsItem(stringResource(R.string.thirdsTimeSettings), Icons.Default.AccessTime) {
                     showNightThirdDialog = true
                 }
                 if (showNightThirdDialog) {
@@ -96,9 +149,7 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem("سمات البرنامج", Icons.Default.ColorLens) {
-                 //   navController.navigate(Screen.ColorPicker.route)
-
+                SettingsItem(stringResource(R.string.colorpickerSettings), Icons.Default.ColorLens) {
                     showColorDialog = true
                 }
                 if (showColorDialog) {
@@ -112,52 +163,52 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem("الإعدادات العامة للأذان", Icons.Default.Notifications)  {
+                SettingsItem(stringResource(R.string.prayerSettings), Icons.Default.Notifications) {
                     showAzanDialog = true
                 }
                 if (showAzanDialog) {
                     AzanSoundSelectorDialog(
                         context = context,
                         onDismiss = { showAzanDialog = false },
-
                     )
                 }
             }
             item {
-                SettingsItem("إعدادات يوم الجمعة", Icons.Default.Settings) {
+                SettingsItem(stringResource(R.string.fraidaySettings), Icons.Default.Settings) {
                     showFridayDialog = true
                 }
                 if (showFridayDialog) {
-                    FridayReminderDialog(context = LocalContext.current, prayerTimeViewModel =prayerTimeViewModel ) {
+                    FridayReminderDialog(
+                        context = LocalContext.current,
+                        prayerTimeViewModel = prayerTimeViewModel
+                    ) {
                         showFridayDialog = false
                     }
                 }
             }
             item {
-                SettingsItem("خدمة النافذة عائمة", Icons.Default.Apps) {
-                showOverlayDialog =true
-                }
-
-                /*OverlaySettingsDialog(
-                    context = context,
-                    showDialog = showOverlayDialog,
-                    onDismiss = { showOverlayDialog = false }
-                )*/
-
-            }
-            item {
-                SettingsItem("إعدادات متتبع الصلوات والصيام", Icons.Default.Settings) {}
-            }
-            item {
-                SettingsItem("إعدادات الشروق والنوافل", Icons.Default.Settings) {
-
+                SettingsItem(stringResource(R.string.overlaySettings), Icons.Default.Apps) {
+                    showOverlayDialog = true
                 }
             }
             item {
-                SettingsItem("إعدادات الأذكار", Icons.Default.Notifications) {}
+                SettingsItem(stringResource(R.string.FastSettings), Icons.Default.Settings) {
+                showSettingsDialog = true
+                }
+                // نقل الـ Dialog خارج الـ LazyColumn
+                if (showSettingsDialog) {
+                    ReminderSettingsDialog(
+                        context,
+                        showDialog = showSettingsDialog,
+                        onDismiss = { showSettingsDialog = false },
+                        preferences = preferences
+                    )
+                }
+
             }
+
             item {
-                SettingsItem("إعدادات منبه الفجر", Icons.Default.AccessAlarm) {
+                SettingsItem(stringResource(R.string.fajralarmSettings), Icons.Default.AccessAlarm) {
                     showStepAlarmDialog = true
                 }
                 if (showStepAlarmDialog) {
@@ -165,17 +216,24 @@ fun SettingsScreen(
                         showStepAlarmDialog = false
                     }
                 }
-
             }
             item {
-                SettingsItem("عن البرنامج", Icons.Default.Info) {}
+                SettingsItem(stringResource(R.string.aboutApp), Icons.Default.Info) {}
             }
         }
+
     }
+
+
 }
 
 @Composable
-fun SettingsItem(title: String, icon: ImageVector, onClick: () -> Unit) {
+fun SettingsItem(
+    title: String,
+    icon: ImageVector,
+    subtitle: String? = null,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -191,11 +249,35 @@ fun SettingsItem(title: String, icon: ImageVector, onClick: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row {
-                Icon(icon, contentDescription = title, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(
+                    icon,
+                    contentDescription = title,
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(title, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onPrimary)
+
+                // Title and subtitle column
+                androidx.compose.foundation.layout.Column {
+                    Text(
+                        title,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    subtitle?.let {
+                        Text(
+                            it,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                        )
+                    }
+                }
             }
-            Icon(Icons.Default.Settings, contentDescription = "Arrow")
+            Icon(
+                Icons.Default.Settings,
+                contentDescription = "Arrow",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }

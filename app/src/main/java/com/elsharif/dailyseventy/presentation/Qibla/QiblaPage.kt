@@ -38,6 +38,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -76,7 +77,7 @@ fun QiblaPage(
     }
 
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.Qible.route, navController =navController ) }
+        topBar = { DashboardScreenTopBar(Screen.Qible.titleRes, navController =navController ) }
     ) { paddingValues ->
 
 
@@ -97,15 +98,15 @@ private fun QiblaPageViews(
 
 
     val currentDirectionString = buildAnnotatedString {
-        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) { append("${stringResource(id = R.string.current_direction)}: ") }
-        withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)) {
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontSize = 14.sp)) { append("${stringResource(id = R.string.current_direction)}: ") }
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 14.sp)) {
             append(currentDirection.roundToInt().toString())
         }
     }
 
     val qiblaDirectionString = buildAnnotatedString {
-        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) { append("${stringResource(id = R.string.qibla_angel)}: ") }
-        withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)) {
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary, fontSize = 14.sp)) { append("${stringResource(id = R.string.qibla_angel)}: ") }
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 14.sp)) {
             append(qiblaDirection.roundToInt().toString())
         }
     }
@@ -139,9 +140,9 @@ private fun QiblaPageViews(
 
             Spacer(modifier = Modifier.height(45.dp))
             Row(Modifier.padding(25.dp)) {
-                Text(currentDirectionString)
+                Text(currentDirectionString, maxLines = 1)
                 Spacer(modifier = Modifier.weight(1f))
-                Text(qiblaDirectionString)
+                Text(qiblaDirectionString, maxLines = 1)
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row(

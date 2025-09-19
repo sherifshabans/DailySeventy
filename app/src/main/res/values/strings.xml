@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">سبعون مرة</string>
     <string name="MorningZekr">أذكار الصباح</string>
@@ -8,53 +9,224 @@
     <string name="AwakeZekr">أذكار الاستيقاظ</string>
     <string name="QuranPrey">أدعية قرآنية</string>
     <string name="ProphetsPrey">أدعية الأنبياء</string>
+    <string name="GetMyLocation">موقعي الحالي</string>
+    <string name="ChosseLocation">اختر الموقع بدقة</string>
+    <string name="Ruqyah">الرُّقية الشرعية من القرآن الكريم</string>
+    <string name="TasbihAll">التسبيح، التحميد، التهليل، التكبير</string>
+    <string name="MiscZekr">أذكار متنوعة</string>
 
+    <string name="prayers_api">خدمة مواقيت الصلاة</string>
+    <string name="reset">إعادة تعيين</string>
+    <string name="tasbeeh_count">عداد التسبيح</string>
+    <string name="language">اللغة</string>
+    <string name="dark_mode">الوضع الليلي</string>
+    <string name="hijri_calendar">التقويم الهجري</string>
+    <string name="prayer">صلاة</string>
 
-    <string name="prayers_api">Prayer Timings service</string>
-    <string name="reset">reset</string>
-    <string name="tasbeeh_count">Tasbeeh counter</string>
-    <string name="language">Language</string>
-    <string name="dark_mode">Night mode</string>
-    <string name="hijri_calendar">Hijri Calendar</string>
-    <string name="prayer">prayer</string>
-
-    <string name="prayer_is_in_10_minutes">prayer is in 10 minutes</string>
-    <string name="after_prayer_reminder">prayer is NOW Go!</string>
-    <string name="tasbeeh_after_prayer"> سبحة بعد الصلاة🕌</string>
+    <string name="prayer_is_in_10_minutes">الصلاة بعد 10 دقائق</string>
+    <string name="after_prayer_reminder">حان وقت الصلاة الآن!</string>
+    <string name="tasbeeh_after_prayer">سبحة بعد الصلاة🕌</string>
     <string name="tasbeeh_by_zekr">قائمة الأذكار📜</string>
     <string name="tasbeeh_custom">سبحة مخصصة✍️</string>
 
-    <string name="is_coming_soon">Is Coming Soon</string>
+    <string name="is_coming_soon">قريباً</string>
+    <string name="prayer_is_now">حان وقت الصلاة!</string>
+    <string name="search">بحث</string>
+    <string name="search_icon">أيقونة البحث</string>
 
+    <string name="fajr">الفجر</string>
+    <string name="dhuhr">الظهر</string>
+    <string name="asr">العصر</string>
+    <string name="maghrib">المغرب</string>
+    <string name="isha">العشاء</string>
+    <string name="sun_rise">الشروق</string>
+    <string name="imsak">الإمساك</string>
+    <string name="sunset">الغروب</string>
+    <string name="midnight">منتصف الليل</string>
 
-    <string name="prayer_is_now">Prayer is NOW!</string>
-    <string name="search">Search</string>
-    <string name="search_icon">Search Icon</string>
-
-    <string name="fajr">Fajr</string>
-    <string name="dhuhr">Dhuhr</string>
-    <string name="asr">Asr</string>
-    <string name="maghrib">Maghrib</string>
-    <string name="isha">Isha</string>
-    <string name="sun_rise">Sunrise</string>
-
-    <!-- إضافات جديدة -->
-    <string name="imsak">Imsak</string>
-    <string name="sunset">Sunset</string>
-    <string name="midnight">Midnight</string>
-
-
-    <string name="prayers_time_authorization">Prayers Time Authority</string>
-    <string name="pick_location_acurrately">Pick Location Acurrately</string>
+    <string name="prayers_time_authorization">مرجع مواقيت الصلاة</string>
+    <string name="pick_location_acurrately">اختر الموقع بدقة</string>
     <string name="ZEKR">الصفحة الرئيسية</string>
 
-    <string name="qibla">Qibla</string>
-    <string name="qibla_direction">Qibla direction</string>
-    <string name="qibla_angel">Qibla angle</string>
-    <string name="current_direction">Current direction</string>
-    <string name="kaaba">Kaaba</string>
-    <string name="compass">Compass</string>
-    <string name="needle">Needle</string>
+    <string name="qibla">القبلة</string>
+    <string name="qibla_direction">اتجاه القبلة</string>
+    <string name="qibla_angel">زاوية القبلة</string>
+    <string name="current_direction">الاتجاه الحالي</string>
+    <string name="kaaba">الكعبة</string>
+    <string name="compass">البوصلة</string>
+    <string name="needle">الإبرة</string>
+    <string name="write_zirk">اكتب الذكر</string>
+    <string name="type_of_sebhha">أنواع السبحة</string>
+    <string name="ChosseZikr">اختر الذكر</string>
+    <string name="afternoon">النهار 🌞</string>
+    <string name="openzekr">تفعيل التذكير</string>
+    <string name="choosethird">اختر الأثلاث:</string>
+    <string name="save">حفظ وتفعيل</string>
+    <string name="thirdsSettings">إعدادات حساب الثلث الأخير</string>
+    <string name="close">إغلاق</string>
+    <string name="languageSettings">إعدادات اللغة</string>
+    <string name="thirdsTimeSettings">إعدادات حساب الوقت</string>
+    <string name="colorpickerSettings">سمات البرنامج</string>
+    <string name="prayerSettings">الإعدادات العامة للأذان</string>
+    <string name="fraidaySettings">إعدادات يوم الجمعة</string>
+    <string name="overlaySettings">خدمة النافذة العائمة</string>
+    <string name="FastSettings">إعدادات متتبع الصلوات والصيام</string>
+    <string name="fajralarmSettings">إعدادات منبه الفجر</string>
+    <string name="aboutApp">عن البرنامج</string>
+    <string name="Exit">إلغاء</string>
+    <string name="notes">📌 ملاحظة:</string>
+    <string name="currentTime">الوقت الحالي:</string>
+    <string name="alarmTime">⏰ وقت المنبه</string>
+    <string name="steps">الخطوات:</string>
+    <string name="requierSteps">🚶 عدد الخطوات المطلوبة</string>
+    <string name="lightalarm">💡 منبه الإضاءة</string>
+    <string name="motionalarm">🚶 منبه الحركة</string>
+    <string name="needssteps">يحتاج لعدد خطوات محدد لإيقافه</string>
+    <string name="needslight">يعمل في الظلام ويتوقف في الضوء</string>
+    <string name="typeofalarm">🔧 نوع المنبه</string>
+    <string name="currentSettings">الإعدادات الحالية</string>
+    <string name="activealarm">منبه نشط</string>
+    <string name="stepsnumber">خطوة</string>
+    <string name="Settings">إعدادات</string>
+    <string name="importantnotes">⚠️ تنبيه هام</string>
+    <string name="muslimzikr">دليل المسلم اليومي</string>
+    <string name="prayertimes">مواقيت الصلاة</string>
+    <string name="pray">الصلاة</string>
+    <string name="praytime">موعد الصلاة</string>
+    <string name="remainingtime">الوقت المتبقي</string>
+    <string name="loadingprays">نقوم بتحميل أوقات الصلاة بدقة… 🌙</string>
+    <string name="notprayupcoming">لا توجد صلاة قادمة</string>
+    <string name="choosecolor">اختر لونًا</string>
+
+    <!-- Language Selection Dialog -->
+    <string name="select_language">اختر اللغة</string>
+    <string name="current_language">اللغة الحالية</string>
+    <string name="restart_required">يتطلب إعادة تشغيل التطبيق</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+    <string name="french">الفرنسية</string>
+    <string name="ok">موافق</string>
+    <string name="cancel">إلغاء</string>
+
+
+    <string name="screen_home">الصفحة الرئيسية</string>
+    <string name="screen_azkar">الأذكار</string>
+    <string name="screen_prayer_times">مواقيت الصلاة</string>
+    <string name="screen_monthly_prayer_times">مواقيت الصلاة الشهرية</string>
+    <string name="screen_hijri">التاريخ الهجري</string>
+    <string name="screen_qible">القبلة</string>
+    <string name="screen_settings">الإعدادات العامة</string>
+    <string name="screen_tasbeeh">تسبيح</string>
+    <string name="screen_tasbeeh_images">تسبيح بعد الصلاة</string>
+    <string name="screen_tasbeeh_list">تسبيح من اختيارك</string>
+    <string name="screen_tasbeeh_custom">تسبيح مخصص</string>
+    <string name="screen_color_picker">سمات البرنامج</string>
+    <string name="screen_night_third">إعدادات حساب الوقت</string>
+    <string name="screen_alarm">منبه القيام/الفجر</string>
+
+    <string name="friday_reminders">تنبيهات الجمعة</string>
+    <string name="kahf_reminder">تذكير بقراءة سورة الكهف</string>
+    <string name="asr_time_reminder">ساعة الإجابة (العصر)</string>
+
+    <string name="night_third_first">الثلث الأول</string>
+    <string name="night_third_second">الثلث الثاني</string>
+    <string name="night_third_third">الثلث الأخير</string>
+    <string name="notification_title">تنبيه</string>
+    <string name="current_third">الثلث الحالي: </string>
+    <string name="remaining_time">متبقي: %1$s</string>
+    <string name="today_date">اليوم: %1$s هـ</string>
+
+    <string name="header_day">اليوم</string>
+    <string name="header_date">التاريخ</string>
+    <string name="header_fajr">الفجر</string>
+    <string name="header_sunrise">الشروق</string>
+    <string name="header_dhuhr">الظهر</string>
+    <string name="header_asr">العصر</string>
+    <string name="header_maghrib">المغرب</string>
+    <string name="header_isha">العشاء</string>
+    <string name="loading_prayer_times">نستعد لمواقيت الصلاة… 🌙</string>
+    <string name="error_loading_prayer_times">تعذر تحميل المواقيت ⚠️</string>
+    <string name="check_internet">تأكد من اتصالك بالإنترنت وأعد المحاولة</string>
+
+    <string name="choose_authority">اختر التفويض</string>
+    <string name="choose_location">اختر الموقع بدقة</string>
+    <string name="not_available_offline">غير متاح أثناء عدم الاتصال</string>
+    <string name="no_authority_available">لا يوجد تفويض متاح</string>
+    <string name="last_saved_prayer_times">يتم عرض آخر المواقيت المحفوظة محلياً</string>
+    <string name="no_prayer_times_available">لا توجد مواقيت متاحة</string>
+    <string name="check_internet_try_again">تأكد من الاتصال بالإنترنت وأعد المحاولة</string>
+    <string name="try_different_date_or_location">حاول اختيار تاريخ أو موقع مختلف</string>
+    <string name="loading_map">جارٍ تحميل الخريطة…</string>
+    <string name="map_loading_error">تعذر تحميل الخريطة ⚠️</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="offline_mode">وضع عدم الاتصال 📴</string>
+    <string name="prayer_times_saved_locally">المواقيت محفوظة محلياً</string>
+    <string name="last_saved_location">📍 آخر موقع محفوظ</string>
+    <string name="check_connection">تحقق من الاتصال</string>
+
+    <string name="select_azan_sound">اختر صوت الأذان</string>
+    <string name="azan_ali_elmola">علي الملا</string>
+    <string name="azan_abo_elenin">أبو العينين</string>
+    <string name="azan_abdelbasset">عبدالباسط عبدالصمد</string>
+    <string name="azan_mosharyfajr">مشاري راشد</string>
+
+    <string name="no_prayer_times">لا توجد مواقيت متاحة لهذا الشهر</string>
+    <string name="loading_month_prayer_times">جاري تحميل مواقيت الشهر…</string>
+    <string name="error_loading_month_prayer_times">حدث خطأ في تحميل مواقيت الشهر: %1$s</string>
+
+    <string name="qibla_calibration">معايرة البوصلة</string>
+    <string name="rotate_phone_instruction">حرك هاتفك في دائرة لمعايرة أجهزة الاستشعار</string>
+    <string name="calibrating_sensors">جاري معايرة أجهزة الاستشعار...</string>
+
+    <string name="reminder_settings">إعدادات التذكيرات</string>
+
+    <string name="fasting_reminders">تذكيرات الصيام</string>
+    <string name="fasting_reminders_subtitle">تفعيل جميع تذكيرات الصيام</string>
+
+    <string name="monday_thursday">صيام الإثنين والخميس</string>
+    <string name="monday_thursday_subtitle">تذكير بصيام يومي الإثنين والخميس</string>
+
+    <string name="white_days">الأيام البيض</string>
+    <string name="white_days_subtitle">تذكير بصيام الأيام البيض (13، 14، 15)</string>
+
+    <string name="eid_reminders">تذكيرات الأعياد</string>
+    <string name="eid_reminders_subtitle">تهنئة بالأعياد الإسلامية</string>
+
+    <string name="religious_occasions">المناسبات الدينية</string>
+    <string name="religious_occasions_subtitle">تذكير بالمناسبات الإسلامية المهمة</string>
+
+    <string name="eid_fitr">عيد الفطر</string>
+    <string name="eid_adha">عيد الأضحى</string>
+    <string name="day_arafat">يوم عرفة</string>
+    <string name="day_ashura">يوم عاشوراء</string>
+    <string name="prophet_birthday">المولد النبوي</string>
+    <string name="isra_miraj">الإسراء والمعراج</string>
+    <string name="laylat_qadr">ليلة القدر</string>
+    <string name="begin_ramadan">بداية رمضان</string>
+
+    <string name="channel_fasting_name">تذكيرات الصيام</string>
+    <string name="channel_fasting_description">تذكيرات خاصة بأيام الصيام</string>
+
+    <string name="channel_general_name">التذكيرات العامة</string>
+    <string name="channel_general_description">تذكيرات الأعياد والمناسبات الدينية</string>
+
+    <!-- General Notifications -->
+    <string name="eid_title">🎉 %1$s</string>
+    <string name="eid_message">كل عام وأنتم بخير! %1$s مبارك 🌙✨</string>
+
+    <string name="occasion_title">🕌 %1$s</string>
+    <string name="occasion_message">اليوم %1$s، بارك الله لكم في هذا اليوم المبارك 🤲</string>
+
+    <!-- Fasting Reminders -->
+    <string name="fasting_title">تذكير الصيام</string>
+    <string name="monday_fasting">غداً يوم الإثنين - يُسن صيام يوم الإثنين 🌙</string>
+    <string name="thursday_fasting">غداً يوم الخميس - يُسن صيام يوم الخميس 🌙</string>
+
+    <string name="white_days_title">الأيام البيض</string>
+    <string name="white_days_message">غداً اليوم الـ%1$d من الشهر الهجري - من الأيام البيض المستحب صيامها 🌙\n%2$s</string>
+
+    <string name="special_fasting_title">صيام %1$s</string>
+    <string name="special_fasting_message">غداً %1$s - يُسن الصيام في هذا اليوم المبارك 🌙\n%2$s</string>
 
 
 </resources>

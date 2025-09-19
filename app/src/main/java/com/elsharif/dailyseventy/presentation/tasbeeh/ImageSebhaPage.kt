@@ -22,7 +22,7 @@ fun ImageSebhaPage(viewModel: TasbeehViewModel,navController: NavController)
     val repetitionCount = 33
     val currentIdx = (count / repetitionCount) % tasbeehImagesList.size
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.TasbeehImages.route, navController) }
+        topBar = { DashboardScreenTopBar(Screen.TasbeehImages.titleRes, navController) }
     ) { paddingValues ->
 
     CustomizableSebhaPage(

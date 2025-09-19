@@ -7,10 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.elsharif.dailyseventy.domain.data.sharedpreferences.FridayPrefs
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.R
 
 @SuppressLint("NewApi")
 @Composable
@@ -36,7 +38,7 @@ fun FridayReminderDialog(
             ) {
                 // Title
                 Text(
-                    text = "تنبيهات الجمعة",
+                    text = stringResource(R.string.friday_reminders),
                     style = MaterialTheme.typography.headlineSmall
                 )
 
@@ -53,7 +55,7 @@ fun FridayReminderDialog(
                     )
                     Spacer(Modifier.width(12.dp))
                     Text(
-                        text = "تذكير بقراءة سورة الكهف",
+                        text = stringResource(R.string.kahf_reminder),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -69,7 +71,7 @@ fun FridayReminderDialog(
                     )
                     Spacer(Modifier.width(12.dp))
                     Text(
-                        text = "ساعة الإجابة (العصر)",
+                        text = stringResource(R.string.asr_time_reminder),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -82,7 +84,8 @@ fun FridayReminderDialog(
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("إلغاء")
+                        Text(stringResource(R .string.Exit))
+
                     }
                     Spacer(Modifier.width(12.dp))
                     Button(
@@ -98,7 +101,7 @@ fun FridayReminderDialog(
                             onDismiss()
                         }
                     ) {
-                        Text("حفظ")
+                        Text(stringResource(R.string.save))
                     }
                 }
             }

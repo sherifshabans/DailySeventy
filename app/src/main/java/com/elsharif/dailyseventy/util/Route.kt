@@ -1,31 +1,24 @@
 package com.elsharif.dailyseventy.util
 
-sealed class  Screen(val route: String) {
+import androidx.annotation.StringRes
+import com.elsharif.dailyseventy.R
 
-    object Azkar : Screen("الأذكار")
+sealed class Screen(val route: String, @StringRes val titleRes: Int) {
 
-    object HomeScreen : Screen("الصفحة الرئيسية")
-    object PrayerTimes : Screen("مواقيت الصلاة")
+    object Azkar : Screen("azkar", R.string.screen_azkar)
+    object HomeScreen : Screen("home", R.string.screen_home)
+    object PrayerTimes : Screen("prayer_times", R.string.screen_prayer_times)
+    object MonthlyPrayerTimes : Screen("monthly_prayer_times", R.string.screen_monthly_prayer_times)
+    object Hijri: Screen("hijri", R.string.screen_hijri)
+    object Qible: Screen("qible", R.string.screen_qible)
+    object Settings: Screen("settings", R.string.screen_settings)
+    object Tasbeeh: Screen("tasbeeh", R.string.screen_tasbeeh)
+    object TasbeehImages : Screen("tasbeeh_images", R.string.screen_tasbeeh_images)
+    object TasbeehList : Screen("tasbeeh_list", R.string.screen_tasbeeh_list)
+    object TasbeehCustom : Screen("tasbeeh_custom", R.string.screen_tasbeeh_custom)
+    object ColorPicker: Screen("color_picker", R.string.screen_color_picker)
+    object NightThirdRoute: Screen("night_third", R.string.screen_night_third)
+    object AalarmRoute: Screen("step_alarm", R.string.screen_alarm)
 
-    object MonthlyPrayerTimes : Screen("مواقيت الصلاة الشهرية")
-    object Hijri: Screen("التاريخ الهجري")
-    object Qible: Screen("القبلة")
-
-    object Settings: Screen("الإعدادات العامة")
-
-    object Tasbeeh: Screen("تسبيح")
-
-    object TasbeehImages : Screen("تسبيح بعد الصلاة")
-
-    object TasbeehList : Screen("تسبيح من اختيارك")
-
-    object TasbeehCustom : Screen("تسبيح مخصص")
-
-    object ColorPicker: Screen("سمات البرنامج")
-
-    object NightThirdRoute: Screen("إعدادات حساب الوقت")
-
-    object AalarmRoute: Screen("منبه القيام/الفجر")
-
-
+    object AnimatedQibla: Screen("animated_qibla", R.string.screen_alarm)
 }

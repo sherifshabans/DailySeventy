@@ -3,14 +3,33 @@ package com.elsharif.dailyseventy.presentation.home.view
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,19 +42,20 @@ import java.time.Duration
 import java.time.LocalTime
 import java.time.chrono.HijrahDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-@SuppressLint("NewApi")
+@SuppressLint("NewApi", "LocalContextConfigurationRead")
 @Composable
-fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
-
+fun TopAddressSection(
+    viewModel: PrayerTimeViewModel = hiltViewModel(),
+) {
     val state by viewModel.prayerTimesState.collectAsState()
     val currentHijrahDate = HijrahDate.now()
+    val addressText by viewModel.addressText.collectAsState()
 
+    val locale = LocalContext.current.resources.configuration.locales[0] // اللغة الحالية للجهاز
     val hijriDateFormatted = currentHijrahDate.format(
-        DateTimeFormatter.ofPattern("d MMMM yyyy").withLocale(Locale("ar"))
+        DateTimeFormatter.ofPattern("d MMMM yyyy").withLocale(locale)
     )
-
     val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
 
     var remainingTime by remember { mutableStateOf("00:00:00") }
@@ -74,8 +94,9 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(110.dp) // نفس الارتفاع الأصلي
     ) {
+        // صورة الخلفية
         Image(
             painter = androidx.compose.ui.res.painterResource(id = R.drawable.mosque01),
             contentDescription = null,
@@ -83,90 +104,111 @@ fun TopAddressSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxSize()
         )
 
+        // المحتوى الرئيسي - بدون طبقة إضافية
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(6.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
+            // التاريخ الهجري في الأعلى
             Text(
-                textAlign = TextAlign.Center,
-                text = "اليوم: $hijriDateFormatted هـ",
-                fontSize = 18.sp,
+                text = stringResource(R.string.today_date, hijriDateFormatted),
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(6.dp))
 
-            when (state) {
-                is PrayerUiState.Loading -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        androidx.compose.material3.CircularProgressIndicator(
-                            color = MaterialTheme.colorScheme.primary,
-                            strokeWidth = 2.dp,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "نقوم بتحميل أوقات الصلاة بدقة… 🌙",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp
-                        )
-                    }
-                }
-                is PrayerUiState.Error -> {
-                    Text(
-                        text = (state as PrayerUiState.Error).message.toString(),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-                is PrayerUiState.Success -> {
-                    if (upcomingPrayer != null) {
+            // معلومات الصلاة في الوسط
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                when (state) {
+                    is PrayerUiState.Loading -> {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Image(
-                                painter = androidx.compose.ui.res.painterResource(id = upcomingPrayer.iconRes),
-                                contentDescription = upcomingPrayer.name,
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .padding(end = 8.dp)
+                            androidx.compose.material3.CircularProgressIndicator(
+                                color = MaterialTheme.colorScheme.primary,
+                                strokeWidth = 2.dp,
+                                modifier = Modifier.size(20.dp)
                             )
-
-                            Column {
-                                Text(
-                                    text = upcomingPrayer.name,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                                Text(
-                                    text = "متبقي: $remainingTime",
-                                    fontSize = 14.sp,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
-                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(R.string.loadingprays),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 14.sp
+                            )
                         }
-                    } else {
+                    }
+
+                    is PrayerUiState.Error -> {
                         Text(
-                            text = "لا توجد صلاة قادمة",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary
+                            text = (state as PrayerUiState.Error).message.toString(),
+                            color = MaterialTheme.colorScheme.error
                         )
                     }
+
+                    is PrayerUiState.Success -> {
+                        if (upcomingPrayer != null) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Image(
+                                    painter = androidx.compose.ui.res.painterResource(id = upcomingPrayer.iconRes),
+                                    contentDescription = upcomingPrayer.name,
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .padding(end = 4.dp)
+                                )
+
+                                Column {
+                                    Text(
+                                        text = upcomingPrayer.name,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.remaining_time, remainingTime),
+                                        fontSize = 12.sp,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
+                        } else {
+                            Text(
+                                text = stringResource(R.string.notprayupcoming),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
                 }
+            }
+
+            // العنوان في الأسفل
+            if (addressText.isNotEmpty()) {
+                Text(
+                    text = addressText,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }

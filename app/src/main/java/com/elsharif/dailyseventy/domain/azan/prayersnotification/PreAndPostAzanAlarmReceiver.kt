@@ -12,7 +12,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
-import com.elsharif.dailyseventy.MainActivity
+import com.elsharif.dailyseventy.ui.MainActivity
 import com.elsharif.dailyseventy.R
 
 class PreAndPostAzanAlarmReceiver : BroadcastReceiver() {

@@ -25,8 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.util.Screen
 
@@ -38,7 +40,7 @@ fun ZikrListSebhaPage(viewModel: TasbeehViewModel, navController: NavController)
     val count by viewModel.getTasbeehCount().collectAsState(initial = 0)
 
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.TasbeehList.route, navController) }
+        topBar = { DashboardScreenTopBar(Screen.TasbeehList.titleRes, navController) }
     ) { paddingValues ->
 
         Column(
@@ -58,7 +60,7 @@ fun ZikrListSebhaPage(viewModel: TasbeehViewModel, navController: NavController)
                     value = selectedZikr,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("اختر الذكر") },
+                    label = { Text(stringResource(R.string.ChosseZikr)) },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     },

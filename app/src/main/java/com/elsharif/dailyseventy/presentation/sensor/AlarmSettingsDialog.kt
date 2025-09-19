@@ -11,9 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
 import com.elsharif.dailyseventy.domain.sensordomain.AlarmScheduler
 
@@ -41,7 +43,7 @@ fun StepAlarmSettingsDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "ضبط إعدادات المنبه",
+                text = stringResource(R.string.fajralarmSettings),
                 fontWeight = FontWeight.Bold
             )
         },
@@ -61,7 +63,7 @@ fun StepAlarmSettingsDialog(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "🔧 نوع المنبه",
+                            text = stringResource(R.string.typeofalarm),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(bottom = 12.dp)
@@ -80,12 +82,12 @@ fun StepAlarmSettingsDialog(
                             )
                             Column {
                                 Text(
-                                    text = "🚶 منبه الحركة",
+                                    text = stringResource(R.string.motionalarm),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium
                                 )
                                 Text(
-                                    text = "يحتاج لعدد خطوات محدد لإيقافه",
+                                    text = stringResource(R.string.needssteps),
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -105,12 +107,12 @@ fun StepAlarmSettingsDialog(
                             )
                             Column {
                                 Text(
-                                    text = "💡 منبه الإضاءة",
+                                    text = stringResource(R.string.lightalarm),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium
                                 )
                                 Text(
-                                    text = "يعمل في الظلام ويتوقف في الضوء",
+                                    text = stringResource(R.string.needslight),
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -132,7 +134,7 @@ fun StepAlarmSettingsDialog(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                text = "⏰ وقت المنبه",
+                                text = stringResource(R.string.alarmTime),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 modifier = Modifier.padding(bottom = 12.dp)
@@ -143,7 +145,7 @@ fun StepAlarmSettingsDialog(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("الوقت الحالي:")
+                                Text(stringResource(R.string.currentTime))
 
                                 OutlinedButton(
                                     onClick = {
@@ -180,7 +182,7 @@ fun StepAlarmSettingsDialog(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                text = "🚶 عدد الخطوات المطلوبة",
+                                text = stringResource(R.string.requierSteps),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 modifier = Modifier.padding(bottom = 12.dp)
@@ -191,7 +193,7 @@ fun StepAlarmSettingsDialog(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("الخطوات:")
+                                Text(stringResource(R.string.steps))
 
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically
@@ -253,7 +255,7 @@ fun StepAlarmSettingsDialog(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                text = "⏰ وقت المنبه",
+                                text = stringResource(R.string.alarmTime),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 modifier = Modifier.padding(bottom = 12.dp)
@@ -264,7 +266,7 @@ fun StepAlarmSettingsDialog(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("الوقت الحالي:")
+                                Text(stringResource(R.string.currentTime))
 
                                 OutlinedButton(
                                     onClick = {
@@ -304,7 +306,7 @@ fun StepAlarmSettingsDialog(
                         modifier = Modifier.padding(12.dp)
                     ) {
                         Text(
-                            text = "📌 ملاحظة:",
+                            text = stringResource(R.string.notes),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -357,12 +359,12 @@ fun StepAlarmSettingsDialog(
                     onDismiss()
                 }
             ) {
-                Text("💾 حفظ الإعدادات")
+                Text(stringResource(R.string.save))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = onDismiss) {
-                Text("إلغاء")
+                Text(stringResource(R.string.Exit))
             }
         }
     )

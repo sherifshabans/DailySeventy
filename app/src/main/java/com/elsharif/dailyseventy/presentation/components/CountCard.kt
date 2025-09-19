@@ -89,14 +89,6 @@ fun CountCard(
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 12.dp)
                 .clip(RoundedCornerShape(RadiusContainer.dp))
-                /*.background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.secondaryContainer,
-                            dominantColor
-                        )
-                    )
-                )*/
                 .background(Color.White)
                 .clickable {
                     if (count > 0) {  // Prevent negative values
@@ -166,7 +158,7 @@ fun CountCard(
                 CircularProgressIndicator(
                     progress = { localCount.toFloat() / zekkr.count.toFloat() },
                     modifier = Modifier.size(50.dp).padding(2.dp),
-                    color = White,
+                    color = MaterialTheme.colorScheme.primary,
                     strokeWidth = 4.dp,
                     trackColor = Black,
                 )

@@ -40,12 +40,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.util.Screen
@@ -70,7 +72,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
 
     Scaffold(
         topBar = {
-            DashboardScreenTopBar(Screen.AalarmRoute.route, navController = navController)
+            DashboardScreenTopBar(Screen.AalarmRoute.titleRes, navController = navController)
         }
     ) { paddingValues ->
         Column(
@@ -92,7 +94,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "الإعدادات الحالية",
+                        text = stringResource(R.string.currentSettings),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -124,7 +126,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                     ) {
                         Icon(
                             imageVector = Icons.Default.Warning,
-                            contentDescription = "منبه نشط",
+                            contentDescription = stringResource(R.string.activealarm),
                             tint = Color.Red,
                             modifier = Modifier.size(48.dp)
                         )
@@ -158,7 +160,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Text(
-                                    text = "خطوة",
+                                    text = stringResource(R.string.stepsnumber) ,
                                     fontSize = 18.sp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -219,7 +221,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                             AlarmPreferences.ALARM_TYPE_LIGHT -> {
                                 Icon(
                                     imageVector = Icons.Default.Lightbulb,
-                                    contentDescription = "منبه الإضاءة",
+                                    contentDescription = stringResource(R.string.lightalarm),
                                     tint = if (isDark) Color.Gray else Color.Yellow,
                                     modifier = Modifier.size(64.dp)
                                 )
@@ -306,7 +308,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
-                                    text = "خطوة",
+                                    text = stringResource(R.string.stepsnumber),
                                     fontSize = 16.sp,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -324,7 +326,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                             AlarmPreferences.ALARM_TYPE_LIGHT -> {
                                 Icon(
                                     imageVector = Icons.Default.Lightbulb,
-                                    contentDescription = "منبه الإضاءة",
+                                    contentDescription = stringResource(R.string.lightalarm),
                                     tint = if (isDark) Color.Gray else Color.Yellow,
                                     modifier = Modifier.size(48.dp)
                                 )
@@ -386,7 +388,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("إعدادات")
+                    Text(stringResource(R.string.Settings))
                 }
 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -411,7 +413,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                 ) {
                     Text(
                         text = if (AlarmPreferences.isAlarmEnabled(context))
-                            "إلغاء المنبه" else "تفعيل المنبه",
+                            stringResource(R.string.close) else stringResource(R.string.save),
                         fontSize = 14.sp
                     )
                 }
@@ -436,7 +438,7 @@ fun StepAlarmScreen(viewModel: StepAlarmViewModel = hiltViewModel(), navControll
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "⚠️ تنبيه هام",
+                            text = stringResource(R.string.importantnotes),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Red

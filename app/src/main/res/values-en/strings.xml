@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Seventy Times</string>
+    <string name="MorningZekr">Morning Zhikr</string>
+    <string name="NightZekr">Evening Zhikr</string>
+    <string name="AfterPrey">Zhikr after Obligatory Prayer</string>
+    <string name="Tsabeeh">Tasbih</string>
+    <string name="SleepingZekr">Sleep Zhikr</string>
+    <string name="AwakeZekr">Waking Up Zhikr</string>
+    <string name="QuranPrey">Quranic Prayers</string>
+    <string name="ProphetsPrey">Prophets\' Prayers</string>
+    <string name="GetMyLocation">My Current Location</string>
+    <string name="ChosseLocation">Choose Location Precisely</string>
+    <string name="Ruqyah">Ruqyah from Quran</string>
+    <string name="TasbihAll">Tasbih, Tahmid, Tahleel, Takbeer</string>
+    <string name="MiscZekr">Miscellaneous Dhikr</string>
+
+    <string name="friday_reminders">Friday Reminders</string>
+    <string name="kahf_reminder">Kahf Recitation Reminder</string>
+    <string name="asr_time_reminder">Answer Hour (Asr)</string>
+
+    <string name="prayers_api">Prayer Timings Service</string>
+    <string name="reset">Reset</string>
+    <string name="tasbeeh_count">Tasbih Counter</string>
+    <string name="language">Language</string>
+    <string name="dark_mode">Night Mode</string>
+    <string name="hijri_calendar">Hijri Calendar</string>
+    <string name="prayer">Prayer</string>
+
+    <string name="prayer_is_in_10_minutes">Prayer is in 10 minutes</string>
+    <string name="after_prayer_reminder">Prayer is NOW Go!</string>
+    <string name="tasbeeh_after_prayer">Tasbih after Prayer🕌</string>
+    <string name="tasbeeh_by_zekr">Zhikr List📜</string>
+    <string name="tasbeeh_custom">Custom Tasbih✍️</string>
+
+    <string name="is_coming_soon">Coming Soon</string>
+    <string name="prayer_is_now">Prayer is NOW!</string>
+    <string name="search">Search</string>
+    <string name="search_icon">Search Icon</string>
+
+    <string name="fajr">Fajr</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Isha</string>
+    <string name="sun_rise">Sunrise</string>
+    <string name="imsak">Imsak</string>
+    <string name="sunset">Sunset</string>
+    <string name="midnight">Midnight</string>
+
+    <string name="prayers_time_authorization">Prayer Times Authority</string>
+    <string name="pick_location_acurrately">Pick Location Accurately</string>
+    <string name="ZEKR">Home Page</string>
+
+    <string name="qibla">Qibla</string>
+    <string name="qibla_direction">Qibla Direction</string>
+    <string name="qibla_angel">Qibla Angle</string>
+    <string name="current_direction">Current Direction</string>
+    <string name="kaaba">Kaaba</string>
+    <string name="compass">Compass</string>
+    <string name="needle">Needle</string>
+    <string name="write_zirk">Write Dhikr</string>
+    <string name="type_of_sebhha">Types of Tasbih</string>
+    <string name="ChosseZikr">Choose Dhikr</string>
+    <string name="afternoon">Daytime 🌞</string>
+    <string name="openzekr">Enable Reminder</string>
+    <string name="choosethird">Choose the Third:</string>
+    <string name="save">Save and Enable</string>
+    <string name="thirdsSettings">Last Third Calculation Settings</string>
+    <string name="close">Close</string>
+    <string name="languageSettings">Language Settings</string>
+    <string name="thirdsTimeSettings">Time Calculation Settings</string>
+    <string name="colorpickerSettings">App Themes</string>
+    <string name="prayerSettings">General Prayer Settings</string>
+    <string name="fraidaySettings">Friday Settings</string>
+    <string name="overlaySettings">Floating Window Service</string>
+    <string name="FastSettings">Prayer and Fasting Tracker Settings</string>
+    <string name="fajralarmSettings">Fajr Alarm Settings</string>
+    <string name="aboutApp">About App</string>
+    <string name="Exit">Cancel</string>
+    <string name="notes">📌 Note:</string>
+    <string name="currentTime">Current Time:</string>
+    <string name="alarmTime">⏰ Alarm Time</string>
+    <string name="steps">Steps:</string>
+    <string name="requierSteps">🚶 Required Steps Count</string>
+    <string name="lightalarm">💡 Light Alarm</string>
+    <string name="motionalarm">🚶 Motion Alarm</string>
+    <string name="needssteps">Needs specific number of steps to stop</string>
+    <string name="needslight">Works in darkness and stops in light</string>
+    <string name="typeofalarm">🔧 Alarm Type</string>
+    <string name="currentSettings">Current Settings</string>
+    <string name="activealarm">Active Alarm</string>
+    <string name="stepsnumber">Step</string>
+    <string name="Settings">Settings</string>
+    <string name="importantnotes">⚠️ Important Note</string>
+    <string name="muslimzikr">Daily Muslim Guide</string>
+    <string name="prayertimes">Prayer Times</string>
+    <string name="pray">Prayer</string>
+    <string name="praytime">Prayer Time</string>
+    <string name="remainingtime">Remaining Time</string>
+    <string name="loadingprays">Loading prayer times accurately… 🌙</string>
+    <string name="notprayupcoming">No upcoming prayer</string>
+    <string name="choosecolor">Choose a Color</string>
+
+    <!-- Language Selection Dialog -->
+    <string name="select_language">Select Language</string>
+    <string name="current_language">Current Language</string>
+    <string name="restart_required">App restart required</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="french">French</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+
+    <string name="screen_home">Home Page</string>
+    <string name="screen_azkar">Azkar</string>
+    <string name="screen_prayer_times">Prayer Times</string>
+    <string name="screen_monthly_prayer_times">Monthly Prayer Times</string>
+    <string name="screen_hijri">Hijri Calendar</string>
+    <string name="screen_qible">Qibla</string>
+    <string name="screen_settings">General Settings</string>
+    <string name="screen_tasbeeh">Tasbeeh</string>
+    <string name="screen_tasbeeh_images">Tasbeeh After Prayer</string>
+    <string name="screen_tasbeeh_list">Tasbeeh List</string>
+    <string name="screen_tasbeeh_custom">Custom Tasbeeh</string>
+    <string name="screen_color_picker">App Themes</string>
+    <string name="screen_night_third">Last Third Settings</string>
+    <string name="screen_alarm">Fajr/Step Alarm</string>
+    <string name="night_third_first">First Third</string>
+    <string name="night_third_second">Second Third</string>
+    <string name="night_third_third">Last Third</string>
+    <string name="notification_title">Reminder</string>
+    <string name="current_third">Current Third: </string>
+    <string name="remaining_time">Remaining: %1$s</string>
+    <string name="today_date">Today: %1$s AH</string>
+
+    <string name="header_day">Day</string>
+    <string name="header_date">Date</string>
+    <string name="header_fajr">Fajr</string>
+    <string name="header_sunrise">Sunrise</string>
+    <string name="header_dhuhr">Dhuhr</string>
+    <string name="header_asr">Asr</string>
+    <string name="header_maghrib">Maghrib</string>
+    <string name="header_isha">Isha</string>
+
+    <string name="loading_prayer_times">Preparing prayer times… 🌙</string>
+    <string name="error_loading_prayer_times">Failed to load prayer times ⚠️</string>
+    <string name="check_internet">Check your internet connection and try again</string>
+
+    <string name="choose_authority">Select Authority</string>
+    <string name="choose_location">Select location accurately</string>
+    <string name="not_available_offline">Not available offline</string>
+    <string name="no_authority_available">No authority available</string>
+    <string name="last_saved_prayer_times">Displaying last locally saved prayer times</string>
+    <string name="no_prayer_times_available">No prayer times available</string>
+    <string name="check_internet_try_again">Check your internet connection and try again</string>
+    <string name="try_different_date_or_location">Try selecting a different date or location</string>
+    <string name="loading_map">Loading map…</string>
+    <string name="map_loading_error">Failed to load map ⚠️</string>
+    <string name="retry">Retry</string>
+    <string name="offline_mode">Offline mode 📴</string>
+    <string name="prayer_times_saved_locally">Prayer times saved locally</string>
+    <string name="last_saved_location">📍 Last saved location</string>
+    <string name="check_connection">Check connection</string>
+
+    <string name="select_azan_sound">Select Azan Sound</string>
+    <string name="azan_ali_elmola">Ali ElMola</string>
+    <string name="azan_abo_elenin">Abu Elenin</string>
+    <string name="azan_abdelbasset">Abdelbasset Abdelsamad</string>
+    <string name="azan_mosharyfajr">Mishary Rashid</string>
+
+    <string name="no_prayer_times">No prayer times available for this month</string>
+    <string name="loading_month_prayer_times">Loading this month\'s prayer times…</string>
+    <string name="error_loading_month_prayer_times">Error loading this month\'s prayer times: %1$s</string>
+
+    <string name="qibla_calibration">Compass Calibration</string>
+    <string name="rotate_phone_instruction">Move your phone in a circle to calibrate the sensors</string>
+    <string name="calibrating_sensors">Calibrating sensors...</string>
+
+    <string name="reminder_settings">Reminder Settings</string>
+
+    <string name="fasting_reminders">Fasting Reminders</string>
+    <string name="fasting_reminders_subtitle">Enable all fasting reminders</string>
+
+    <string name="monday_thursday">Monday &amp; Thursday Fasting</string>
+    <string name="monday_thursday_subtitle">Reminder to fast on Mondays and Thursdays</string>
+
+    <string name="white_days">White Days</string>
+    <string name="white_days_subtitle">Reminder to fast on the White Days (13, 14, 15)</string>
+
+    <string name="eid_reminders">Eid Reminders</string>
+    <string name="eid_reminders_subtitle">Greetings on Islamic Eids</string>
+
+    <string name="religious_occasions">Religious Occasions</string>
+    <string name="religious_occasions_subtitle">Reminder of important Islamic occasions</string>
+
+    <string name="eid_fitr">Eid Al-Fitr</string>
+    <string name="eid_adha">Eid Al-Adha</string>
+    <string name="day_arafat">Day of Arafat</string>
+    <string name="day_ashura">Day of Ashura</string>
+    <string name="prophet_birthday">Prophet\'s Birthday</string>
+    <string name="isra_miraj">Isra and Mi\'raj</string>
+    <string name="laylat_qadr">Laylat al-Qadr</string>
+    <string name="begin_ramadan">Beginning of Ramadan</string>
+    <string name="channel_fasting_name">Fasting Reminders</string>
+    <string name="channel_fasting_description">Reminders for fasting days</string>
+
+    <string name="channel_general_name">General Reminders</string>
+    <string name="channel_general_description">Reminders for Islamic events</string>
+
+    <!-- General Notifications -->
+    <string name="eid_title">🎉 Eid Mubarak</string>
+    <string name="eid_message">Happy Eid! Blessed %1$s 🌙✨</string>
+
+    <string name="occasion_title">🕌 %1$s</string>
+    <string name="occasion_message">Today is %1$s, may Allah bless this day 🤲</string>
+
+    <!-- Fasting Reminders -->
+    <string name="fasting_title">Fasting Reminder</string>
+    <string name="monday_fasting">Tomorrow is Monday - Sunnah to fast 🌙</string>
+    <string name="thursday_fasting">Tomorrow is Thursday - Sunnah to fast 🌙</string>
+
+    <string name="white_days_title">White Days</string>
+    <string name="white_days_message">Tomorrow is the %1$dth Hijri day - Sunnah to fast 🌙\n%2$s</string>
+
+    <string name="special_fasting_title">Fasting %1$s</string>
+    <string name="special_fasting_message">Tomorrow is %1$s - Sunnah to fast 🌙\n%2$s</string>
+
+
+</resources>

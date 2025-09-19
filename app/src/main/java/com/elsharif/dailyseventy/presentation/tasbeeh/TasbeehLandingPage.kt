@@ -29,7 +29,7 @@ import com.elsharif.dailyseventy.util.Screen
 @Composable
 fun TasbeehLandingPage(navController: NavController) {
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.Tasbeeh.route, navController) }
+        topBar = { DashboardScreenTopBar(Screen.Tasbeeh.titleRes, navController) }
     ) { paddingValues ->
 
         CurvedSebhaScroll(navController,paddingValues)
@@ -40,9 +40,9 @@ fun TasbeehLandingPage(navController: NavController) {
 fun CurvedSebhaScroll(navController: NavController,paddingValues: PaddingValues) {
 
     val sebhaTypes = listOf(
-        R.string.tasbeeh_after_prayer to Screen.TasbeehImages.route,
-        R.string.tasbeeh_by_zekr to Screen.TasbeehList.route,
-        R.string.tasbeeh_custom to Screen.TasbeehCustom.route
+        Screen.TasbeehImages.titleRes to Screen.TasbeehImages.route,
+        Screen.TasbeehList.titleRes to Screen.TasbeehList.route,
+        Screen.TasbeehCustom.titleRes to Screen.TasbeehCustom.route
     )
 
     Column(
@@ -60,7 +60,7 @@ fun CurvedSebhaScroll(navController: NavController,paddingValues: PaddingValues)
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "أنواع السبحة",
+                text = stringResource(R.string.type_of_sebhha),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )

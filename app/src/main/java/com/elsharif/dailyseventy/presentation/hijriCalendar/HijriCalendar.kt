@@ -91,7 +91,7 @@ fun HijriCalendar(
     )
 
     Scaffold(
-        topBar = { DashboardScreenTopBar(Screen.Hijri.route, navController =navController ) }
+        topBar = { DashboardScreenTopBar(Screen.Hijri.titleRes, navController =navController ) }
     ) { paddingValues ->
 
 

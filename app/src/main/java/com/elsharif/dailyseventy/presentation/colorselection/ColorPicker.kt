@@ -10,8 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.ui.theme.UserColors
 
 @Composable
@@ -33,7 +35,7 @@ fun ColorPickerDialog(
             ) {
                 // عنوان
                 Text(
-                    text = "اختر لونًا",
+                    text = stringResource(R.string.choosecolor),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -69,7 +71,7 @@ fun ColorPickerDialog(
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("إغلاق")
+                    Text(stringResource(R.string.close))
                 }
             }
         }

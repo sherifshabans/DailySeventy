@@ -3,6 +3,7 @@ package com.elsharif.dailyseventy.util.Navigation
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,10 +13,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.elsharif.dailyseventy.MainActivity
+import com.elsharif.dailyseventy.ui.MainActivity
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmScreen
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
 import com.elsharif.dailyseventy.presentation.Qibla.QiblaPage
+import com.elsharif.dailyseventy.presentation.Qibla.QiblaPageWithSplash
 import com.elsharif.dailyseventy.presentation.azkarcategories.CategoryScreen
 import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
 import com.elsharif.dailyseventy.presentation.home.view.HomePage
@@ -34,6 +36,7 @@ import com.elsharif.dailyseventy.util.Screen
 import java.time.chrono.HijrahDate
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(navController: NavHostController,context: Context,themeViewModel: ThemeViewModel,prayerTimeViewModel: PrayerTimeViewModel) {
@@ -116,6 +119,10 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
             val viewModel: TasbeehViewModel = hiltViewModel()
 
             CustomZikrSebhaPage(viewModel,navController)
+        }
+        composable(Screen.AnimatedQibla.route) {
+
+            QiblaPageWithSplash(navController)
         }
 
 

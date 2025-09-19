@@ -9,7 +9,7 @@ import android.media.AudioAttributes
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
-import com.elsharif.dailyseventy.MainActivity
+import com.elsharif.dailyseventy.ui.MainActivity
 import com.elsharif.dailyseventy.R
 
 object NotificationHelperAzkar {

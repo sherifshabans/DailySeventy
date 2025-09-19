@@ -5,9 +5,8 @@ import androidx.annotation.RequiresApi
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
-
 @RequiresApi(Build.VERSION_CODES.O)
-fun getNightThird(maghrib: LocalTime, fajr: LocalTime): String {
+fun getNightThird(maghrib: LocalTime, fajr: LocalTime): NightThirdPart {
     val now = LocalTime.now()
     val nightMinutes = if (fajr.isBefore(maghrib)) {
         ChronoUnit.MINUTES.between(maghrib, LocalTime.MAX) + 1 +
@@ -22,9 +21,10 @@ fun getNightThird(maghrib: LocalTime, fajr: LocalTime): String {
     } else {
         ChronoUnit.MINUTES.between(maghrib, now)
     }
+
     return when {
-        sinceStart <= third -> "الثلث الأول من الليل"
-        sinceStart <= third * 2 -> "الثلث الثاني من الليل"
-        else -> "الثلث الثالث من الليل"
+        sinceStart <= third -> NightThirdPart.FIRST
+        sinceStart <= third * 2 -> NightThirdPart.SECOND
+        else -> NightThirdPart.THIRD
     }
 }

@@ -2,9 +2,11 @@ package com.elsharif.dailyseventy.domain
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import androidx.core.os.LocaleListCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -19,6 +21,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "PRAYERS_PREF")
 
@@ -28,21 +31,103 @@ class AppPreferences(private val context: Context) {
 
     init {
         preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+        Log.d("AppPreferences", "Preferences initialized")
     }
 
+    // Language Support
+    enum class SupportedLanguage(val code: String, val displayName: String) {
+        ARABIC("ar", "العربية"),
+        ENGLISH("en", "English"),
+        FRENCH("fr", "Français")
+    }
 
-    val isFirstTime: Flow<Boolean>  
+    val currentLanguage: Flow<SupportedLanguage>
+        get() = context.dataStore.data.map {
+            val languageCode = it[LANGUAGE_STORE_KEY] ?: SupportedLanguage.ARABIC.code
+            Log.d("AppPreferences", "Current language code: $languageCode")
+            SupportedLanguage.values().find { lang -> lang.code == languageCode }
+                ?: SupportedLanguage.ARABIC
+        }
+
+    suspend fun setLanguage(language: SupportedLanguage) {
+        Log.d("AppPreferences", "Setting language to: ${language.code}")
+
+        // Save to DataStore
+        context.dataStore.edit {
+            it[LANGUAGE_STORE_KEY] = language.code
+        }
+
+        // Save to SharedPreferences for immediate access
+        preferences.edit {
+            putString(LANGUAGE_KEY, language.code)
+        }
+
+        // Apply language using both methods for maximum compatibility
+        try {
+            // Method 1: AppCompatDelegate (for newer Android versions)
+            val locales = LocaleListCompat.forLanguageTags(language.code)
+            AppCompatDelegate.setApplicationLocales(locales)
+
+            // Method 2: Manual locale setting (for immediate effect)
+            setLocale(context, language.code)
+
+            Log.d("AppPreferences", "Language applied: ${language.displayName}")
+        } catch (e: Exception) {
+            Log.e("AppPreferences", "Error applying language: ${e.message}")
+        }
+    }
+
+    // Manual locale setting method
+    private fun setLocale(context: Context, languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val configuration = Configuration(context.resources.configuration)
+        configuration.setLocale(locale)
+        context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
+    }
+
+    // Get saved language immediately (synchronous)
+    fun getSavedLanguageCode(): String {
+        return preferences.getString(LANGUAGE_KEY, SupportedLanguage.ARABIC.code)
+            ?: SupportedLanguage.ARABIC.code
+    }
+
+    // Initialize app language on startup
+    fun initializeLanguage() {
+        try {
+            val languageCode = getSavedLanguageCode()
+            Log.d("AppPreferences", "Initializing with language code: $languageCode")
+
+            // Apply using both methods
+            val locales = LocaleListCompat.forLanguageTags(languageCode)
+            AppCompatDelegate.setApplicationLocales(locales)
+
+            // Also set manually for immediate effect
+            setLocale(context, languageCode)
+
+            Log.d("AppPreferences", "Applied language: $languageCode")
+
+        } catch (e: Exception) {
+            Log.e("AppPreferences", "Error initializing language: ${e.message}")
+            // Fallback to Arabic
+            val locales = LocaleListCompat.forLanguageTags(SupportedLanguage.ARABIC.code)
+            AppCompatDelegate.setApplicationLocales(locales)
+            setLocale(context, SupportedLanguage.ARABIC.code)
+        }
+    }
+
+    val isFirstTime: Flow<Boolean>
         get() = context.dataStore.data.map {
             it[IS_FIRST_TIME_STORE_KEY] ?: true
         }
+
     val method: Flow<DomainPrayerTimingSchool>
         get() = context.dataStore.data.map {
             DomainPrayerTimingSchool(it[METHOD_ID_STORE_KEY] ?: 5, it[METHOD_NAME_STORE_KEY] ?: "")
         }
 
-
     val tasbeehCounter: Flow<Int> get() = context.dataStore.data.map { it[TASBEEH_STORE_KEY] ?: 0 }
-
 
     val currentLocation: Flow<Pair<Double, Double>>
         get() = context.dataStore.data.map {
@@ -51,7 +136,6 @@ class AppPreferences(private val context: Context) {
                 it[LNG_STORE_KEY] ?: 30.0
             )
         }
-
 
     suspend fun setMethod(method: DomainPrayerTimingSchool) {
         context.dataStore.edit {
@@ -70,7 +154,6 @@ class AppPreferences(private val context: Context) {
     fun toggleDarkMode() {
         val isDarkMode = isDarkModeEnabled()
         AppCompatDelegate.setDefaultNightMode(if (!isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
-
         preferences.edit { putBoolean(DARK_MODE_ENABLED, !isDarkMode) }
     }
 
@@ -113,7 +196,6 @@ class AppPreferences(private val context: Context) {
         }
     }
 
-
     fun isDarkModeEnabled(): Boolean = preferences.getBoolean(DARK_MODE_ENABLED, false)
 
     suspend fun nextQuranPage() {
@@ -136,21 +218,6 @@ class AppPreferences(private val context: Context) {
         it[KHATMA_PAGE] ?: 1
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     companion object {
         private const val FILE_NAME = "PRAYERS_PREF"
         private const val CITY_KEY = "CITY_PREF"
@@ -166,16 +233,18 @@ class AppPreferences(private val context: Context) {
         private const val TASBEEH_KEY = "TASBEEH"
         private const val DARK_MODE_ENABLED = "DARK_MODE_ENABLED"
         private const val PRAYER_TIMES = "PRAYER_TIMES"
+        private const val LANGUAGE_KEY = "LANGUAGE_PREF"
+
+        // DataStore Keys
         private val METHOD_ID_STORE_KEY = intPreferencesKey(METHOD_ID_KEY)
         private val METHOD_NAME_STORE_KEY = stringPreferencesKey(METHOD_NAME_KEY)
         private val PRAYERS_STORE_KEY = stringPreferencesKey(PRAYER_TIMES)
         private val LAT_STORE_KEY = doublePreferencesKey(LAT_KEY)
         private val LNG_STORE_KEY = doublePreferencesKey(LNG_KEY)
         private val TASBEEH_STORE_KEY = intPreferencesKey(TASBEEH_KEY)
-
         private val DARK_MODE_STORE_KEY = booleanPreferencesKey(DARK_MODE_ENABLED)
         private val IS_FIRST_TIME_STORE_KEY = booleanPreferencesKey(IS_FIRST_TIME)
         private val KHATMA_PAGE = intPreferencesKey("KHATMA_PAGE")
-
+        private val LANGUAGE_STORE_KEY = stringPreferencesKey(LANGUAGE_KEY)
     }
 }
