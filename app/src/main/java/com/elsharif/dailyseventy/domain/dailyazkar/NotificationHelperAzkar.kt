@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
@@ -35,6 +36,7 @@ object NotificationHelperAzkar {
 
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION) // 🔧 إضافة content type
                 .build()
 
             val channel = NotificationChannel(
@@ -64,7 +66,8 @@ object NotificationHelperAzkar {
             .setContentText(message)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
-            .setSound(soundUri) // للأجهزة أقل من أندرويد O
+            .setSound(soundUri, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
+            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
             .build()
 
         notificationManager.notify(category.hashCode(), notification)

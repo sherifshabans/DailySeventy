@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.PermDataSetting
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -54,6 +55,7 @@ import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.presentation.friday.FridayReminderDialog
 import com.elsharif.dailyseventy.presentation.language.LanguageViewModel
 import com.elsharif.dailyseventy.presentation.language.LanguageSelectionDialog
+import com.elsharif.dailyseventy.presentation.permissins.PermissionsGuideDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.AzanSoundSelectorDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.thirdofthenight.NightThirdDialog
@@ -80,6 +82,7 @@ fun SettingsScreen(
     var showOverlayDialog by remember { mutableStateOf(false) }
     var showStepAlarmDialog by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
+    var showPermissionsDialog by remember { mutableStateOf(false) }
 
     // إنشاء الـ preferences مرة واحدة فقط
     val preferences = remember { IslamicReminderPreferences(context) }
@@ -218,7 +221,21 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem(stringResource(R.string.aboutApp), Icons.Default.Info) {}
+                SettingsItem(stringResource(R.string.aboutApp), Icons.Default.Info) {
+
+                }
+            }
+            item {
+                SettingsItem(stringResource(R.string.appPermissionsInstructions), Icons.Default.PermDataSetting) {
+                    showPermissionsDialog =true
+                }
+
+                PermissionsGuideDialog(
+                    context = context,
+                    showDialog = showPermissionsDialog,
+                    onDismiss = { showPermissionsDialog = false }
+                )
+
             }
         }
 
@@ -262,13 +279,15 @@ fun SettingsItem(
                     Text(
                         title,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        maxLines = 1
                     )
                     subtitle?.let {
                         Text(
                             it,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                            maxLines = 1
                         )
                     }
                 }

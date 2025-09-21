@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -80,7 +81,8 @@ class AzanAlarmReceiver : BroadcastReceiver() {
             .setContentTitle(title)
             .setContentText(content)
             .setAutoCancel(true)
-            .setSound(sound) // لأجهزة أقل من أندرويد O
+            .setSound(sound, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
+            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)

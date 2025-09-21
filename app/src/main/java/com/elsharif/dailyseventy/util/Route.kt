@@ -7,7 +7,7 @@ sealed class Screen(val route: String, @StringRes val titleRes: Int) {
 
     object Azkar : Screen("azkar", R.string.screen_azkar)
     object HomeScreen : Screen("home", R.string.screen_home)
-    object PrayerTimes : Screen("prayer_times", R.string.screen_prayer_times)
+    object PrayerTimes : Screen("prayer_times", R.string.location_icon)
     object MonthlyPrayerTimes : Screen("monthly_prayer_times", R.string.screen_monthly_prayer_times)
     object Hijri: Screen("hijri", R.string.screen_hijri)
     object Qible: Screen("qible", R.string.screen_qible)

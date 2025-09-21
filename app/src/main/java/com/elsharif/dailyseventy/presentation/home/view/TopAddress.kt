@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,8 +47,19 @@ import java.time.format.DateTimeFormatter
 @SuppressLint("NewApi", "LocalContextConfigurationRead")
 @Composable
 fun TopAddressSection(
-    viewModel: PrayerTimeViewModel = hiltViewModel(),
+    viewModel: PrayerTimeViewModel,
 ) {
+    val context = LocalContext.current
+
+    LaunchedEffect(context) {
+        viewModel.refreshAddressForLanguageChange()
+    }
+
+    // أو استخدم DisposableEffect للتحديث عند العودة للشاشة
+    DisposableEffect(context) {
+        viewModel.refreshAddressForLanguageChange()
+        onDispose { }
+    }
     val state by viewModel.prayerTimesState.collectAsState()
     val currentHijrahDate = HijrahDate.now()
     val addressText by viewModel.addressText.collectAsState()

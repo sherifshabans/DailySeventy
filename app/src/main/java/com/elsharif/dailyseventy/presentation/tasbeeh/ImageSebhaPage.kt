@@ -14,8 +14,8 @@ fun ImageSebhaPage(viewModel: TasbeehViewModel,navController: NavController)
     val tasbeehImagesList = listOf(
         com.elsharif.dailyseventy.R.drawable.ic_subhan_allah,
         com.elsharif.dailyseventy.R.drawable.ic_alhamduillah,
-        com.elsharif.dailyseventy.R.drawable.ic_la_ilah_ila_allah,
-        com.elsharif.dailyseventy.R.drawable.ic_allah_akbar
+        com.elsharif.dailyseventy.R.drawable.ic_allah_akbar,
+        com.elsharif.dailyseventy.R.drawable.ic_la_ilah_ila_allah
     )
     val count by viewModel.getTasbeehCount().collectAsState(initial = 0)
 

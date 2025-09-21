@@ -2,6 +2,7 @@
 package com.elsharif.dailyseventy.presentation.home.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,13 +33,17 @@ import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
 
 @SuppressLint("NewApi", "UnusedBoxWithConstraintsScope")
 @Composable
-fun PrayerTimesSection(viewModel: PrayerTimeViewModel = hiltViewModel()) {
+fun PrayerTimesSection(context: Context, viewModel: PrayerTimeViewModel = hiltViewModel()) {
 
     val state by viewModel.prayerTimesState.collectAsState()
 
     var isVisible by remember { mutableStateOf(false) }
     var iconState by remember { mutableStateOf(Icons.Rounded.KeyboardArrowUp) }
+    val currentLocale = context.resources.configuration.locales[0]
 
+    LaunchedEffect(currentLocale) {
+        viewModel.refreshAddressForLanguageChange()
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()

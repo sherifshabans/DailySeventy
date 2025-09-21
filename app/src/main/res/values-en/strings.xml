@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Seventy Times</string>
+    <string name="company_version">Medhamtan Company Edition</string>
     <string name="MorningZekr">Morning Zhikr</string>
     <string name="NightZekr">Evening Zhikr</string>
     <string name="AfterPrey">Zhikr after Obligatory Prayer</string>
@@ -28,7 +29,8 @@
     <string name="prayer">Prayer</string>
 
     <string name="prayer_is_in_10_minutes">Prayer is in 10 minutes</string>
-    <string name="after_prayer_reminder">Prayer is NOW Go!</string>
+    <string name="after_prayer_reminder">Prayer is NOW Go! %1$s prayer ⏰</string>
+    <string name="night_started">🌙 %1$s has started at night</string>
     <string name="tasbeeh_after_prayer">Tasbih after Prayer🕌</string>
     <string name="tasbeeh_by_zekr">Zhikr List📜</string>
     <string name="tasbeeh_custom">Custom Tasbih✍️</string>
@@ -69,12 +71,12 @@
     <string name="thirdsSettings">Last Third Calculation Settings</string>
     <string name="close">Close</string>
     <string name="languageSettings">Language Settings</string>
-    <string name="thirdsTimeSettings">Time Calculation Settings</string>
+    <string name="thirdsTimeSettings">Night Thirds Notification Settings</string>
     <string name="colorpickerSettings">App Themes</string>
-    <string name="prayerSettings">General Prayer Settings</string>
+    <string name="prayerSettings">Prayer Settings</string>
     <string name="fraidaySettings">Friday Settings</string>
     <string name="overlaySettings">Floating Window Service</string>
-    <string name="FastSettings">Prayer and Fasting Tracker Settings</string>
+    <string name="FastSettings">Fasting Reminders Settings</string>
     <string name="fajralarmSettings">Fajr Alarm Settings</string>
     <string name="aboutApp">About App</string>
     <string name="Exit">Cancel</string>
@@ -116,6 +118,8 @@
     <string name="screen_home">Home Page</string>
     <string name="screen_azkar">Azkar</string>
     <string name="screen_prayer_times">Prayer Times</string>
+    <string name="location_icon">Location</string>
+
     <string name="screen_monthly_prayer_times">Monthly Prayer Times</string>
     <string name="screen_hijri">Hijri Calendar</string>
     <string name="screen_qible">Qibla</string>
@@ -226,6 +230,44 @@
 
     <string name="special_fasting_title">Fasting %1$s</string>
     <string name="special_fasting_message">Tomorrow is %1$s - Sunnah to fast 🌙\n%2$s</string>
+
+
+
+    <string name="appPermissionsInstructions">App Permissions And Instructions</string>
+    <string name="general_settings">General Settings</string>
+    <string name="understand">Got it</string>
+    <string name="open_settings">Open Settings</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Enable Notifications</string>
+    <string name="notifications_subtitle">To receive reminders for adhkar and prayer times</string>
+    <string name="notifications_step1">Go to Settings → Notifications</string>
+    <string name="notifications_step2">Find the "Seventy Times" app and enable it</string>
+    <string name="notifications_step3">Make sure all types of notifications are enabled</string>
+
+    <!-- Overlay -->
+    <string name="overlay_title">Allow Overlay</string>
+    <string name="overlay_subtitle">To show adhkar reminders while using other apps</string>
+    <string name="overlay_step1">Go to Settings → Special Apps</string>
+    <string name="overlay_step2">Select "Appear on top of other apps"</string>
+    <string name="overlay_step3">Find "Seventy Times" and enable the option</string>
+
+    <!-- Sensors -->
+    <string name="sensors_title">Enable Device Sensors</string>
+    <string name="sensors_subtitle">To use light and motion sensors for smart reminders</string>
+    <string name="sensors_step1">Go to Settings → Privacy</string>
+    <string name="sensors_step2">Select "Admin Permissions" → Sensors</string>
+    <string name="sensors_step3">Make sure to allow "Seventy Times" app</string>
+
+    <!-- Battery -->
+    <string name="battery_title">Battery Optimization</string>
+    <string name="battery_subtitle">To ensure the app works in the background without interruption</string>
+    <string name="battery_step1">Go to Settings → Battery</string>
+    <string name="battery_step2">Select "Optimize battery usage"</string>
+    <string name="battery_step3">Find "Seventy Times" and choose "Don’t optimize"</string>
+
+    <string name="permissions_note">These steps are necessary for the best experience with the app. Menu names may vary depending on the OS version.</string>
+
 
 
 </resources>

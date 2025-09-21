@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
@@ -37,7 +38,8 @@ object NightThirdNotifier {
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
-            .setSound(soundUri) // بيشتغل على Android < O
+            .setSound(soundUri, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
+            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
             .build()
 
         manager.notify(System.currentTimeMillis().toInt(), notification)

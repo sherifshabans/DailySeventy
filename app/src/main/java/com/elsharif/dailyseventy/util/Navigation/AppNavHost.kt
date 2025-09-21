@@ -21,6 +21,7 @@ import com.elsharif.dailyseventy.presentation.Qibla.QiblaPageWithSplash
 import com.elsharif.dailyseventy.presentation.azkarcategories.CategoryScreen
 import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
 import com.elsharif.dailyseventy.presentation.home.view.HomePage
+import com.elsharif.dailyseventy.presentation.home.view.SplashScreen
 import com.elsharif.dailyseventy.presentation.prayertimes.MonthlyPrayerTimesPage
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimesPage
@@ -40,6 +41,8 @@ import java.time.chrono.HijrahDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(navController: NavHostController,context: Context,themeViewModel: ThemeViewModel,prayerTimeViewModel: PrayerTimeViewModel) {
+    var showSplash by remember { mutableStateOf(true) }
+
     // التحقق من Intent للمنبه
     val startCategoryFromIntent = (context as? MainActivity)?.intent?.getStringExtra("category") ?: ""
     val stepAlarmCategory = (context as? MainActivity)?.intent?.getStringExtra("step_alarm") ?: ""
@@ -49,19 +52,24 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
         startCategoryFromIntent.isNotEmpty() -> "zekkr_screen/$startCategoryFromIntent"
         else -> Screen.HomeScreen.route
     }
+    if (showSplash) {
+        SplashScreen(
+            onSplashFinished = { showSplash = false }
+        )
+    } else {
     NavHost(
         navController,
         startDestination = startDestination
     ) {
         composable(Screen.HomeScreen.route) {
-            HomePage(navController)
+            HomePage(context,navController,prayerTimeViewModel)
         }
         composable("zekkr_screen/{category}") { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: ""
             ZekkrScreen(navController, category)
         }
         composable(Screen.PrayerTimes.route) {
-            PrayerTimesPage(navController)
+            PrayerTimesPage(navController,prayerTimeViewModel)
 
         }
         composable(Screen.MonthlyPrayerTimes.route) {
@@ -125,7 +133,6 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
             QiblaPageWithSplash(navController)
         }
 
-
-
+    }
     }
 }

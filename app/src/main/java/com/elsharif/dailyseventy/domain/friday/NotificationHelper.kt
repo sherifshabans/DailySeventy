@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -35,6 +36,7 @@ object NotificationHelper {
                     soundUri,
                     AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION) // 🔧 إضافة content type
                         .build()
                 )
             }
@@ -46,7 +48,9 @@ object NotificationHelper {
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
-            .setSound(soundUri)
+            .setSound(soundUri, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
+            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
+
             .build()
 
         manager.notify(System.currentTimeMillis().toInt(), notification)

@@ -17,11 +17,12 @@ class NightThirdWorker(
         val message = applicationContext.getString(part.labelRes)
         val title = applicationContext.getString(R.string.notification_title)
 
+        val discription =  applicationContext.getString(R.string.night_started, message)
 
         NightThirdNotifier.notify(
             context = applicationContext,
             title = title,
-            message = "بدأ $message من الليل 🌙"
+            message =discription
         )
 
 

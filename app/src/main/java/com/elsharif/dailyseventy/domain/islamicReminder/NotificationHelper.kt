@@ -60,6 +60,9 @@ class NotificationHelper(private val context: Context) {
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun showFastingNotification(title: String, message: String) {
+
+        val sound: Uri ="android.resource://${context.packageName}/${R.raw.fasting_sound}".toUri()
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_FASTING)
             .setSmallIcon(R.drawable.crescent_moon)
             .setContentTitle(title)
@@ -67,7 +70,7 @@ class NotificationHelper(private val context: Context) {
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-            .setSound("android.resource://${context.packageName}${R.raw.fasting_sound}".toUri())
+            .setSound(sound)
             .build()
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_FASTING, notification)

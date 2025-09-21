@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -48,11 +49,16 @@ class PreAndPostAzanAlarmReceiver : BroadcastReceiver() {
             ("android.resource://${context.packageName}/${R.raw.postazan}").toUri()
         }
 
+        val reminderText = if (type == "PRE") {
+            content
+        } else {
+            context.getString(R.string.after_prayer_reminder, prayerName)
+        }
         sendNotification(
             context,
             icon,
             title,
-            if (type == "PRE") content else "⏰ Reminder after $prayerName prayer",
+   reminderText,
             sound,
             pendingIntent,
             id,
@@ -86,8 +92,11 @@ class PreAndPostAzanAlarmReceiver : BroadcastReceiver() {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            builder.setSound(sound)
+            builder.setSound(sound, AudioManager.STREAM_NOTIFICATION)
+                .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
+
         }
 
         manager.notify(id, builder.build())

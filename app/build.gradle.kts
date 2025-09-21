@@ -260,4 +260,5 @@ dependencies {
 // علشان ViewTreeSavedStateRegistryOwner
     implementation("androidx.savedstate:savedstate:1.3.2")
 
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

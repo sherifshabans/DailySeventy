@@ -22,8 +22,8 @@ class AlarmMusicService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
     private val binder = MusicBinder()
-    private val channelId = "alarm_channel"
-    private val notificationId = 1001
+    private val channelId = "alarm_channel+10"
+    private val notificationId = 1025
 
     inner class MusicBinder : Binder() {
         fun getService(): AlarmMusicService = this@AlarmMusicService

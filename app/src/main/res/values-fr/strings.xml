@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Soixante-dix Fois</string>
+    <string name="company_version">Édition Société Medhamtan</string>
     <string name="MorningZekr">Dhikr du Matin</string>
     <string name="NightZekr">Dhikr du Soir</string>
     <string name="AfterPrey">Dhikr après la Prière Obligatoire</string>
@@ -20,6 +21,7 @@
 
 
     <string name="prayers_api">Service d\'Horaires de Prière</string>
+
     <string name="reset">Réinitialiser</string>
     <string name="tasbeeh_count">Compteur Tasbih</string>
     <string name="language">Langue</string>
@@ -28,7 +30,8 @@
     <string name="prayer">Prière</string>
 
     <string name="prayer_is_in_10_minutes">La prière est dans 10 minutes</string>
-    <string name="after_prayer_reminder">C\'est l\'heure de la prière maintenant!</string>
+    <string name="after_prayer_reminder">C\'est l\'heure de la prière maintenant! la prière de %1$s ⏰</string>
+    <string name="night_started">🌙 %1$s a commencé la nuit</string>
     <string name="tasbeeh_after_prayer">Tasbih après la Prière🕌</string>
     <string name="tasbeeh_by_zekr">Liste de Dhikr📜</string>
     <string name="tasbeeh_custom">Tasbih Personnalisé✍️</string>
@@ -69,12 +72,12 @@
     <string name="thirdsSettings">Paramètres de Calcul du Dernier Tiers</string>
     <string name="close">Fermer</string>
     <string name="languageSettings">Paramètres de Langue</string>
-    <string name="thirdsTimeSettings">Paramètres de Calcul du Temps</string>
+    <string name="thirdsTimeSettings">Paramètres des notifications du tiers de la nuit</string>
     <string name="colorpickerSettings">Thèmes de l\'Application</string>
-    <string name="prayerSettings">Paramètres Généraux de Prière</string>
+    <string name="prayerSettings">Paramètres de Prière</string>
     <string name="fraidaySettings">Paramètres du Vendredi</string>
     <string name="overlaySettings">Service de Fenêtre Flottante</string>
-    <string name="FastSettings">Paramètres du Tracker de Prière et Jeûne</string>
+    <string name="FastSettings">Paramètres du rappel de jeûne</string>
     <string name="fajralarmSettings">Paramètres d\'Alarme Fajr</string>
     <string name="aboutApp">À Propos de l\'App</string>
     <string name="Exit">Annuler</string>
@@ -117,6 +120,7 @@
     <string name="screen_azkar">Dhikr</string>
     <string name="screen_prayer_times">Horaires de Prière</string>
     <string name="screen_monthly_prayer_times">Horaires Mensuels de Prière</string>
+    <string name="location_icon">Localiser</string>
     <string name="screen_hijri">Calendrier Hijri</string>
     <string name="screen_qible">Qibla</string>
     <string name="screen_settings">Paramètres Généraux</string>
@@ -228,5 +232,43 @@
 
     <string name="special_fasting_title">Jeûne de %1$s</string>
     <string name="special_fasting_message">Demain c\'est %1$s - Sunnah de jeûner 🌙\n%2$s</string>
+
+
+
+    <string name="appPermissionsInstructions">Autorisations et instructions de l\'application</string>
+    <string name="general_settings">Paramètres généraux</string>
+    <string name="understand">Compris</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Activer les notifications</string>
+    <string name="notifications_subtitle">Pour recevoir les rappels des adhkars et des heures de prière</string>
+    <string name="notifications_step1">Allez dans Paramètres → Notifications</string>
+    <string name="notifications_step2">Recherchez l’application "Soixante-dix fois" et activez-la</string>
+    <string name="notifications_step3">Assurez-vous que tous les types de notifications sont activés</string>
+
+    <!-- Overlay -->
+    <string name="overlay_title">Autoriser l’affichage au-dessus des applications</string>
+    <string name="overlay_subtitle">Pour afficher les rappels d’adhkars même lors de l’utilisation d’autres applications</string>
+    <string name="overlay_step1">Allez dans Paramètres → Applications spéciales</string>
+    <string name="overlay_step2">Choisissez "Apparaître au-dessus des autres applications"</string>
+    <string name="overlay_step3">Recherchez "Soixante-dix fois" et activez l’option</string>
+
+    <!-- Capteurs -->
+    <string name="sensors_title">Activer les capteurs de l’appareil</string>
+    <string name="sensors_subtitle">Pour utiliser les capteurs de lumière et de mouvement dans les rappels intelligents</string>
+    <string name="sensors_step1">Allez dans Paramètres → Confidentialité</string>
+    <string name="sensors_step2">Sélectionnez "Autorisations administrateur" → Capteurs</string>
+    <string name="sensors_step3">Assurez-vous d’autoriser l’application "Soixante-dix fois"</string>
+
+    <!-- Batterie -->
+    <string name="battery_title">Optimisation de la batterie</string>
+    <string name="battery_subtitle">Pour garantir le fonctionnement de l’application en arrière-plan sans interruption</string>
+    <string name="battery_step1">Allez dans Paramètres → Batterie</string>
+    <string name="battery_step2">Choisissez "Optimiser l’utilisation de la batterie"</string>
+    <string name="battery_step3">Recherchez "Soixante-dix fois" et choisissez "Ne pas optimiser"</string>
+
+    <string name="permissions_note">Ces étapes sont nécessaires pour une expérience optimale avec l’application. Les noms des menus peuvent varier selon la version du système.</string>
+
 
 </resources>

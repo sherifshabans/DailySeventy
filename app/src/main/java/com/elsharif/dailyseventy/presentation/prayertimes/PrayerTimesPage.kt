@@ -66,9 +66,9 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.presentation.common.OutlinedRow
-import com.elsharif.dailyseventy.presentation.common.PrimaryColorDivider
-import com.elsharif.dailyseventy.presentation.common.maps.MapView
+import com.elsharif.dailyseventy.presentation.components.OutlinedRow
+import com.elsharif.dailyseventy.presentation.components.PrimaryColorDivider
+import com.elsharif.dailyseventy.presentation.components.maps.MapView
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
 import com.elsharif.dailyseventy.presentation.prayertimes.model.UiPrayerTime
@@ -176,7 +176,7 @@ fun PrayerTimesPage(
     }}
 }
 
-@SuppressLint("MissingPermission")
+@SuppressLint("MissingPermission", "LocalContextConfigurationRead")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -211,7 +211,11 @@ private fun PrayerTimesViews(
             connectivityManager.activeNetworkInfo?.isConnected == true
         }
     }
+    val currentLocale = context.resources.configuration.locales[0]
 
+    LaunchedEffect(currentLocale) {
+        viewModel.refreshAddressForLanguageChange()
+    }
     val authorityListOptions =
         prayerTimesAuthorities.map {
             ListOption(

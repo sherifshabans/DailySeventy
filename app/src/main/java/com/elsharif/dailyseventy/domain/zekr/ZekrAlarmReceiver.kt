@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -42,7 +43,9 @@ class ZekrWorker(
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setSound(sound)
+            .setSound(sound, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
+            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
+
             .setAutoCancel(true)
             .build()
 
@@ -53,6 +56,7 @@ class ZekrWorker(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION) // 🔧 إضافة content type
                 .build()
 
             val channel = NotificationChannel(

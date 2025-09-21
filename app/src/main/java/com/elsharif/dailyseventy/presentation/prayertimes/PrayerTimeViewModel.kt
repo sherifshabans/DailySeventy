@@ -385,7 +385,9 @@ class PrayerTimeViewModel @Inject constructor(
 
     private fun getAddressFromGeoPoint(context: Context, geoPoint: GeoPoint): String {
         return try {
-            val geocoder = android.location.Geocoder(context, Locale.getDefault())
+            val currentLocale = context.resources.configuration.locales[0]
+            val geocoder = android.location.Geocoder(context, currentLocale)
+
             val addresses = geocoder.getFromLocation(geoPoint.latitude, geoPoint.longitude, 1)
             if (!addresses.isNullOrEmpty()) {
                 val adminArea = addresses[0].adminArea ?: ""   // المحافظة / المنطقة
@@ -399,6 +401,22 @@ class PrayerTimeViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             "تعذر تحديد الموقع"
+        }
+    }
+    // 🔧 أضف دالة لتحديث العنوان عند تغيير اللغة
+    fun refreshAddressForLanguageChange() = viewModelScope.launch {
+        try {
+            val locationPair = getUserLocationUseCase().first()
+            val location = GeoPoint(locationPair.first, locationPair.second)
+            updateAddressFromGeoPoint(location)
+        } catch (e: Exception) {
+            // في حالة فشل جلب الموقع، استخدم آخر موقع معروف من الـ state
+            val currentLocation = when (val state = _mapState.value) {
+                is MapUiState.Success -> state.location
+                is MapUiState.Offline -> state.location
+                else -> GeoPoint(30.0444, 31.2357) // القاهرة افتراضي
+            }
+            updateAddressFromGeoPoint(currentLocation)
         }
     }
     private fun fetchCurrentLocation() = viewModelScope.launch {

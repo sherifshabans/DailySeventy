@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">سبعون مرة</string>
+    <string name="company_version">إصدار شركة مدهامتان</string>
     <string name="MorningZekr">أذكار الصباح</string>
     <string name="NightZekr">أذكار المساء</string>
     <string name="AfterPrey">أذكار بعد السلام من الصلاة المفروضة</string>
@@ -24,7 +25,8 @@
     <string name="prayer">صلاة</string>
 
     <string name="prayer_is_in_10_minutes">الصلاة بعد 10 دقائق</string>
-    <string name="after_prayer_reminder">حان وقت الصلاة الآن!</string>
+    <string name="after_prayer_reminder"> ⏰حان وقت الصلاة الآن! صلاة %1$s</string>
+    <string name="night_started">🌙 بدأ %1$s من الليل</string>
     <string name="tasbeeh_after_prayer">سبحة بعد الصلاة🕌</string>
     <string name="tasbeeh_by_zekr">قائمة الأذكار📜</string>
     <string name="tasbeeh_custom">سبحة مخصصة✍️</string>
@@ -65,12 +67,12 @@
     <string name="thirdsSettings">إعدادات حساب الثلث الأخير</string>
     <string name="close">إغلاق</string>
     <string name="languageSettings">إعدادات اللغة</string>
-    <string name="thirdsTimeSettings">إعدادات حساب الوقت</string>
+    <string name="thirdsTimeSettings">إعدادات إشعارات ثلث الليل</string>
     <string name="colorpickerSettings">سمات البرنامج</string>
-    <string name="prayerSettings">الإعدادات العامة للأذان</string>
+    <string name="prayerSettings">الإعدادات الأذان</string>
     <string name="fraidaySettings">إعدادات يوم الجمعة</string>
     <string name="overlaySettings">خدمة النافذة العائمة</string>
-    <string name="FastSettings">إعدادات متتبع الصلوات والصيام</string>
+    <string name="FastSettings">إعدادات تذكيرات الصيام</string>
     <string name="fajralarmSettings">إعدادات منبه الفجر</string>
     <string name="aboutApp">عن البرنامج</string>
     <string name="Exit">إلغاء</string>
@@ -112,6 +114,7 @@
     <string name="screen_home">الصفحة الرئيسية</string>
     <string name="screen_azkar">الأذكار</string>
     <string name="screen_prayer_times">مواقيت الصلاة</string>
+    <string name="location_icon">تحديد الموقع</string>
     <string name="screen_monthly_prayer_times">مواقيت الصلاة الشهرية</string>
     <string name="screen_hijri">التاريخ الهجري</string>
     <string name="screen_qible">القبلة</string>
@@ -227,6 +230,42 @@
 
     <string name="special_fasting_title">صيام %1$s</string>
     <string name="special_fasting_message">غداً %1$s - يُسن الصيام في هذا اليوم المبارك 🌙\n%2$s</string>
+
+    <string name="appPermissionsInstructions">أذونات وتعليمات البرنامج</string>
+    <string name="general_settings">الإعدادات العامة</string>
+    <string name="understand">فهمت</string>
+    <string name="open_settings">فتح الإعدادات</string>
+
+    <!-- الإشعارات -->
+    <string name="notifications_title">تفعيل الإشعارات</string>
+    <string name="notifications_subtitle">للحصول على تذكيرات الأذكار ومواقيت الصلاة</string>
+    <string name="notifications_step1">انتقل إلى الإعدادات ← الإشعارات</string>
+    <string name="notifications_step2">ابحث عن تطبيق "سبعون مرة" وفعله</string>
+    <string name="notifications_step3">تأكد من تفعيل جميع أنواع الإشعارات</string>
+
+    <!-- الظهور فوق التطبيقات -->
+    <string name="overlay_title">السماح بالظهور فوق التطبيقات</string>
+    <string name="overlay_subtitle">لعرض تذكيرات الأذكار حتى عند استخدام تطبيقات أخرى</string>
+    <string name="overlay_step1">انتقل إلى الإعدادات ← التطبيقات الخاصة</string>
+    <string name="overlay_step2">اختر "الظهور فوق التطبيقات الأخرى"</string>
+    <string name="overlay_step3">ابحث عن "سبعون مرة" وفعل الخيار</string>
+
+    <!-- الحساسات -->
+    <string name="sensors_title">تفعيل حساسات الجهاز</string>
+    <string name="sensors_subtitle">لاستخدام حساس الضوء والحركة في التذكيرات الذكية</string>
+    <string name="sensors_step1">انتقل إلى الإعدادات ← الخصوصية</string>
+    <string name="sensors_step2">اختر "أذونات المدير" ← الحساسات</string>
+    <string name="sensors_step3">تأكد من السماح لتطبيق "سبعون مرة"</string>
+
+    <!-- البطارية -->
+    <string name="battery_title">تحسين البطارية</string>
+    <string name="battery_subtitle">لضمان عمل التطبيق في الخلفية بدون انقطاع</string>
+    <string name="battery_step1">انتقل إلى الإعدادات ← البطارية</string>
+    <string name="battery_step2">اختر "تحسين استخدام البطارية"</string>
+    <string name="battery_step3">ابحث عن "سبعون مرة" واختر "عدم التحسين"</string>
+
+    <string name="permissions_note">هذه الخطوات ضرورية لتجربة مثالية مع التطبيق. يمكن أن تختلف أسماء القوائم حسب إصدار نظام التشغيل.</string>
+
 
 
 </resources>
