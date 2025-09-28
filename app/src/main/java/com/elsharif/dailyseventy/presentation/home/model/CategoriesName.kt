@@ -51,7 +51,7 @@ internal val listOfCategories=listOf(
     ),
     CategoriesName(
         title = "القرآن الكريم",
-        iconRes = R.drawable.mecca,
+        iconRes = R.drawable.holyquran,
         routeInt = Screen.HolyQuran.titleRes,
         route = Screen.ComingSoon.route
     )

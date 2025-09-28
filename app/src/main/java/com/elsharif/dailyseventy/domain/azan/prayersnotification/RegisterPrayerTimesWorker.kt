@@ -123,7 +123,7 @@ class RegisterPrayerTimesWorker(
                     }
 
                     // Post-Azan (5 min for Maghrib, 20 min otherwise)
-                    val delayMinutes = if (cleanName.lowercase() == "maghrib") 5 else 20
+                    val delayMinutes = if (cleanName.lowercase() == "maghrib") 5 else 10
                     val postAzanMillis = azanMillis + (delayMinutes * 60 * 1000)
                     if (postAzanMillis > System.currentTimeMillis()) {
                         setAlarm(

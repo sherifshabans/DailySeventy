@@ -76,6 +76,13 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+
+        <service
+            android:name=".domain.azan.prayersnotification.AzanMediaPlayerService"
+            android:enabled="true"
+            android:exported="false"/>
+
+
 <!--
         <receiver
             android:name=".domain.nightthird.NightThirdReceiver"

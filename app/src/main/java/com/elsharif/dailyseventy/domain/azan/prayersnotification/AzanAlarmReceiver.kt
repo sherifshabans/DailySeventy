@@ -21,27 +21,38 @@ import com.elsharif.dailyseventy.domain.data.sharedpreferences.AzanSoundPrefs
 class AzanAlarmReceiver : BroadcastReceiver() {
 
     private val TAG = "AzanAlarmReceiver"
-    override fun onReceive(context: Context, intent: Intent) {
 
-        val i = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+    override fun onReceive(context: Context, intent: Intent) {
         val content = intent.getStringExtra("CONTENT")
         val title = intent.getStringExtra("TITLE")
         val icon = intent.getIntExtra("ICON", R.drawable.doaa)
-        val id = intent.getIntExtra("ID",0)
+        val id = intent.getIntExtra("ID", 0)
+        val prayerName = intent.getStringExtra("PRAYER") ?: ""
+        val type = intent.getStringExtra("TYPE") ?: "MAIN"
 
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(
-                context, id, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
         // ⬇️ نجيب الصوت اللي اختاره المستخدم
         val selectedSoundResId = AzanSoundPrefs.loadSelectedSound(context)
         val azanSound: Uri = "android.resource://${context.packageName}/$selectedSoundResId".toUri()
 
+        // بدء خدمة تشغيل الوسائط
+        startMediaPlayerService(context, azanSound, prayerName, type)
 
-        sendNotification(context, icon, title, content, azanSound, pendingIntent)
+        // عرض الإشعار بدون صوت
+        sendNotification(context, icon, title, content, prayerName, id)
+    }
 
+    private fun startMediaPlayerService(context: Context, soundUri: Uri, prayerName: String, type: String) {
+        val serviceIntent = Intent(context, AzanMediaPlayerService::class.java).apply {
+            putExtra(AzanMediaPlayerService.EXTRA_SOUND_URI, soundUri)
+            putExtra(AzanMediaPlayerService.EXTRA_PRAYER_NAME, prayerName)
+            putExtra(AzanMediaPlayerService.EXTRA_PRAYER_TYPE, type)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(serviceIntent)
+        } else {
+            context.startService(serviceIntent)
+        }
     }
 
     private fun sendNotification(
@@ -49,83 +60,63 @@ class AzanAlarmReceiver : BroadcastReceiver() {
         iconId: Int,
         title: String?,
         content: String?,
-        sound: Uri,
-        pendingIntent: PendingIntent
+        prayerName: String,
+        notificationId: Int
     ) {
-        val manager = context
-            .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationBuilder =
-            createNotificationBuilder(context, iconId, title, content, sound, pendingIntent)
-        createNotificationChannel(  manager, context, sound)
-        manager.notify(0, notificationBuilder.build())
-    }
+        val i = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
 
-    private fun createNotificationBuilder(
-        context: Context,
-        iconId: Int,
-        title: String?,
-        content: String?,
-        sound: Uri,
-        pendingIntent: PendingIntent
-    ): NotificationCompat.Builder {
+        val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(context, notificationId, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        } else {
+            PendingIntent.getActivity(context, notificationId, i, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
 
-        // 🟢 هنا نربط الـ channelId بالصوت المختار
-        val channelId = getAzanChannelId(context, sound)
+        val stopIntent = Intent(context, AzanMediaPlayerService::class.java).apply {
+            action = AzanMediaPlayerService.ACTION_STOP
+        }
+        val pendingStopIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getService(context, notificationId + 1000, stopIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        } else {
+            PendingIntent.getService(context, notificationId + 1000, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = createSilentNotificationChannel(manager, context)
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
-        Log.d(TAG, "createNotificationBuilder: $title $content ${sound.path}")
-
-        notificationBuilder
             .setSmallIcon(iconId)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources, iconId))
             .setContentTitle(title)
             .setContentText(content)
             .setAutoCancel(true)
-            .setSound(sound, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
-            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
             .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
-            .setColorized(true)
+            .setSilent(true) // بدون صوت في الإشعار
+            .addAction(R.drawable.ic_stop, "إيقاف الأذان", pendingStopIntent)
 
-        return notificationBuilder
+        manager.notify(notificationId, notificationBuilder.build())
     }
 
-
-    private fun createNotificationChannel(manager: NotificationManager, context: Context, sound: Uri): String {
-        val channelId = getAzanChannelId(context, sound)
-        val channelName = "Azan Channel - ${sound.lastPathSegment}"
+    private fun createSilentNotificationChannel(manager: NotificationManager, context: Context): String {
+        val channelId = "AZAN_SILENT_CHANNEL"
+        val channelName = "تنبيهات الأذان الصامتة"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // لو القناة لسه مش موجودة اعملها
             if (manager.getNotificationChannel(channelId) == null) {
-                val audioAttributes = AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                    .build()
-
                 val notificationChannel = NotificationChannel(
                     channelId,
                     channelName,
                     NotificationManager.IMPORTANCE_HIGH
                 )
-                notificationChannel.setSound(sound, audioAttributes)
+                notificationChannel.setSound(null, null) // بدون صوت
                 notificationChannel.enableVibration(true)
                 notificationChannel.enableLights(true)
-
                 manager.createNotificationChannel(notificationChannel)
             }
         }
         return channelId
-    }
-
-    private fun getAzanChannelId(context: Context, sound: Uri): String {
-        return "AZAN_CHANNEL_${sound.lastPathSegment}"
-    }
-
-
-    companion object {
-        private const val CHANNEL_ID = "AZAN_CHANNEL"
-        private const val CHANNEL_NAME = "azan channel"
     }
 }
