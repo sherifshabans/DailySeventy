@@ -80,10 +80,10 @@
 
 ### Modularization
 - The app follows a modular architecture with:
-  - **Use Cases**: Encapsulate business logic.
-  - **Data Sources**: Handle data retrieval (local and remote).
+  - **Use Cases**: Encapsulate business logic (e.g., `azan`, `dailyazkar`).
+  - **Data Sources**: Handle data retrieval (e.g., `repository`, `sensordomain`).
   - **Repositories**: Manage data flow between sources and use cases.
-  - **Modules**: Separate features (e.g., prayer times, adhkar, tasbih) for scalability.
+  - **Modules**: Separate features (e.g., `prayertimes`, `qibla`, `tasbeeh`) for scalability.
 
 ### Tools
 - **Android Studio**: IDE for development and testing.
@@ -118,21 +118,54 @@ To build and run the app, ensure you have:
 
 ## Project Structure
 ```
+core/                          # Core module containing core features
+├── prayertimes/               # Prayer times functionality
+├── quran/                     # Quran-related functionality
+└── tasbih/                    # Tasbih-related functionality
 app/
-├── core/                     # Core module (shared utilities, use cases, data sources)
-├── features/
-│   ├── prayer_times/         # Prayer times module
-│   ├── adhkar/              # Adhkar module
-│   ├── tasbih/              # Tasbih module
-│   ├── qibla/               # Qibla module
-│   ├── reminders/           # Reminders and notifications module
-├── src/
-│   ├── main/
-│   │   ├── java/com/example/dailyseventy/  # Kotlin source files
-│   │   ├── res/                           # Resources (drawables, strings, etc.)
-│   │   └── AndroidManifest.xml            # App manifest with permissions
-├── build.gradle.kts                       # App-level Gradle configuration
-└── settings.gradle.kts                    # Project-level Gradle settings
+├── manifests/                 # Manifest files
+├── kotlin-java/
+│   ├── com.elsharif.dailyseventy/
+│   │   ├── di/               # Dependency Injection configuration
+│   │   ├── domain/           # Business logic layer
+│   │   │   ├── azan/
+│   │   │   ├── dailyazkar/
+│   │   │   ├── data/
+│   │   │   ├── friday/
+│   │   │   ├── islamicReminder/
+│   │   │   ├── repository/
+│   │   │   ├── sensordomain/
+│   │   │   ├── thirdnight/
+│   │   │   └── zekr/
+│   │   ├── data/             # Data layer
+│   │   ├── AppPreferences.kt # App settings
+│   │   ├── presentation/     # Presentation layer
+│   │   │   ├── azkarcategories/
+│   │   │   ├── colorselction/
+│   │   │   ├── comingsoon/
+│   │   │   ├── components/
+│   │   │   ├── friday/
+│   │   │   ├── hijriCalendar/
+│   │   │   ├── home/
+│   │   │   ├── islamicReminders/
+│   │   │   ├── language/
+│   │   │   ├── permissins/
+│   │   │   ├── prayertimes/
+│   │   │   ├── privacypolicy/
+│   │   │   ├── problems/
+│   │   │   ├── qibla/
+│   │   │   ├── sensor/
+│   │   │   ├── settings/
+│   │   │   ├── tasbeeh/
+│   │   │   ├── thirdofthenight/
+│   │   │   ├── widgets/
+│   │   │   ├── zekr/
+│   │   │   ├── ui/
+│   │   │   └── util/
+│   │   ├── DilaYApp.kt       # App entry point
+│   │   └── MainActivity      # Main activity
+│   ├── com (androidTest)/    # Android test cases
+│   └── com (test)/           # Unit test cases
 ```
 
 ## Dependencies
