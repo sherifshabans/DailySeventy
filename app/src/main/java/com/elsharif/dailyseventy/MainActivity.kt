@@ -5,8 +5,7 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
-import android.hardware.Sensor
-import android.hardware.SensorManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,9 +17,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
@@ -33,9 +35,12 @@ import androidx.work.workDataOf
 import com.elsharif.dailyseventy.domain.AppPreferences
 import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
 import com.elsharif.dailyseventy.domain.dailyazkar.AzkarWorker
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.FridayPrefs
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.NightThird
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.ThemePreferences
+import com.elsharif.dailyseventy.domain.data.preferences.FridayPrefs
+import com.elsharif.dailyseventy.domain.data.preferences.IslamicReminderPreferences
+import com.elsharif.dailyseventy.domain.data.preferences.NightThirdPrefs
+import com.elsharif.dailyseventy.domain.data.preferences.ThemePreferences
+import com.elsharif.dailyseventy.domain.data.preferences.ZekrPrefs
+import com.elsharif.dailyseventy.domain.islamicReminder.IslamicReminderManager
 import com.elsharif.dailyseventy.domain.zekr.ZekrWorker
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
@@ -48,6 +53,8 @@ import com.elsharif.dailyseventy.util.setCurrentLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -66,16 +73,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Inject lateinit var appPreferences: AppPreferences
+    @Inject
+    lateinit var appPreferences: AppPreferences
 
     private val prayerTimeViewModel: PrayerTimeViewModel by viewModels()
 
+    private lateinit var reminderManager: IslamicReminderManager
+    private lateinit var preferences: IslamicReminderPreferences
 
-    private lateinit var sensorManager: SensorManager
-    private var stepCounter: Sensor? = null
-    private var initialSteps = -1
-
-    //  private val tasbeehViewModel : TasbeehViewModel by viewModels ()
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -85,12 +90,33 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.POST_NOTIFICATIONS,
     )
 
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase?.let { updateContextWithLanguage(it) })
+    }
+
+    private fun updateContextWithLanguage(context: Context): Context {
+        val prefs = context.getSharedPreferences("PRAYERS_PREF", MODE_PRIVATE)
+        val languageCode = prefs.getString("LANGUAGE_PREF", "ar") ?: "ar"
+
+        Log.d("MainActivity", "Applying language: $languageCode")
+
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val configuration = Configuration(context.resources.configuration)
+        configuration.setLocale(locale)
+
+        return context.createConfigurationContext(configuration)
+    }
+
 
 
 
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         ActivityCompat.requestPermissions(
             this, permissions, 100
@@ -103,6 +129,7 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
+
         }
 /*
 
@@ -128,27 +155,13 @@ class MainActivity : ComponentActivity() {
 
         val context = applicationContext
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-
-        Log.d("StepSensor", "stepCounter = $stepCounter")
 
         enableEdgeToEdge()
         requestIgnoreBatteryOptimization()
         requestExactAlarmPermission(this)
         requestNotificationPermission(this)
-        // للتأكد إننا فعلاً فعلنا المنبه في preferences (لأن scheduleStepAlarm يبدأ فقط لو enabled)
-    //    AlarmPreferences.setAlarmEnabled(this, true)
-        Log.d("MainActivityDebug", "DEBUG: AlarmPreferences.setAlarmEnabled -> true")
 
-// اطبع حالة إمكانية exact alarms
-        val am = getSystemService(ALARM_SERVICE) as AlarmManager
-        val canExact = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) am.canScheduleExactAlarms() else true
-        Log.d("MainActivityDebug", "DEBUG: canScheduleExactAlarms = $canExact")
 
-// نفّذ اختبار سريع (سيجعل المنبه يرن بعد 30 ثانية)
-        //AlarmScheduler.scheduleImmediateTest(this, 30_000L)
-        Log.d("MainActivityDebug", "DEBUG: Called scheduleImmediateTest(30s)")
         setContent {
             DailySeventyTheme(
                 userPrimary = themeViewModel.userColor.value
@@ -158,7 +171,12 @@ class MainActivity : ComponentActivity() {
 
                 val context = LocalContext.current
 
-                AppNavHost(context = context, themeViewModel = themeViewModel,navController= navController, prayerTimeViewModel = prayerTimeViewModel)
+                AppNavHost(
+                    context = context,
+                    themeViewModel = themeViewModel,
+                    navController = navController,
+                    prayerTimeViewModel = prayerTimeViewModel
+                )
             }
         }
         Log.d("PermissionCheck", "Requesting ACTIVITY_RECOGNITION permission...")
@@ -169,24 +187,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun registerZekr() {
-        val workRequest = PeriodicWorkRequestBuilder<ZekrWorker>(
-            15, TimeUnit.MINUTES // ⏰ الحد الأدنى المسموح في WorkManager
-        ).setInputData(
-            workDataOf(
-                "TITLE" to "وقت الصلاة على النبي ﷺ",
-                "CONTENT" to "المُحبّ ينبغي أن لا يتركَ وردَ الصَّلاة والسّلام على سيدنا رسولِ الله صلى الله عليه وسلّم، فإنّ المحبّ لا يغفل عن حبيبه...",
-                "ICON" to R.drawable.doaa,
-                "ID" to 1001
-            )
-        ).build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "zekr_work", // اسم فريد
-            ExistingPeriodicWorkPolicy.REPLACE,
-            workRequest
-        )
+        // ✅ فقط تحقق من الإعدادات وجدول إذا كان مفعل
+        if (ZekrPrefs.isEnabled(this)) {
+            ZekrWorker.scheduleNext(applicationContext)
+        }
     }
-
 
 
     private fun scheduleAzkarWork() {
@@ -196,15 +201,15 @@ class MainActivity : ComponentActivity() {
             Triple("night", 0, 0)
         )
 
-        val workManager = WorkManager.getInstance(applicationContext)
+        val workManager = WorkManager.Companion.getInstance(applicationContext)
 
         azkarTimes.forEach { (type, hour, minute) ->
-            val now = java.util.Calendar.getInstance()
-            val scheduleTime = java.util.Calendar.getInstance().apply {
-                set(java.util.Calendar.HOUR_OF_DAY, hour)
-                set(java.util.Calendar.MINUTE, minute)
-                set(java.util.Calendar.SECOND, 0)
-                if (before(now)) add(java.util.Calendar.DAY_OF_MONTH, 1)
+            val now = Calendar.getInstance()
+            val scheduleTime = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
+                set(Calendar.SECOND, 0)
+                if (before(now)) add(Calendar.DAY_OF_MONTH, 1)
             }
 
             val initialDelay = scheduleTime.timeInMillis - now.timeInMillis
@@ -255,6 +260,27 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    private fun applyCurrentLanguage() {
+        try {
+            val languageCode = appPreferences.getSavedLanguageCode()
+            Log.d("MainActivity", "Applying current language: $languageCode")
+
+            val locale = Locale(languageCode)
+            Locale.setDefault(locale)
+
+            val configuration = Configuration(resources.configuration)
+            configuration.setLocale(locale)
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+
+            // Also apply via AppCompatDelegate
+            val locales = LocaleListCompat.forLanguageTags(languageCode)
+            AppCompatDelegate.setApplicationLocales(locales)
+
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Error applying language: ${e.message}")
+        }
+    }
+
 
     @SuppressLint("NewApi")
     override fun onResume() {
@@ -273,13 +299,35 @@ class MainActivity : ComponentActivity() {
                 asrEnabled = asrEnabled
             )
 
-            prayerTimeViewModel.scheduleNightThirdNotificationsFromPrayerTimes(
-                applicationContext,
-                setOf(NightThird.FIRST, NightThird.SECOND, NightThird.THIRD)
-            )
+            // ✅ اشغل تذكيرات الأثلاث بس لو متفعلة
+            if (NightThirdPrefs.isEnabled(this)) {
+                val selection = NightThirdPrefs.getSelection(this)
+                if (selection.isNotEmpty()) {
+                    prayerTimeViewModel.scheduleNightThirdNotificationsFromPrayerTimes(
+                        this, selection
+                    )
+                }
+            }
+
 
             prayerTimeViewModel.scheduleSunriseAzkar(applicationContext)
+
+            // ✅ هنا - جدول التذكيرات أول ما التطبيق يفتح
+            val preferences = IslamicReminderPreferences(this)
+            IslamicReminderManager.scheduleAllReminders(this, preferences)
+
         }
+
+        // Check if language changed and recreate if needed
+        val currentLanguage = Locale.getDefault().language
+        val savedLanguage = appPreferences.getSavedLanguageCode()
+
+        if (currentLanguage != savedLanguage) {
+            Log.d("MainActivity", "Language mismatch detected. Recreating...")
+            applyCurrentLanguage()
+            recreate()
+        }
+
     }
 
 }

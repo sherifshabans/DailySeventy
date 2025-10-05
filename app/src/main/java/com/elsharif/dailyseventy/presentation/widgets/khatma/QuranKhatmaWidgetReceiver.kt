@@ -11,12 +11,10 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.provideContent
-import com.elsharif.dailyseventy.domain.UseCaseProvider
 import com.elsharif.dailyseventy.domain.AppPreferences
-import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
+import com.elsharif.dailyseventy.util.UseCaseProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import androidx.glance.LocalContext
 
 
 private const val TAG = "QuranKhatmaWidgetReceiv"

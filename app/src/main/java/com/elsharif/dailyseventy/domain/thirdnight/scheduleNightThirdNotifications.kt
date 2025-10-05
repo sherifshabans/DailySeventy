@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.NightThird
+import com.elsharif.dailyseventy.domain.data.preferences.NightThird
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime

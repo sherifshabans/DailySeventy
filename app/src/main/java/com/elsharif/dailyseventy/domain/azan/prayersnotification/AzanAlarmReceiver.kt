@@ -7,16 +7,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.media.AudioAttributes
-import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
-import com.elsharif.dailyseventy.ui.MainActivity
+import com.elsharif.dailyseventy.MainActivity
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AzanSoundPrefs
+import com.elsharif.dailyseventy.domain.data.preferences.AzanSoundPrefs
 
 class AzanAlarmReceiver : BroadcastReceiver() {
 

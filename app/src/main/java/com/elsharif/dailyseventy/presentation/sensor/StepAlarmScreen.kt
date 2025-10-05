@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
+import com.elsharif.dailyseventy.domain.data.preferences.AlarmPreferences
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.util.Screen
 

@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModel
 import com.elsharif.dailyseventy.domain.sensordomain.LightSensor
 import com.elsharif.dailyseventy.domain.sensordomain.StepCounterSensor
 import com.elsharif.dailyseventy.domain.sensordomain.StepDetectorSensor
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
+import com.elsharif.dailyseventy.domain.data.preferences.AlarmPreferences
 import com.elsharif.dailyseventy.domain.sensordomain.AlarmMusicService
 import com.elsharif.dailyseventy.domain.sensordomain.AlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel

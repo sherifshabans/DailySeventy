@@ -17,6 +17,8 @@
     <string name="MiscZekr">Miscellaneous Dhikr</string>
     <string name="holy_quran">Holy Quran</string>
 
+
+
     <string name="friday_reminders">Friday Reminders</string>
     <string name="kahf_reminder">Kahf Recitation Reminder</string>
     <string name="asr_time_reminder">Answer Hour (Asr)</string>
@@ -38,6 +40,7 @@
 
     <string name="is_coming_soon">Coming Soon</string>
     <string name="prayer_is_now">Prayer is NOW!</string>
+
     <string name="search">Search</string>
     <string name="search_icon">Search Icon</string>
 
@@ -270,5 +273,88 @@
     <string name="permissions_note">These steps are necessary for the best experience with the app. Menu names may vary depending on the OS version.</string>
 
 
+
+    <!-- Fasting Reminders -->
+    <string name="monday_fasting_reminder">Monday Fasting Reminder</string>
+    <string name="monday_fasting_message">Tomorrow is Monday. Reminder: Fasting on Mondays has great virtue.</string>
+    <string name="thursday_fasting_reminder">Thursday Fasting Reminder</string>
+    <string name="thursday_fasting_message">Tomorrow is Thursday. Reminder: Fasting on Thursdays has great virtue.</string>
+
+    <!-- White Days Reminders -->
+    <string name="white_days_reminder">White Days Fasting Reminder</string>
+    <string name="white_days_reminder_message">Tomorrow is the %dth of the month. Reminder: Fasting the White Days.</string>
+    <string name="selected_currently">✓ Selected currently</string>
+
+    <!-- Eid Reminders -->
+    <string name="eid_fitr_reminder">Eid al-Fitr Reminder</string>
+    <string name="eid_fitr_reminder_message">Tomorrow is Eid al-Fitr. Congratulations!</string>
+    <string name="eid_adha_reminder">Eid al-Adha Reminder</string>
+    <string name="eid_adha_reminder_message">Tomorrow is Eid al-Adha. Congratulations!</string>
+    <string name="eid_reminder">Eid Reminder</string>
+    <string name="eid_reminder_message">Tomorrow is Eid. Congratulations!</string>
+
+    <!-- Religious Occasions -->
+    <string name="day_arafat_reminder">Day of Arafah Reminder</string>
+    <string name="day_arafat_reminder_message">Tomorrow is the Day of Arafah. Reminder: Fasting on this day has great virtue.</string>
+    <string name="day_ashura_reminder">Day of Ashura Reminder</string>
+    <string name="day_ashura_reminder_message">Tomorrow is the Day of Ashura. Reminder: Fasting on this day.</string>
+    <string name="prophet_birthday_reminder">Prophet’s Birthday Reminder</string>
+    <string name="prophet_birthday_reminder_message">Tomorrow is the commemoration of the Prophet’s birthday.</string>
+    <string name="isra_miraj_reminder">Isra and Mi\'raj Reminder</string>
+    <string name="isra_miraj_reminder_message">Tomorrow is the commemoration of Isra and Mi\'raj.</string>
+    <string name="laylat_qadr_reminder">Laylat al-Qadr Reminder</string>
+    <string name="laylat_qadr_reminder_message">Tomorrow is Laylat al-Qadr. Reminder to strive in worship.</string>
+    <string name="begin_ramadan_reminder">Beginning of Ramadan Reminder</string>
+    <string name="begin_ramadan_reminder_message">Tomorrow is the first day of Ramadan. Congratulations!</string>
+
+    <string name="feedback_title">Complaints &amp; Suggestions</string>
+    <string name="select_fajr_azan_sound">Select Fajr Azan sound</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="muezzin_ahmed_alnafees">Ahmed Al-Nafees</string>
+    <string name="muezzin_nuaaynah">Nuaaynah</string>
+    <string name="muezzin_saad_alghamidi">Saad Al-Ghamdi</string>
+    <string name="select_preferred_sound">Select your preferred sound for each prayer</string>
+    <string name="regular_prayers">Regular prayers</string>
+    <string name="fajr_prayer">Fajr prayer</string>
+
+    <string name="stop_sound">Stop sound</string>
+
+    <string name="note_movement">
+• The alarm will ring daily at the set time
+• Music can only be stopped by completing the required steps
+• The alarm will be automatically scheduled for the next day
+</string>
+
+    <string name="note_light">
+• The alarm will activate automatically in darkness
+• Music can only be stopped by exposure to light
+• It works throughout the day depending on ambient light
+</string>
+
+    <string name="stop_alarm_hint">You can stop the alarm sound here if you cannot turn it off</string>
+    <string name="alarm_running">The sound is now playing!</string>
+    <string name="azkar_overlay_dialog_title">Floating Azkar Reminder Settings</string>
+    <string name="azkar_overlay">Floating Azkar Reminders</string>
+    <string name="azkar_overlay_subtitle">Show a floating Azkar every 5 minutes over apps with sound</string>
+    <string name="overlay_permission_title">Overlay Permission</string>
+    <string name="overlay_permission_message">Please grant overlay permission to show Azkar reminders.</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="azkar_reminder">Azkar Reminder</string>
+    <string name="azkar_service_running">Azkar reminder service is running</string>
+
+
+    <string name="zekr_reminder_title">Reminder to send blessings upon the Prophet ﷺ</string>
+    <string name="enable_reminder">Enable reminder</string>
+    <string name="repeat_every">Repeat every:</string>
+    <string name="one_hour">One hour</string>
+    <string name="one_and_half_hour">One and a half hours</string>
+    <string name="two_hours">Two hours</string>
+    <string name="three_hours">Three hours</string>
+    <string name="minutes">%1$d minutes</string>
+    <string name="custom_time">Custom time</string>
+    <string name="interval_minutes">Interval in minutes</string>
+    <string name="min_interval_hint">Minimum: 15 minutes</string>
+    <string name="exit">Exit</string>
 
 </resources>

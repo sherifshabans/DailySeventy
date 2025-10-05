@@ -17,12 +17,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessAlarm
 import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.ColorLens
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Mosque
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PermDataSetting
+import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,18 +47,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.IslamicReminderPreferences
-import com.elsharif.dailyseventy.domain.islamicReminder.ReminderSettingsDialog
-import com.elsharif.dailyseventy.presentation.sensor.StepAlarmSettingsDialog
-import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
+import com.elsharif.dailyseventy.domain.data.preferences.IslamicReminderPreferences
 import com.elsharif.dailyseventy.presentation.colorselection.ColorPickerDialog
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
 import com.elsharif.dailyseventy.presentation.friday.FridayReminderDialog
-import com.elsharif.dailyseventy.presentation.language.LanguageViewModel
+import com.elsharif.dailyseventy.presentation.islamicReminders.ReminderSettingsDialog
+import com.elsharif.dailyseventy.presentation.islamicReminders.ZekrReminderDialog
 import com.elsharif.dailyseventy.presentation.language.LanguageSelectionDialog
+import com.elsharif.dailyseventy.presentation.language.LanguageViewModel
 import com.elsharif.dailyseventy.presentation.permissins.PermissionsGuideDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.AzanSoundSelectorDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.presentation.sensor.StepAlarmSettingsDialog
+import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
 import com.elsharif.dailyseventy.presentation.thirdofthenight.NightThirdDialog
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
 import com.elsharif.dailyseventy.util.Screen
@@ -79,10 +81,10 @@ fun SettingsScreen(
     var showColorDialog by remember { mutableStateOf(false) }
     var showAzanDialog by remember { mutableStateOf(false) }
     var showFridayDialog by remember { mutableStateOf(false) }
-    var showOverlayDialog by remember { mutableStateOf(false) }
     var showStepAlarmDialog by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
     var showPermissionsDialog by remember { mutableStateOf(false) }
+    var showZekrDialog by remember { mutableStateOf(false) }
 
     // إنشاء الـ preferences مرة واحدة فقط
     val preferences = remember { IslamicReminderPreferences(context) }
@@ -104,6 +106,7 @@ fun SettingsScreen(
             languageViewModel.acknowledgeActivityRecreation()
         }
     }
+
 
     // Show Language Selection Dialog
     if (showLanguageDialog) {
@@ -177,6 +180,17 @@ fun SettingsScreen(
                 }
             }
             item {
+                SettingsItem(stringResource(R.string.zekr_reminder_title), Icons.Default.Mosque){
+                    showZekrDialog = true
+                }
+                if (showZekrDialog) {
+                    ZekrReminderDialog(
+                        context = context,
+                        onDismiss = { showZekrDialog = false }
+                    )
+                }
+            }
+            item {
                 SettingsItem(stringResource(R.string.fraidaySettings), Icons.Default.Settings) {
                     showFridayDialog = true
                 }
@@ -189,11 +203,7 @@ fun SettingsScreen(
                     }
                 }
             }
-            item {
-                SettingsItem(stringResource(R.string.overlaySettings), Icons.Default.Apps) {
-                    showOverlayDialog = true
-                }
-            }
+
             item {
                 SettingsItem(stringResource(R.string.FastSettings), Icons.Default.Settings) {
                 showSettingsDialog = true
@@ -221,11 +231,6 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem(stringResource(R.string.aboutApp), Icons.Default.Info) {
-
-                }
-            }
-            item {
                 SettingsItem(stringResource(R.string.appPermissionsInstructions), Icons.Default.PermDataSetting) {
                     showPermissionsDialog =true
                 }
@@ -237,6 +242,20 @@ fun SettingsScreen(
                 )
 
             }
+            item {
+                SettingsItem(stringResource(R.string.feedback_title), Icons.Default.Feedback) {
+
+                    navController.navigate(Screen.FeedbackScreen.route)
+                }
+            }
+            item {
+                SettingsItem(stringResource(R.string.privacy_policy), Icons.Default.PrivacyTip) {
+
+                    navController.navigate(Screen.PrivacyPolicyScreen.route)
+                }
+            }
+
+
         }
 
     }

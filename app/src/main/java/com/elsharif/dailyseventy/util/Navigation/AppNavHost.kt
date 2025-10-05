@@ -13,11 +13,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.elsharif.dailyseventy.ui.MainActivity
+import com.elsharif.dailyseventy.MainActivity
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmScreen
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
-import com.elsharif.dailyseventy.presentation.Qibla.QiblaPage
-import com.elsharif.dailyseventy.presentation.Qibla.QiblaPageWithSplash
+import com.elsharif.dailyseventy.presentation.qibla.QiblaPage
+import com.elsharif.dailyseventy.presentation.qibla.QiblaPageWithSplash
 import com.elsharif.dailyseventy.presentation.azkarcategories.CategoryScreen
 import com.elsharif.dailyseventy.presentation.comingsoon.ComingSoonPage
 import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
@@ -26,6 +26,8 @@ import com.elsharif.dailyseventy.presentation.home.view.SplashScreen
 import com.elsharif.dailyseventy.presentation.prayertimes.MonthlyPrayerTimesPage
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimesPage
+import com.elsharif.dailyseventy.presentation.privacypolicy.PrivacyPolicy
+import com.elsharif.dailyseventy.presentation.problems.FormWebViewScreen
 import com.elsharif.dailyseventy.presentation.settings.SettingsScreen
 import com.elsharif.dailyseventy.presentation.tasbeeh.CustomZikrSebhaPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.ImageSebhaPage
@@ -132,6 +134,14 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
         composable(Screen.AnimatedQibla.route) {
 
             QiblaPageWithSplash(navController)
+        }
+        composable(Screen.FeedbackScreen.route) {
+
+            FormWebViewScreen(navController)
+        }
+        composable(Screen.PrivacyPolicyScreen.route) {
+
+            PrivacyPolicy(navController)
         }
 
     }

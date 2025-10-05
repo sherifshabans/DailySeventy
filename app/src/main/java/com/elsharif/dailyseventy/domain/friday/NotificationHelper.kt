@@ -29,7 +29,7 @@ object NotificationHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "Friday Reminders ($type)",
+                "Reminders ($type)",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 setSound(

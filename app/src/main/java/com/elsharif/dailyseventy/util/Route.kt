@@ -23,4 +23,8 @@ sealed class Screen(val route: String, @StringRes val titleRes: Int) {
     object AnimatedQibla: Screen("animated_qibla", R.string.screen_alarm)
     object ComingSoon: Screen("coming_soon", R.string.is_coming_soon)
     object HolyQuran: Screen("holy_quran", R.string.holy_quran)
+
+    object FeedbackScreen: Screen("feedback_title", R.string.feedback_title)
+
+    object PrivacyPolicyScreen: Screen("privacy_policy", R.string.privacy_policy)
 }

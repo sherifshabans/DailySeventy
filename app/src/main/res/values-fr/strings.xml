@@ -272,4 +272,88 @@
     <string name="permissions_note">Ces étapes sont nécessaires pour une expérience optimale avec l’application. Les noms des menus peuvent varier selon la version du système.</string>
 
 
+    <!-- Rappels de jeûne -->
+    <string name="monday_fasting_reminder">Rappel du jeûne du lundi</string>
+    <string name="monday_fasting_message">Demain c’est lundi. Rappel : le jeûne du lundi a une grande vertu.</string>
+    <string name="thursday_fasting_reminder">Rappel du jeûne du jeudi</string>
+    <string name="thursday_fasting_message">Demain c’est jeudi. Rappel : le jeûne du jeudi a une grande vertu.</string>
+
+    <!-- Rappels des jours blancs -->
+    <string name="white_days_reminder">Rappel du jeûne des jours blancs</string>
+    <string name="white_days_reminder_message">Demain c’est le %d du mois. Rappel : jeûner les jours blancs.</string>
+    <string name="selected_currently">✓ Sélectionné actuellement</string>
+
+    <!-- Rappels de l’Aïd -->
+    <string name="eid_fitr_reminder">Rappel de l’Aïd al-Fitr</string>
+    <string name="eid_fitr_reminder_message">Demain c’est l’Aïd al-Fitr. Félicitations !</string>
+    <string name="eid_adha_reminder">Rappel de l’Aïd al-Adha</string>
+    <string name="eid_adha_reminder_message">Demain c’est l’Aïd al-Adha. Félicitations !</string>
+    <string name="eid_reminder">Rappel de l’Aïd</string>
+    <string name="eid_reminder_message">Demain c’est l’Aïd. Félicitations !</string>
+
+    <!-- Occasions religieuses -->
+    <string name="day_arafat_reminder">Rappel du jour de Arafat</string>
+    <string name="day_arafat_reminder_message">Demain c’est le jour de Arafat. Rappel : jeûner ce jour a une grande vertu.</string>
+    <string name="day_ashura_reminder">Rappel du jour de Achoura</string>
+    <string name="day_ashura_reminder_message">Demain c’est le jour de Achoura. Rappel : jeûner ce jour.</string>
+    <string name="prophet_birthday_reminder">Rappel de la naissance du Prophète</string>
+    <string name="prophet_birthday_reminder_message">Demain c’est la commémoration de la naissance du Prophète.</string>
+    <string name="isra_miraj_reminder">Rappel de l’Isra et Mi‘raj</string>
+    <string name="isra_miraj_reminder_message">Demain c’est la commémoration de l’Isra et Mi‘raj.</string>
+    <string name="laylat_qadr_reminder">Rappel de Laylat al-Qadr</string>
+    <string name="laylat_qadr_reminder_message">Demain c’est Laylat al-Qadr. Rappel : persévérez dans l’adoration.</string>
+    <string name="begin_ramadan_reminder">Rappel du début de Ramadan</string>
+    <string name="begin_ramadan_reminder_message">Demain c’est le premier jour de Ramadan. Félicitations !</string>
+
+    <string name="feedback_title">Plaintes et suggestions</string>
+    <string name="select_fajr_azan_sound">Choisir le son de l\'appel à la prière de Fajr</string>
+    <string name="privacy_policy">Politique de confidentialité</string>
+
+    <string name="muezzin_ahmed_alnafees">Ahmed Al-Nafees</string>
+    <string name="muezzin_nuaaynah">Nuaaynah</string>
+    <string name="muezzin_saad_alghamidi">Saad Al-Ghamdi</string>
+
+    <string name="select_preferred_sound">Choisissez le son préféré pour chaque prière</string>
+    <string name="regular_prayers">Prières régulières</string>
+    <string name="fajr_prayer">Prière de Fajr</string>
+
+    <string name="stop_sound">Arrêter le son</string>
+
+    <string name="note_movement">
+• L’alarme sonnera chaque jour à l’heure définie
+• La musique ne peut être arrêtée qu’en accomplissant le nombre de pas requis
+• L’alarme sera automatiquement programmée pour le lendemain
+</string>
+
+    <string name="note_light">
+• L’alarme se déclenchera automatiquement dans l’obscurité
+• La musique ne peut être arrêtée qu’en s’exposant à la lumière
+• Elle fonctionne toute la journée selon la lumière ambiante
+</string>
+
+    <string name="stop_alarm_hint">Vous pouvez arrêter le son de l’alarme ici si vous ne pouvez pas l’éteindre</string>
+    <string name="alarm_running">Le son est en cours de lecture !</string>
+    <string name="azkar_overlay_dialog_title">Paramètres des rappels flottants des adhkars</string>
+    <string name="azkar_overlay">Rappels flottants des adhkars</string>
+    <string name="azkar_overlay_subtitle">Afficher un dhikr flottant toutes les 5 minutes au-dessus des applications avec son</string>
+    <string name="overlay_permission_title">Autorisation de superposition</string>
+
+    <!-- بعد التصليح (صح ✅) -->
+    <string name="overlay_permission_message">Veuillez accorder l\'autorisation de superposition pour afficher les rappels d\'adhkars.</string>
+    <string name="grant_permission">Accorder l\'autorisation</string>
+    <string name="azkar_reminder">Rappel d\'adhkars</string>
+    <string name="azkar_service_running">Le service de rappel des adhkars est en cours d\'exécution</string>
+
+    <string name="zekr_reminder_title">Rappel pour prier sur le Prophète ﷺ</string>
+    <string name="enable_reminder">Activer le rappel</string>
+    <string name="repeat_every">Répéter toutes les :</string>
+    <string name="one_hour">Une heure</string>
+    <string name="one_and_half_hour">Une heure et demie</string>
+    <string name="two_hours">Deux heures</string>
+    <string name="three_hours">Trois heures</string>
+    <string name="minutes">%1$d minutes</string>
+    <string name="custom_time">Heure personnalisée</string>
+    <string name="interval_minutes">Intervalle en minutes</string>
+    <string name="min_interval_hint">Minimum : 15 minutes</string>
+    <string name="exit">Quitter</string>
 </resources>

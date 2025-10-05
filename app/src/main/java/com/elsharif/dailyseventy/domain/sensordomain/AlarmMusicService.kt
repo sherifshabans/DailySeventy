@@ -17,7 +17,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.elsharif.dailyseventy.ui.MainActivity
+import com.elsharif.dailyseventy.MainActivity
 import com.elsharif.dailyseventy.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

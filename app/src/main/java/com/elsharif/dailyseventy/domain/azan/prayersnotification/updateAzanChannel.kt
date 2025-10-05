@@ -1,6 +1,5 @@
 package com.elsharif.dailyseventy.domain.azan.prayersnotification
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -8,8 +7,7 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AzanSoundPrefs
-import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.domain.data.preferences.AzanSoundPrefs
 
 fun updateAzanChannel(context: Context): String {
 

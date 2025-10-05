@@ -70,10 +70,10 @@
     <string name="languageSettings">إعدادات اللغة</string>
     <string name="thirdsTimeSettings">إعدادات إشعارات ثلث الليل</string>
     <string name="colorpickerSettings">سمات البرنامج</string>
-    <string name="prayerSettings">الإعدادات الأذان</string>
+    <string name="prayerSettings">إعدادات الأذان</string>
     <string name="fraidaySettings">إعدادات يوم الجمعة</string>
     <string name="overlaySettings">خدمة النافذة العائمة</string>
-    <string name="FastSettings">إعدادات تذكيرات الصيام</string>
+    <string name="FastSettings">إعدادات الصيام والمناسبات الإسلامية</string>
     <string name="fajralarmSettings">إعدادات منبه الفجر</string>
     <string name="aboutApp">عن البرنامج</string>
     <string name="Exit">إلغاء</string>
@@ -268,5 +268,88 @@
     <string name="permissions_note">هذه الخطوات ضرورية لتجربة مثالية مع التطبيق. يمكن أن تختلف أسماء القوائم حسب إصدار نظام التشغيل.</string>
 
 
+
+    <!-- تذكيرات الصيام -->
+    <string name="monday_fasting_reminder">تذكير صيام الإثنين</string>
+    <string name="monday_fasting_message">غداً يوم الإثنين، تذكير بصيام يوم الإثنين له فضل عظيم</string>
+    <string name="thursday_fasting_reminder">تذكير صيام الخميس</string>
+    <string name="thursday_fasting_message">غداً يوم الخميس، تذكير بصيام يوم الخميس له فضل عظيم</string>
+
+    <!-- تذكيرات الأيام البيض -->
+    <string name="white_days_reminder">تذكير صيام الأيام البيض</string>
+    <string name="white_days_reminder_message">غداً اليوم %d من الشهر، تذكير بصيام الأيام البيض.</string>
+    <string name="selected_currently">✓ محدد حالياً</string>
+
+    <!-- تذكيرات الأعياد -->
+    <string name="eid_fitr_reminder">تذكير عيد الفطر</string>
+    <string name="eid_fitr_reminder_message">غداً يوم عيد الفطر المبارك، تهانينا بالعيد!</string>
+    <string name="eid_adha_reminder">تذكير عيد الأضحى</string>
+    <string name="eid_adha_reminder_message">غداً يوم عيد الأضحى المبارك، تهانينا بالعيد!</string>
+    <string name="eid_reminder">تذكير عيد</string>
+    <string name="eid_reminder_message">غداً مناسبة عيد، تهانينا!</string>
+
+    <!-- تذكيرات المناسبات الدينية -->
+    <string name="day_arafat_reminder">تذكير يوم عرفة</string>
+    <string name="day_arafat_reminder_message">غداً يوم عرفة، تذكير بصيام هذا اليوم له فضل عظيم</string>
+    <string name="day_ashura_reminder">تذكير يوم عاشوراء</string>
+    <string name="day_ashura_reminder_message">غداً يوم عاشوراء، تذكير بصيام هذا اليوم</string>
+    <string name="prophet_birthday_reminder">تذكير المولد النبوي</string>
+    <string name="prophet_birthday_reminder_message">غداً ذكرى المولد النبوي الشريف</string>
+    <string name="isra_miraj_reminder">تذكير الإسراء والمعراج</string>
+    <string name="isra_miraj_reminder_message">غداً ذكرى الإسراء والمعراج</string>
+    <string name="laylat_qadr_reminder">تذكير ليلة القدر</string>
+    <string name="laylat_qadr_reminder_message">غداً ليلة القدر المباركة، تذكير بالاجتهاد في العبادة</string>
+    <string name="begin_ramadan_reminder">تذكير بداية رمضان</string>
+    <string name="begin_ramadan_reminder_message">غداً أول أيام شهر رمضان المبارك، تهانينا!</string>
+
+    <string name="feedback_title">للشكاوى والاقتراحات</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="select_fajr_azan_sound">اختر صوت أذان الفجر</string>
+    <string name="muezzin_ahmed_alnafees">أحمد النفيس</string>
+    <string name="muezzin_nuaaynah">نعينع</string>
+    <string name="muezzin_saad_alghamidi">سعد الغامدي</string>
+
+    <string name="select_preferred_sound">اختر الصوت المفضل لديك لكل صلاة</string>
+    <string name="regular_prayers">الصلوات العادية</string>
+    <string name="fajr_prayer">صلاة الفجر</string>
+
+
+    <string name="stop_sound">إيقاف الصوت</string>
+
+    <string name="note_movement">
+• سيتم تشغيل المنبه يوميًا في الوقت المحدد
+• لا يمكن إيقاف الموسيقى إلا بإنجاز عدد الخطوات
+• المنبه سيُجدول تلقائيًا لليوم التالي
+</string>
+
+    <string name="note_light">
+• سيعمل المنبه عند الظلام تلقائيًا
+• لا يمكن إيقاف الموسيقى إلا بالتعرض للضوء
+• يعمل على مدار اليوم حسب الإضاءة المحيطة
+</string>
+
+    <string name="stop_alarm_hint">يمكنك إيقاف صوت المنبه من هنا إذا كنت لا تستطيع إغلاقه</string>
+    <string name="alarm_running">الصوت شغال الآن!</string>
+
+    <string name="azkar_overlay_dialog_title">إعدادات تذكيرات الأذكار العائمة</string>
+    <string name="azkar_overlay">تذكيرات الأذكار العائمة</string>
+    <string name="azkar_overlay_subtitle">عرض ذكر عائم كل 5 دقايق فوق التطبيقات مع صوت</string>
+    <string name="overlay_permission_title">إذن نافذة عائمة</string>
+    <string name="overlay_permission_message">الرجاء منح إذن العرض فوق التطبيقات لعرض تذكيرات الأذكار.</string>
+    <string name="grant_permission">منح الإذن</string>
+    <string name="azkar_reminder">تذكير الأذكار</string>
+    <string name="azkar_service_running">خدمة تذكير الأذكار قيد التشغيل</string>
+    <string name="zekr_reminder_title">تذكير الصلاة على النبي ﷺ</string>
+    <string name="enable_reminder">تفعيل التذكير</string>
+    <string name="repeat_every">التكرار كل:</string>
+    <string name="one_hour">ساعة واحدة</string>
+    <string name="one_and_half_hour">ساعة ونصف</string>
+    <string name="two_hours">ساعتين</string>
+    <string name="three_hours">٣ ساعات</string>
+    <string name="minutes">%1$d دقيقة</string>
+    <string name="custom_time">وقت مخصص</string>
+    <string name="interval_minutes">الفترة بالدقائق</string>
+    <string name="min_interval_hint">الحد الأدنى: 15 دقيقة</string>
+    <string name="exit">خروج</string>
 
 </resources>

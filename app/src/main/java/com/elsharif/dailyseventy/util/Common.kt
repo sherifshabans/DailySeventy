@@ -33,7 +33,7 @@ import java.util.Locale
 fun GlanceModifier.cornerRadiusCompat(
     cornerRadius: Int,
     color: Color = Color(0xFFCDDDFF),
-    @FloatRange(from = 0.0, to = 1.0) backgroundAlpha: Float = 1f,
+    @FloatRange(from = 0.0, to = 1.0) backgroundAlpha: Float = 0.5f,
 ): GlanceModifier {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         // For Android 12+ use native corner radius and background support

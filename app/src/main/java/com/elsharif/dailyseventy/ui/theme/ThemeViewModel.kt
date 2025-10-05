@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.ThemePreferences
+import com.elsharif.dailyseventy.domain.data.preferences.ThemePreferences
 import kotlinx.coroutines.launch
 
 class ThemeViewModel(private val prefs: ThemePreferences) : ViewModel() {

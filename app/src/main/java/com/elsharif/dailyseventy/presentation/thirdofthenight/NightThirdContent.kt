@@ -28,8 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.NightThird
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.NightThirdPrefs
+import com.elsharif.dailyseventy.domain.data.preferences.NightThird
+import com.elsharif.dailyseventy.domain.data.preferences.NightThirdPrefs
 import com.elsharif.dailyseventy.domain.thirdnight.cancelNightThirdNotifications
 import com.elsharif.dailyseventy.domain.thirdnight.scheduleNightThirdNotifications
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
@@ -37,7 +37,6 @@ import com.elsharif.dailyseventy.presentation.prayertimes.model.PrayerUiState
 import com.elsharif.dailyseventy.presentation.prayertimes.model.UiPrayerTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 enum class NightThirdPart(val labelRes: Int) {
     FIRST(R.string.night_third_first),

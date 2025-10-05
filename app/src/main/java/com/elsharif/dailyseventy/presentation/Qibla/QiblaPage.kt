@@ -1,4 +1,4 @@
-package com.elsharif.dailyseventy.presentation.Qibla
+package com.elsharif.dailyseventy.presentation.qibla
 
 import android.Manifest
 import android.content.pm.PackageManager

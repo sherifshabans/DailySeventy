@@ -6,6 +6,8 @@ plugins {
     id("kotlin-kapt")
     id ("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp") version "2.0.0-1.0.21" // ✅ Add version here
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
 
 
 }
@@ -49,18 +51,31 @@ android {
         arg("room.expandProjection", "true")
     }
 
+    signingConfigs {
+        create("DailySeventy") {
+            storeFile = file("C:\\Users\\ElSha\\.android/debug.keystore")        // مكان ملف keystore
+            storePassword = project.property("STORE_PASSWORD") as String
+            keyAlias = project.property("KEY_ALIAS") as String
+            keyPassword = project.property("KEY_PASSWORD") as String
+        }
+    }
 
     buildTypes {
         release {
 
             isCrunchPngs = true
-            isMinifyEnabled = false
+            isMinifyEnabled = true   // يفضل تعمل shrink/obfuscation
+            isShrinkResources = true // يقلل حجم الـ APK/Bundle
+            signingConfig = signingConfigs.getByName("DailySeventy") // نعرّف تحت
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
+
     compileOptions {
         isCoreLibraryDesugaringEnabled  =false
 
@@ -261,4 +276,6 @@ dependencies {
     implementation("androidx.savedstate:savedstate:1.3.2")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+
 }

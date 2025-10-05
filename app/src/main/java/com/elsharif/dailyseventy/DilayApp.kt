@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.elsharif.dailyseventy.domain.AppPreferences
-import com.elsharif.dailyseventy.domain.UseCaseProvider
+import com.elsharif.dailyseventy.util.UseCaseProvider
 import com.elsharif.dailyseventy.domain.azan.prayersnotification.updateAzanChannel
 import com.example.core.usecase.GetQuranPageAyaWithTafseerUseCase
 import com.example.core.usecase.GetSoraByPageNumberUseCase

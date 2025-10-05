@@ -1,9 +1,5 @@
 package com.elsharif.dailyseventy.domain.azan.prayersnotification
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -14,9 +10,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
-import androidx.core.app.NotificationCompat
+import android.util.Log
+import androidx.core.net.toUri
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AzanSoundPrefs
+import com.elsharif.dailyseventy.domain.data.preferences.AlarmPreferences
+import com.elsharif.dailyseventy.domain.data.preferences.AzanSoundPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,15 +23,15 @@ import kotlinx.coroutines.launch
 
 class AzanMediaPlayerService : Service() {
     private var mediaPlayer: MediaPlayer? = null
-    private var notificationManager: NotificationManager? = null
+    private var notificationManager: android.app.NotificationManager? = null
     private var stopJob: Job? = null
 
     companion object {
         private const val NOTIFICATION_ID = 9999
         private const val CHANNEL_ID = "AZAN_MEDIA_PLAYER_CHANNEL"
         const val ACTION_STOP = "ACTION_STOP_AZAN"
-        const val EXTRA_SOUND_URI = "EXTRA_SOUND_URI"
         const val EXTRA_PRAYER_NAME = "EXTRA_PRAYER_NAME"
+        const val EXTRA_SOUND_URI = "EXTRA_SOUND_URI"
         const val EXTRA_PRAYER_TYPE = "EXTRA_PRAYER_TYPE"
     }
 
@@ -41,7 +39,7 @@ class AzanMediaPlayerService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
         createNotificationChannel()
     }
 
@@ -52,32 +50,44 @@ class AzanMediaPlayerService : Service() {
                 stopSelf()
             }
             else -> {
-                val soundUri = intent?.getParcelableExtra<Uri>(EXTRA_SOUND_URI)
                 val prayerName = intent?.getStringExtra(EXTRA_PRAYER_NAME) ?: "الأذان"
                 val prayerType = intent?.getStringExtra(EXTRA_PRAYER_TYPE) ?: "MAIN"
 
-                if (soundUri != null) {
-                    startAzan(soundUri, prayerName, prayerType)
-                }
+                // 🔍 التشيك على نوع الصلاة
+                val isFajr = isFajrPrayer(prayerName) || isFajrPrayerByType(prayerType)
+
+                // 🎵 اختيار الصوت المناسب
+                val selectedSoundResId = AzanSoundPrefs.getSoundForPrayer(applicationContext, isFajr)
+                val soundUri: Uri = "android.resource://${packageName}/$selectedSoundResId".toUri()
+
+                startAzan(soundUri, prayerName, prayerType)
             }
         }
         return START_NOT_STICKY
     }
 
     private fun startAzan(soundUri: Uri, prayerName: String, prayerType: String) {
-        stopAzan() // تأكد من إيقاف أي تشغيل سابق
+        stopAzan()
 
         mediaPlayer = MediaPlayer().apply {
             setWakeMode(applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build()
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+            }
             setDataSource(applicationContext, soundUri)
             setOnPreparedListener {
                 start()
+                // حفظ حالة التشغيل
+                AlarmPreferences.setAlarmMusicPlaying(applicationContext, true)
+                Log.d("AlarmMusicService", "Music started successfully")
                 showPlayingNotification(prayerName, prayerType)
             }
             setOnCompletionListener {
@@ -92,9 +102,8 @@ class AzanMediaPlayerService : Service() {
             prepareAsync()
         }
 
-        // إيقاف تلقائي بعد 5 دقائق كحد أقصى (للأمان)
         stopJob = CoroutineScope(Dispatchers.Main).launch {
-            delay(5 * 60 * 1000) // 5 دقائق
+            delay(5 * 60 * 1000)
             stopAzan()
             stopSelf()
         }
@@ -107,6 +116,10 @@ class AzanMediaPlayerService : Service() {
                 it.stop()
             }
             it.release()
+            // تحديث حالة التوقيف
+            AlarmPreferences.setAlarmMusicPlaying(applicationContext, false)
+            Log.d("AlarmMusicService", "Music stopped and released")
+
         }
         mediaPlayer = null
         notificationManager?.cancel(NOTIFICATION_ID)
@@ -116,20 +129,23 @@ class AzanMediaPlayerService : Service() {
         val stopIntent = Intent(this, AzanMediaPlayerService::class.java).apply {
             action = ACTION_STOP
         }
-        val pendingStopIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        val pendingStopIntent = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            android.app.PendingIntent.getService(this, 0, stopIntent, android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_MUTABLE)
         } else {
-            PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            android.app.PendingIntent.getService(this, 0, stopIntent, android.app.PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("تشغيل الأذان")
+        // إضافة emoji حسب نوع الصلاة
+        val icon = if (isFajrPrayer(prayerName) || isFajrPrayerByType(prayerType)) "🌅" else "🕌"
+
+        val notification = androidx.core.app.NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("$icon تشغيل الأذان")
             .setContentText("جارٍ تشغيل أذان $prayerName")
             .setSmallIcon(R.drawable.doaa)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
+            .setCategory(androidx.core.app.NotificationCompat.CATEGORY_SERVICE)
             .setOngoing(true)
-            .setSilent(true) // بدون صوت في الإشعار
+            .setSilent(true)
             .addAction(R.drawable.ic_stop, "إيقاف", pendingStopIntent)
             .build()
 
@@ -137,15 +153,15 @@ class AzanMediaPlayerService : Service() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val channel = android.app.NotificationChannel(
                 CHANNEL_ID,
                 "خدمة تشغيل الأذان",
-                NotificationManager.IMPORTANCE_LOW
+                android.app.NotificationManager.IMPORTANCE_LOW
             ).apply {
                 description = "خدمة تشغيل صوت الأذان"
                 setShowBadge(false)
-                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
             }
             notificationManager?.createNotificationChannel(channel)
         }

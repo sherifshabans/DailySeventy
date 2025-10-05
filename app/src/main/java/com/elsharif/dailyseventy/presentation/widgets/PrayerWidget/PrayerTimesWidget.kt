@@ -52,6 +52,7 @@ import com.elsharif.dailyseventy.domain.AppPreferences
 import com.elsharif.dailyseventy.presentation.prayertimes.model.UiPrayerTime
 import com.elsharif.dailyseventy.ui.theme.Black
 import com.elsharif.dailyseventy.ui.theme.White
+import com.elsharif.dailyseventy.util.cornerRadiusCompat
 import com.elsharif.dailyseventy.util.getTodayExact
 import com.elsharif.dailyseventy.util.updatePrayerTimesWidget
 import dagger.hilt.android.EntryPointAccessors
@@ -120,13 +121,18 @@ class PrayerTimesWidget : GlanceAppWidget() {
             )
             val todayExact = getTodayExact()
 
+            val cornerRadius = 6
+            val backgroundAlpha = 0.01f
+
             // تحديث البيانات عند تغيير اللغة
             LaunchedEffect(currentLocale, prayerTiming) {
                 if (prayerTiming.isNotEmpty()) prayerTimingRemembered = prayerTiming
             }
 
             Box(
-                modifier = GlanceModifier.background(if (isDarkSystem) Black else White),
+                modifier = GlanceModifier
+                    .cornerRadiusCompat(cornerRadius, color = White, backgroundAlpha = 1f),
+
                 contentAlignment = Alignment.TopCenter
             ) {
                 Column(
@@ -163,7 +169,7 @@ class PrayerTimesWidget : GlanceAppWidget() {
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = ColorProvider(
-                                            if (!isDarkSystem) Black else White
+                                            Black
                                         )
                                     ),
                                     modifier = GlanceModifier.padding(top = 8.dp)
@@ -343,7 +349,7 @@ private fun PrayerTimeListItem(
                 style = TextStyle(
                     fontSize = 16.sp,
                     textAlign = TextAlign.Start,
-                    color = ColorProvider(if (!isDarkSystem) Black else White)
+                    color = ColorProvider( Black )
                 )
             )
 
@@ -354,7 +360,7 @@ private fun PrayerTimeListItem(
                 style = TextStyle(
                     fontSize = 16.sp,
                     textAlign = TextAlign.End,
-                    color = ColorProvider(if (!isDarkSystem) Black else White)
+                    color = ColorProvider( Black )
                 ),
             )
 

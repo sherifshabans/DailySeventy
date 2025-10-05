@@ -1,7 +1,7 @@
 package com.elsharif.dailyseventy.domain.data.datasource
 
 import android.content.Context
-import com.elsharif.dailyseventy.domain.data.QuranTafseerPagesProvider
+import com.elsharif.dailyseventy.util.QuranTafseerPagesProvider
 import com.elsharif.dailyseventy.domain.data.database.quran.QuranDao
 import com.example.core.data.datasource.QuranDatasource
 import com.example.core.domain.quran.DomainAya

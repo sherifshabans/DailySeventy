@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.NightThird
+import com.elsharif.dailyseventy.domain.data.preferences.NightThird
 
 class NightThirdWorker(
     context: Context,

@@ -3,6 +3,7 @@ package com.elsharif.dailyseventy.domain.friday
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.elsharif.dailyseventy.R
 
 class FridayReminderWorker(
     context: Context,
@@ -16,16 +17,16 @@ class FridayReminderWorker(
             "kahf" -> {
                 NotificationHelper.showNotification(
                     applicationContext,
-                    "Friday Reminder",
-                    "Don’t forget to read Surah Al-Kahf after Dhuhr.",
+                    applicationContext.getString(R.string.friday_reminders),
+                    applicationContext.getString(R.string.kahf_reminder),
                     "kahf"
                 )
             }
             "asr" -> {
                 NotificationHelper.showNotification(
                     applicationContext,
-                    "Friday Reminder",
-                    "Make extra duaa after Asr on Friday.",
+                    applicationContext.getString(R.string.friday_reminders),
+                    applicationContext.getString(R.string.asr_time_reminder),
                     "asr"
                 )
             }

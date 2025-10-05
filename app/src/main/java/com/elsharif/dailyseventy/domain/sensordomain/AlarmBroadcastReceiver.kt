@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import com.elsharif.dailyseventy.ui.MainActivity
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
+import com.elsharif.dailyseventy.MainActivity
+import com.elsharif.dailyseventy.domain.data.preferences.AlarmPreferences
 import java.util.Calendar
 
 class AlarmBroadcastReceiver : BroadcastReceiver() {

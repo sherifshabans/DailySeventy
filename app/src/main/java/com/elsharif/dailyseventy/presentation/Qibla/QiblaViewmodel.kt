@@ -1,4 +1,4 @@
-package com.elsharif.dailyseventy.presentation.Qibla
+package com.elsharif.dailyseventy.presentation.qibla
 
 import android.annotation.SuppressLint
 import android.app.Application

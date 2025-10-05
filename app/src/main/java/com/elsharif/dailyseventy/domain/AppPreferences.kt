@@ -132,8 +132,8 @@ class AppPreferences(private val context: Context) {
     val currentLocation: Flow<Pair<Double, Double>>
         get() = context.dataStore.data.map {
             Pair(
-                it[LAT_STORE_KEY] ?: 30.0,
-                it[LNG_STORE_KEY] ?: 30.0
+                it[LAT_STORE_KEY] ?: 21.422487,
+                it[LNG_STORE_KEY] ?: 39.826206
             )
         }
 

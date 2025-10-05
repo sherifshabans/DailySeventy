@@ -30,13 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
+import com.elsharif.dailyseventy.presentation.home.view.remembrances
 import com.elsharif.dailyseventy.util.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ZikrListSebhaPage(viewModel: TasbeehViewModel, navController: NavController) {
-    val zikrOptions = listOf("سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر")
-    var selectedZikr by remember { mutableStateOf(zikrOptions.first()) }
+    var selectedZikr by remember { mutableStateOf(remembrances.first()) }
     val count by viewModel.getTasbeehCount().collectAsState(initial = 0)
 
     Scaffold(
@@ -73,7 +73,7 @@ fun ZikrListSebhaPage(viewModel: TasbeehViewModel, navController: NavController)
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    zikrOptions.forEach { zikr ->
+                    remembrances.forEach { zikr ->
                         DropdownMenuItem(
                             text = { Text(zikr) },
                             onClick = {

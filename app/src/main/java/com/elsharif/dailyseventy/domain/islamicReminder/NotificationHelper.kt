@@ -1,92 +1,62 @@
 package com.elsharif.dailyseventy.domain.islamicReminder
 
+
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.media.AudioAttributes
-import android.net.Uri
+import android.content.pm.PackageManager
 import android.os.Build
-import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.elsharif.dailyseventy.R
-import androidx.core.net.toUri
 
-class NotificationHelper(private val context: Context) {
-    companion object {
-        const val CHANNEL_ID_FASTING = "fasting_reminders"
-        const val CHANNEL_ID_GENERAL = "general_reminders"
-        const val NOTIFICATION_ID_FASTING = 18001
-        const val NOTIFICATION_ID_GENERAL = 18002
-    }
+object NotificationHelper {
 
-    init {
-        createNotificationChannels()
-    }
+    private const val CHANNEL_ID = "islamic_reminders"
+    private const val CHANNEL_NAME = "Islamic Reminders"
+    private const val CHANNEL_DESCRIPTION = "Notifications for Islamic reminders and events"
 
-    private fun createNotificationChannels() {
+    fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val fastingChannel = NotificationChannel(
-                CHANNEL_ID_FASTING,
-                context.getString(R.string.channel_fasting_name),
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = context.getString(R.string.channel_fasting_description)
-                setSound(
-                    "android.resource://${context.packageName}/${R.raw.fasting_sound}".toUri(),
-                    AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build()
-                )
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 1000, 500, 1000)
-            }
-
-            val generalChannel = NotificationChannel(
-                CHANNEL_ID_GENERAL,
-                context.getString(R.string.channel_general_name),
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = context.getString(R.string.channel_general_description)
+                description = CHANNEL_DESCRIPTION
             }
-
-            val notificationManager = context.getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(fastingChannel)
-            notificationManager.createNotificationChannel(generalChannel)
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun showFastingNotification(title: String, message: String) {
+    fun showNotification(context: Context, title: String, message: String, notificationId: String) {
+        // Create notification channel if needed
+        createNotificationChannel(context)
 
-        val sound: Uri ="android.resource://${context.packageName}/${R.raw.fasting_sound}".toUri()
+        // Check for notification permission (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Cannot show notification without permission
+            return
+        }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID_FASTING)
-            .setSmallIcon(R.drawable.crescent_moon)
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.prayday) // Replace with your app's notification icon
             .setContentTitle(title)
             .setContentText(message)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .setSound(sound)
-            .build()
-
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_FASTING, notification)
-    }
-
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    fun showGeneralNotification(title: String, message: String) {
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID_GENERAL)
-            .setSmallIcon(R.drawable.pray)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
-            .build()
 
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_GENERAL, notification)
+        with(NotificationManagerCompat.from(context)) {
+            notify(notificationId.hashCode(), builder.build())
+        }
     }
 }

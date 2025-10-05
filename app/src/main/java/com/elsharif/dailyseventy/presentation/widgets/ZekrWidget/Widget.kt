@@ -36,6 +36,8 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.presentation.home.view.remembrances
+import com.elsharif.dailyseventy.ui.theme.Black
+import com.elsharif.dailyseventy.ui.theme.White
 import com.elsharif.dailyseventy.util.cornerRadiusCompat
 
 object ZekerWidget : GlanceAppWidget() {
@@ -73,7 +75,8 @@ object ZekerWidget : GlanceAppWidget() {
 
         val cornerRadius = 6
         val backgroundAlpha = 0.01f
-        val color = Color(0xFFCDDDFF)
+        val color = White
+        val primary =MaterialTheme.colorScheme.primary
 
         Box(
             modifier = GlanceModifier
@@ -86,7 +89,7 @@ object ZekerWidget : GlanceAppWidget() {
             Column(
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .cornerRadiusCompat(cornerRadius, color = Color(0xFF294878), backgroundAlpha = 1f)
+                    .cornerRadiusCompat(cornerRadius, color = White, backgroundAlpha = 1f)
                     .padding(12.dp),
                 horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
                 verticalAlignment = Alignment.Vertical.CenterVertically
@@ -97,7 +100,7 @@ object ZekerWidget : GlanceAppWidget() {
                     text = zikr,
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        color = ColorProvider(MaterialTheme.colorScheme.onPrimary),
+                        color = ColorProvider(Black),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center
                     ),
@@ -106,9 +109,9 @@ object ZekerWidget : GlanceAppWidget() {
 
                 Box(
                     modifier = GlanceModifier
-                        .cornerRadiusCompat(0, color = Color(0xFF294878), 0f)
+                        .cornerRadiusCompat(0, color = Black, 0f)
                         .width(40.dp).height(40.dp)
-                        .background(Color((0xFF294878))),
+                        .background(color),
                     // Set a fixed size for alignment
 
                     contentAlignment = Alignment.BottomCenter // Center the content inside
@@ -117,7 +120,7 @@ object ZekerWidget : GlanceAppWidget() {
                     SquareIconButton(
                         modifier = GlanceModifier
                             .width(30.dp).height(30.dp)
-                            .background(Color((0xFF294878))),
+                            .background(Black),
                         contentDescription = "",
                         onClick = actionRunCallback<ShareActionCallback>(
                             parameters = actionParametersOf(
@@ -125,8 +128,8 @@ object ZekerWidget : GlanceAppWidget() {
                         ),
                         imageProvider =ImageProvider(R.drawable.rounded_inbox_text_share_24),
                         // drawable resource only
-                       backgroundColor = ColorProvider(Color((0xFF294878))),
-                       contentColor =ColorProvider(Color(0xFFBFC5CE)),
+                       backgroundColor = ColorProvider(Black),
+                       contentColor =ColorProvider(White),
                         )
 
                 }

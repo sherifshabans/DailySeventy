@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import com.elsharif.dailyseventy.domain.data.sharedpreferences.AlarmPreferences
+import com.elsharif.dailyseventy.domain.data.preferences.AlarmPreferences
 import java.util.Calendar
 
 
