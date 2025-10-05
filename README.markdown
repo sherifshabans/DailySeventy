@@ -102,7 +102,7 @@ To build and run the app, ensure you have:
 ## Setup Instructions
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/daily-seventy.git
+   git clone https://github.com/sherifshabans/daily-seventy.git
    ```
 2. **Open in Android Studio**:
    - Open Android Studio and select `Open an existing project`.
