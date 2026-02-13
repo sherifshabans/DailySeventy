@@ -1,3 +1,9 @@
+![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-orange?logo=kotlin&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-1.3.0-blue?logo=android&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Android API](https://img.shields.io/badge/API-33%2B-brightgreen)
+
+
 # Daily Seventy
 
 ## Overview
@@ -216,6 +222,24 @@ Contributions are welcome! Please follow these steps:
 3. Make your changes and commit (`git commit -m "Add your feature"`).
 4. Push to the branch (`git push origin feature/your-feature`).
 5. Open a pull request.
+
+## Open Source
+
+Daily Seventy is fully Open Source under the MIT License.  
+You are welcome to:
+
+- Use it for personal or educational projects.
+- Contribute improvements or bug fixes.
+- Fork and experiment, respecting the license terms.
+
+This project has been in active development since 2024 and continues to receive updates.
+
+## Google Play
+
+You can download Daily Seventy directly from Google Play:
+
+[![Get it on Google Play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.elsharif.dailyseventy)
+
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
