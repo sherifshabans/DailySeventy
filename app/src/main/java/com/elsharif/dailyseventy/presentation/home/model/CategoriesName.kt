@@ -48,12 +48,6 @@ internal val listOfCategories=listOf(
         iconRes = R.drawable.mecca,
         routeInt = Screen.Qible.titleRes,
         route = Screen.AnimatedQibla.route
-    ),
-    CategoriesName(
-        title = "القرآن الكريم",
-        iconRes = R.drawable.holyquran,
-        routeInt = Screen.HolyQuran.titleRes,
-        route = Screen.ComingSoon.route
     )
 
 )

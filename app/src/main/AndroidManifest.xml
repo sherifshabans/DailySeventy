@@ -33,8 +33,6 @@
 
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-
 
 
     <application
@@ -70,7 +68,6 @@
             android:name=".domain.sensordomain.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
-
         <!-- Service الموسيقى -->
         <service
             android:name=".domain.sensordomain.AlarmMusicService"
@@ -78,10 +75,12 @@
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
 
+        <!-- Service الأذان -->
         <service
             android:name=".domain.azan.prayersnotification.AzanMediaPlayerService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 
 
 <!--
@@ -130,6 +129,22 @@
         </receiver>
 
 -->
+
+        <!-- ✅ BroadcastReceiver للمنبهات -->
+        <receiver
+            android:name=".domain.zekr.ZekrAlarmManager"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- ✅ BroadcastReceiver لإعادة التشغيل -->
+        <receiver
+            android:name=".domain.zekr.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
 
         <receiver android:name=".presentation.widgets.ZekrWidget.WidgetReceiver" android:exported="true">
@@ -197,6 +212,11 @@
 
         <receiver
             android:name=".domain.azan.prayersnotification.PreAndPostAzanAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".domain.azan.prayersnotification.DailyPrayerUpdateReceiver"
             android:enabled="true"
             android:exported="false" />
 

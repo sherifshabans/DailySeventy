@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.data.preferences.ZekrPrefs
-import com.elsharif.dailyseventy.domain.zekr.ZekrWorker
+import com.elsharif.dailyseventy.domain.zekr.ZekrAlarmManager
 
 @Composable
 fun ZekrReminderDialog(
@@ -302,9 +302,11 @@ fun ZekrReminderDialog(
                                 ZekrPrefs.save(context, enabled, finalInterval)
 
                                 if (enabled) {
-                                    ZekrWorker.scheduleNext(context)
+                                    // ✅ استخدام AlarmManager للدقة العالية
+                                    ZekrAlarmManager.scheduleNext(context)
                                 } else {
-                                    ZekrWorker.cancel(context)
+                                    // ✅ إلغاء المنبه
+                                    ZekrAlarmManager.cancel(context)
                                 }
 
                                 onDismiss()

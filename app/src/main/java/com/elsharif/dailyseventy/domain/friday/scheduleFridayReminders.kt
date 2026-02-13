@@ -7,8 +7,11 @@ import android.content.Context
 
 // 📌 سورة الكهف (ثابتة 10 صباحًا)
 fun scheduleKahfReminder(context: Context) {
+
+
     val workManager = WorkManager.getInstance(context)
     val delayKahf = getNextFridayDelay(10, 0)
+    workManager.cancelAllWorkByTag("friday_kahf")
 
     val kahfWork = PeriodicWorkRequestBuilder<FridayReminderWorker>(7, TimeUnit.DAYS)
         .setInitialDelay(delayKahf, TimeUnit.MILLISECONDS)
@@ -26,6 +29,9 @@ fun scheduleKahfReminder(context: Context) {
 fun scheduleAsrReminder(context: Context, asrHour: Int, asrMinute: Int) {
     val workManager = WorkManager.getInstance(context)
     var delayAsr = getNextFridayDelay(asrHour, asrMinute)
+
+    workManager.cancelAllWorkByTag("friday_asr")
+
 
     delayAsr += 30 * 60 * 1000
 

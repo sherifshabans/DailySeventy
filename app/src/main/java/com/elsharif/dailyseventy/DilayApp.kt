@@ -8,6 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.elsharif.dailyseventy.domain.AppPreferences
+import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
 import com.elsharif.dailyseventy.util.UseCaseProvider
 import com.elsharif.dailyseventy.domain.azan.prayersnotification.updateAzanChannel
 import com.example.core.usecase.GetQuranPageAyaWithTafseerUseCase
@@ -37,7 +38,15 @@ class DilayApp : Application() {
 
         // Create notification channels
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // 🔵 جدولة التحديث اليومي مرة واحدة فقط عند بدء التطبيق
+            AzanPrayersUtil.setupDailyPrayerUpdates(this)
+
+            // 🔴 جدولة فورية أول مرة (للصلوات الحالية)
+            AzanPrayersUtil.registerPrayersImmediately(this)
+
             updateAzanChannel(this) // هنا بنربط القناة مع الصوت المحفوظ
+
         }
 
         // Use manual entry point if needed

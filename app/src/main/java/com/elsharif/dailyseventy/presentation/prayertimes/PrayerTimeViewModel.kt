@@ -48,6 +48,12 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
+import com.elsharif.dailyseventy.domain.azan.prayersnotification.RegisterPrayerTimesWorker
+import com.elsharif.dailyseventy.domain.data.preferences.NightThirdPrefs
+import kotlinx.coroutines.delay
 
 sealed class MapUiState {
     object Loading : MapUiState()
@@ -176,6 +182,14 @@ class PrayerTimeViewModel @Inject constructor(
         try {
             setUserLocationUseCase(location.latitude, location.longitude).collect()
             _mapState.value = MapUiState.Success(location)
+
+            // 🔴 جديد: أعد تشغيل الWorker لتحديث الإشعارات فوراً
+            AzanPrayersUtil.registerPrayersImmediately(context)
+
+            reschedulePrayerDependentNotifications()
+
+            Log.d("PrayerViewModel", "Triggered prayer alarm registration after location change")
+
         } catch (e: Exception) {
             _mapState.value = MapUiState.Error("فشل تحديث الموقع")
         }
@@ -516,6 +530,47 @@ class PrayerTimeViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("PrayerViewModel", "Error parsing time: $inputTime, ${e.message}")
             "12:00 PM" // قيمة افتراضية
+        }
+    }
+
+
+    /**
+     * 🔧 إعادة جدولة كل الإشعارات المرتبطة بمواقيت الصلاة
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun reschedulePrayerDependentNotifications() {
+        try {
+            Log.d("PrayerViewModel", "🔄 Rescheduling prayer-dependent notifications...")
+
+            // انتظر حتى تكتمل جدولة الصلوات الأساسية
+            delay(500)
+
+            // ✅ أعد جدولة تذكير الشروق
+            scheduleSunriseAzkar(context)
+            Log.d("PrayerViewModel", "✓ Sunrise azkar rescheduled")
+
+            // ✅ أعد جدولة تذكيرات الجمعة (إذا كانت مفعّلة)
+            val kahfEnabled = FridayPrefs.loadKahf(context)
+            val asrEnabled = FridayPrefs.loadAsr(context)
+
+            if (kahfEnabled || asrEnabled) {
+                scheduleFridayReminders(context, kahfEnabled, asrEnabled)
+                Log.d("PrayerViewModel", "✓ Friday reminders rescheduled")
+            }
+
+            // ✅ أعد جدولة تذكيرات ثلث الليل (إذا كانت مفعّلة)
+            if (NightThirdPrefs.isEnabled(context)) {
+                val selection = NightThirdPrefs.getSelection(context)
+                if (selection.isNotEmpty()) {
+                    scheduleNightThirdNotificationsFromPrayerTimes(
+                        context, selection
+                    )
+                }
+            }
+            Log.d("PrayerViewModel", "✅ All prayer-dependent notifications rescheduled successfully")
+
+        } catch (e: Exception) {
+            Log.e("PrayerViewModel", "❌ Error rescheduling notifications: ${e.message}", e)
         }
     }
 

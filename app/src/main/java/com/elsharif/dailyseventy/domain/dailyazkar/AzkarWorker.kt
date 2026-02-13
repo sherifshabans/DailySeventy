@@ -16,10 +16,10 @@ class AzkarWorker(
         val type = inputData.getString("type") ?: return Result.failure()
 
         val (title, message, category) = when (type) {
-            "morning" -> listOf("أذكار الصباح", "وقت أذكار الصباح 🌞", "أذكار الصباح")
-            "evening" -> listOf("أذكار المساء", "وقت أذكار المساء 🌙", "أذكار المساء")
-            "night" -> listOf("أذكار النوم", "وقت أذكار النوم 🛌", "أذكار النوم")
-            "sunrise" -> listOf("وقت الشروق🌞", "🌅 وقت أذكار الاستيقاظ", "أذكار الاستيقاظ")
+            "morning" -> listOf("أذكار الصباح", "اضغط لقراءة أذكار الصباح 🌞", "أذكار الصباح")
+            "evening" -> listOf("أذكار المساء", "اضغط لقراءة أذكار المساء 🌙", "أذكار المساء")
+            "night" -> listOf("أذكار النوم", "اضغط لقراءة أذكار النوم 🛌", "أذكار النوم")
+            "sunrise" -> listOf("وقت الشروق🌞", "🌅 اضغط لقراءة أذكار الاستيقاظ", "أذكار الاستيقاظ")
             else -> return Result.failure()
         }
 

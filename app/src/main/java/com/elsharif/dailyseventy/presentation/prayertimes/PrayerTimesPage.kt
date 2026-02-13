@@ -214,7 +214,6 @@ private fun PrayerTimesViews(
     val authorityDialogListState = rememberUseCaseState()
     val context = LocalContext.current
     val addressText by viewModel.addressText.collectAsState()
-
     // تحقق من حالة الاتصال
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val isNetworkAvailable = remember {
@@ -229,6 +228,7 @@ private fun PrayerTimesViews(
             connectivityManager.activeNetworkInfo?.isConnected == true
         }
     }
+
     val currentLocale = context.resources.configuration.locales[0]
 
     LaunchedEffect(currentLocale) {
@@ -371,8 +371,13 @@ private fun PrayerTimesViews(
                 modifier = Modifier.weight(1f)
             )*/
 
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier =
+                    Modifier.weight(1f)
+
+            ) {
                 LocationButton(
+                    enabled = if(isNetworkAvailable) true else false,
                     context = context,
                     viewModel = viewModel,
                     modifier = Modifier.fillMaxWidth()
@@ -924,6 +929,7 @@ private fun GetLocationButton(
 @SuppressLint("MissingPermission", "ServiceCast")
 @Composable
 fun LocationButton(
+    enabled: Boolean = true,
     context: Context,
     viewModel: PrayerTimeViewModel,
     modifier: Modifier = Modifier
@@ -976,6 +982,7 @@ fun LocationButton(
     }
 
     Button(
+
         onClick = {
             errorMessage = null
             when {
@@ -998,7 +1005,7 @@ fun LocationButton(
                 }
             }
         },
-        enabled = !isGettingLocation,
+        enabled = !isGettingLocation||!enabled,
         modifier = modifier
     ) {
         if (isGettingLocation) {

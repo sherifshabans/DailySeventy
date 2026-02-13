@@ -1,5 +1,8 @@
 package com.elsharif.dailyseventy.domain.azan.prayersnotification
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -20,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class AzanMediaPlayerService : Service() {
     private var mediaPlayer: MediaPlayer? = null
@@ -65,6 +69,8 @@ class AzanMediaPlayerService : Service() {
         }
         return START_NOT_STICKY
     }
+
+
 
     private fun startAzan(soundUri: Uri, prayerName: String, prayerType: String) {
         stopAzan()

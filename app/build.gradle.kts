@@ -27,9 +27,9 @@ android {
         applicationId = "com.elsharif.dailyseventy"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
+        versionCode = 6
+        versionName = "1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -53,7 +53,7 @@ android {
 
     signingConfigs {
         create("DailySeventy") {
-            storeFile = file("C:\\Users\\ElSha\\.android/debug.keystore")        // مكان ملف keystore
+            storeFile = file("E:\\AndroidStudioProjects\\DailySeventy\\keystore\\my_release_key.jks")        // مكان ملف keystore
             storePassword = project.property("STORE_PASSWORD") as String
             keyAlias = project.property("KEY_ALIAS") as String
             keyPassword = project.property("KEY_PASSWORD") as String

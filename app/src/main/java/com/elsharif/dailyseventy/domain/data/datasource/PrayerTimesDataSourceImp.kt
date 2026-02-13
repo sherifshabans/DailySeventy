@@ -133,9 +133,11 @@ class PrayerTimesDataSourceImp @Inject constructor(
         // نحاول نجيب البيانات من الكاش أولاً
         val cached = dao.getPrayerTimesForDay(dateString, lat, lng, school.id)
         if (cached.isNotEmpty()) {
+            Log.d(TAG, "Using cached prayers for date: $dateString, lat: $lat, lng: $lng, school: ${school.id}")
             emit(cached.distinctBy { "${it.date}_${it.name}" }.map { it.toDomain(school) })
             return@flow
         }
+
 
         // إذا مش موجود في الكاش، نجيب من API
         val response = api.getPrayerTimes(lat, lng, school.id, date.monthValue, date.year)

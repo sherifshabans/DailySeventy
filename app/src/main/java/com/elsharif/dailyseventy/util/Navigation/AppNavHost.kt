@@ -34,6 +34,7 @@ import com.elsharif.dailyseventy.presentation.tasbeeh.ImageSebhaPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehLandingPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehViewModel
 import com.elsharif.dailyseventy.presentation.tasbeeh.ZikrListSebhaPage
+import com.elsharif.dailyseventy.presentation.zekr.ZekkrArcScreen
 import com.elsharif.dailyseventy.presentation.zekr.ZekkrScreen
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
 import com.elsharif.dailyseventy.util.Screen
@@ -69,7 +70,8 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
         }
         composable("zekkr_screen/{category}") { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: ""
-            ZekkrScreen(navController, category)
+            //ZekkrScreen(navController, category)
+            ZekkrArcScreen( navController,category)
         }
         composable(Screen.PrayerTimes.route) {
             PrayerTimesPage(navController,prayerTimeViewModel)

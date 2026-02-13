@@ -16,6 +16,7 @@ import com.elsharif.dailyseventy.domain.AppPreferences
 import com.example.core.usecase.GetPrayerTimesUseCase
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -33,6 +34,19 @@ class RegisterPrayerTimesWorker(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         return try {
+            // 🔴 فحص إذن SCHEDULE_EXACT_ALARM
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                Log.e("TimePrayer", "Cannot schedule exact alarms; permission denied")
+                return Result.failure()
+            }
+
+            // 🔴 جديد: ألغِ كل الإشعارات القديمة أول حاجة
+            cancelAllExistingAlarms()
+
+            delay(300)
+
+
             val preferences = AppPreferences(applicationContext)
             val location = preferences.currentLocation
             val method = preferences.method
@@ -49,8 +63,21 @@ class RegisterPrayerTimesWorker(
             val prayerTimingsList = withContext(Dispatchers.IO) {
                 val locationData = location.first()
                 val methodData = method.first()
+                Log.d("TimePrayer", "Fetching prayer times for location: (${locationData.first}, ${locationData.second}), method: ${methodData.name}")
+
                 prayerTimes(locationData.first, locationData.second, LocalDate.now(), methodData).first()
             }
+
+
+            val today = LocalDate.now()
+
+
+
+            // 🔴 فلترة لليوم الحالي فقط
+            val todayPrayers = prayerTimingsList.filter { it.date == today.toString() }
+
+            Log.d("TimePrayer", "Total prayers for today: ${todayPrayers.size}")
+            Log.d("TimePrayer", "Prayer names for today: ${todayPrayers.map { it.prayer.name }}")
 
             // الصلوات الخمس الأساسية فقط (بالأسماء الصحيحة)
             val mainPrayers = setOf("fajr", "dhuhr", "asr", "maghrib", "isha")
@@ -58,7 +85,7 @@ class RegisterPrayerTimesWorker(
             Log.d("TimePrayer", "Total prayers: ${prayerTimingsList.size}")
             Log.d("TimePrayer", "Prayer names: ${prayerTimingsList.map { it.prayer.name }}")
 
-            val filteredPrayers = prayerTimingsList.filter { prayerTiming ->
+            val filteredPrayers = todayPrayers.filter { prayerTiming ->
                 val cleanName = if (prayerTiming.prayer.name.contains(":string/")) {
                     prayerTiming.prayer.name.substringAfter(":string/")
                 } else {
@@ -68,6 +95,12 @@ class RegisterPrayerTimesWorker(
             }
 
             Log.d("TimePrayer", "Filtered prayers: ${filteredPrayers.size}")
+
+            // 🔴 فحص إذا كانت الإشعارات موجودة بالفعل
+            if (filteredPrayers.isEmpty()) {
+                Log.w("TimePrayer", "No prayers to schedule for today")
+                return Result.success()
+            }
 
             filteredPrayers.forEachIndexed { idx, prayerTiming ->
                 val cleanName = if (prayerTiming.prayer.name.contains(":string/")) {
@@ -94,6 +127,7 @@ class RegisterPrayerTimesWorker(
                     .toInstant()
                     .toEpochMilli()
 
+                if (!isAlarmScheduled(context, idx, AzanAlarmReceiver::class.java)) {
                 // Main Azan
                 if (azanMillis > System.currentTimeMillis()) {
                     setAlarm(
@@ -107,9 +141,11 @@ class RegisterPrayerTimesWorker(
                         prayerName = prayerName
                     )
 
+                }
                     // Pre-Azan (10 min before)
                     val preAzanMillis = azanMillis - (10 * 60 * 1000)
-                    if (preAzanMillis > System.currentTimeMillis()) {
+                    if (preAzanMillis > System.currentTimeMillis()
+                        && !isAlarmScheduled(context, 1000 + idx, PreAndPostAzanAlarmReceiver::class.java)) {
                         setAlarm(
                             PreAndPostAzanAlarmReceiver::class.java,
                             1000 + idx,
@@ -125,7 +161,9 @@ class RegisterPrayerTimesWorker(
                     // Post-Azan (5 min for Maghrib, 20 min otherwise)
                     val delayMinutes = if (cleanName.lowercase() == "maghrib") 5 else 10
                     val postAzanMillis = azanMillis + (delayMinutes * 60 * 1000)
-                    if (postAzanMillis > System.currentTimeMillis()) {
+                    if (postAzanMillis > System.currentTimeMillis()
+                        && !isAlarmScheduled(context, 2000 + idx, PreAndPostAzanAlarmReceiver::class.java)
+                        ) {
                         setAlarm(
                             PreAndPostAzanAlarmReceiver::class.java,
                             2000 + idx,
@@ -146,6 +184,59 @@ class RegisterPrayerTimesWorker(
         } catch (e: Exception) {
             Log.e("RegisterPrayerTimes", "Error: ${e.message}", e)
             Result.retry()
+        }
+    }
+
+    // 🔴 دالة جديدة للتحقق من وجود إشعار مجدول
+    private fun isAlarmScheduled(context: Context, requestCode: Int, receiverClass: Class<*>): Boolean {
+        val intent = Intent(context, receiverClass)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        return pendingIntent != null
+    }
+
+    // 🔴 دالة جديدة: إلغاء كل الإشعارات المجدولة
+    private fun cancelAllExistingAlarms() {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // قائمة بكل requestCodes الممكنة للصلوات الخمس (idx 0-4)
+        val requestCodes = mutableListOf<Int>()
+        for (idx in 0..4) {
+            requestCodes.add(idx)       // MAIN
+            requestCodes.add(1000 + idx) // PRE
+            requestCodes.add(2000 + idx) // POST
+        }
+
+        var cancelledCount = 0
+        // لكل requestCode، أنشئ PendingIntent وألغيه
+        requestCodes.forEach { code ->
+            val mainIntent = Intent(context, AzanAlarmReceiver::class.java)
+            val prePostIntent = Intent(context, PreAndPostAzanAlarmReceiver::class.java)
+
+            val mainPending = PendingIntent.getBroadcast(
+                context, code, mainIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val prePostPending = PendingIntent.getBroadcast(
+                context, code, prePostIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            if (mainPending != null) {
+                alarmManager.cancel(mainPending)
+                mainPending.cancel()
+                cancelledCount++
+            }
+            if (prePostPending != null) {
+                alarmManager.cancel(prePostPending)
+                prePostPending.cancel()
+                cancelledCount++
+            }
+            Log.d("TimePrayer", "Cancelled existing alarm for requestCode: $code")
         }
     }
 

@@ -50,7 +50,6 @@ object NotificationHelper {
             .setAutoCancel(true)
             .setSound(soundUri, AudioManager.STREAM_NOTIFICATION) // 🔧 إضافة stream type
             .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔧 استخدام كل الـ defaults
-
             .build()
 
         manager.notify(System.currentTimeMillis().toInt(), notification)

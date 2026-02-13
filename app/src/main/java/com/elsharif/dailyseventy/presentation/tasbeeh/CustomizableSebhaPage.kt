@@ -70,7 +70,7 @@ fun CustomizableSebhaPage(
             when (target) {
                 is String -> Text(
                     text = target,
-                    fontSize = 40.sp,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,

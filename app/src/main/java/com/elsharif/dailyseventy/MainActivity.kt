@@ -26,10 +26,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.elsharif.dailyseventy.domain.AppPreferences
@@ -41,7 +39,7 @@ import com.elsharif.dailyseventy.domain.data.preferences.NightThirdPrefs
 import com.elsharif.dailyseventy.domain.data.preferences.ThemePreferences
 import com.elsharif.dailyseventy.domain.data.preferences.ZekrPrefs
 import com.elsharif.dailyseventy.domain.islamicReminder.IslamicReminderManager
-import com.elsharif.dailyseventy.domain.zekr.ZekrWorker
+import com.elsharif.dailyseventy.domain.zekr.ZekrAlarmManager
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
@@ -187,12 +185,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun registerZekr() {
-        // ✅ فقط تحقق من الإعدادات وجدول إذا كان مفعل
+        // ✅ استخدام AlarmManager بدلاً من WorkManager
         if (ZekrPrefs.isEnabled(this)) {
-            ZekrWorker.scheduleNext(applicationContext)
+            ZekrAlarmManager.scheduleNext(applicationContext)
         }
     }
-
 
     private fun scheduleAzkarWork() {
         val azkarTimes = listOf(
@@ -230,9 +227,15 @@ class MainActivity : ComponentActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun registerPrayersAzan() {
 
-        AzanPrayersUtil.registerPrayers(application)
+        // 🔵 جدولة التحديث اليومي مرة واحدة فقط عند بدء التطبيق
+        AzanPrayersUtil.setupDailyPrayerUpdates(this)
+
+        // 🔴 جدولة فورية أول مرة (للصلوات الحالية)
+        AzanPrayersUtil.registerPrayersImmediately(this)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = ContextCompat.getSystemService(this, AlarmManager::class.java) as AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {

@@ -98,7 +98,7 @@
     <string name="praytime">موعد الصلاة</string>
     <string name="remainingtime">الوقت المتبقي</string>
     <string name="loadingprays">نقوم بتحميل أوقات الصلاة بدقة… 🌙</string>
-    <string name="notprayupcoming">لا توجد صلاة قادمة</string>
+    <string name="notprayupcoming">لا توجد صلاة قادمة اليوم</string>
     <string name="choosecolor">اختر لونًا</string>
 
     <!-- Language Selection Dialog -->
@@ -351,5 +351,24 @@
     <string name="interval_minutes">الفترة بالدقائق</string>
     <string name="min_interval_hint">الحد الأدنى: 15 دقيقة</string>
     <string name="exit">خروج</string>
+
+
+    <string name="permission_required">إذن مطلوب</string>
+    <string name="permission_description">منبه الحركة يتطلب إذن "النشاط البدني" لحساب خطواتك بدقة. يرجى تفعيل الإذن من إعدادات التطبيق.</string>
+
+    <string name="drag_to_select_zekr">اسحب لاختيار الذكر</string>
+    <string name="tap_to_count_long_press_details">انقر على الكارد للعد • اضغط مطولاً للتفاصيل</string>
+    <string name="show_more">عرض المزيد</string>
+    <string name="remaining">متبقي</string>
+    <string name="completed">مكتمل ✓</string>
+    <string name="zekr_details">تفاصيل الذكر</string>
+    <string name="count_completed">اكتمل العدد</string>
+    <string name="tap_to_count">انقر للعد</string>
+    <string name="description">الوصف</string>
+    <string name="share_zekr">مشاركة الذكر</string>
+
+    <string name="zikr_shield">أذكارك هي حصنك من كل مكروه</string>
+    <string name="well_done">أحسنت!</string>
+    <string name="keep_it_up">داوم عليها</string>
 
 </resources>

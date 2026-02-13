@@ -144,16 +144,7 @@ fun SettingsScreen(
                     languageViewModel.showLanguageSelectionDialog()
                 }
             }
-            item {
-                SettingsItem(stringResource(R.string.thirdsTimeSettings), Icons.Default.AccessTime) {
-                    showNightThirdDialog = true
-                }
-                if (showNightThirdDialog) {
-                    NightThirdDialog(
-                        onDismiss = { showNightThirdDialog = false }
-                    )
-                }
-            }
+
             item {
                 SettingsItem(stringResource(R.string.colorpickerSettings), Icons.Default.ColorLens) {
                     showColorDialog = true
@@ -169,7 +160,7 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem(stringResource(R.string.prayerSettings), Icons.Default.Notifications) {
+                SettingsItem(stringResource(R.string.prayerSettings), Icons.Default.Mosque) {
                     showAzanDialog = true
                 }
                 if (showAzanDialog) {
@@ -180,7 +171,17 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem(stringResource(R.string.zekr_reminder_title), Icons.Default.Mosque){
+                SettingsItem(stringResource(R.string.thirdsTimeSettings), Icons.Default.Notifications) {
+                    showNightThirdDialog = true
+                }
+                if (showNightThirdDialog) {
+                    NightThirdDialog(
+                        onDismiss = { showNightThirdDialog = false }
+                    )
+                }
+            }
+            item {
+                SettingsItem(stringResource(R.string.zekr_reminder_title), Icons.Default.Notifications){
                     showZekrDialog = true
                 }
                 if (showZekrDialog) {
@@ -191,7 +192,7 @@ fun SettingsScreen(
                 }
             }
             item {
-                SettingsItem(stringResource(R.string.fraidaySettings), Icons.Default.Settings) {
+                SettingsItem(stringResource(R.string.fraidaySettings), Icons.Default.Notifications) {
                     showFridayDialog = true
                 }
                 if (showFridayDialog) {
@@ -205,7 +206,7 @@ fun SettingsScreen(
             }
 
             item {
-                SettingsItem(stringResource(R.string.FastSettings), Icons.Default.Settings) {
+                SettingsItem(stringResource(R.string.FastSettings), Icons.Default.Notifications) {
                 showSettingsDialog = true
                 }
                 // نقل الـ Dialog خارج الـ LazyColumn
@@ -285,13 +286,6 @@ fun SettingsItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row {
-                Icon(
-                    icon,
-                    contentDescription = title,
-                    modifier = Modifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.width(12.dp))
 
                 // Title and subtitle column
                 androidx.compose.foundation.layout.Column {
@@ -312,10 +306,12 @@ fun SettingsItem(
                 }
             }
             Icon(
-                Icons.Default.Settings,
-                contentDescription = "Arrow",
+                icon,
+                contentDescription = title,
+                modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
+
         }
     }
 }

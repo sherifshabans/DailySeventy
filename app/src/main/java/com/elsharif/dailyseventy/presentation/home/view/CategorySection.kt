@@ -86,10 +86,10 @@ fun CategoryItem(
                 contentDescription = category.title,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                 modifier = Modifier
-                    .size(72.dp) // same size as old Box
+                    .size(56.dp) // same size as old Box
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.secondary)
-                    .padding(12.dp) // same padding inside old Box
+                    .padding(8.dp) // same padding inside old Box
 
             )
 
@@ -97,7 +97,8 @@ fun CategoryItem(
                 text = stringResource(category.routeInt),
                 color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 15.sp
+                fontSize = 10.sp,
+                modifier = Modifier.padding(bottom = 4.dp)
             )
 
         }
