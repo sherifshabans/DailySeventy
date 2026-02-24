@@ -65,7 +65,9 @@ fun ZekrCard(zekr: String, color: Brush) {
             .width(250.dp)
             .height(140.dp)
             .clip(RoundedCornerShape(25.dp))
-            .background(color),
+            .background(color)
+            .padding(top= 3.dp)
+        ,
         contentAlignment = Alignment.Center
     ) {
         Text(

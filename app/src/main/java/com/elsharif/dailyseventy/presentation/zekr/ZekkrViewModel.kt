@@ -20,8 +20,6 @@ class ZekkrViewModel @Inject constructor(
         private const val KEY_COUNTER = "zekr_counter"
     }
 
-    /* ---------------- UI STATE ---------------- */
-
     private val _state = MutableStateFlow(
         ZekkrState(
             selectedIndex = savedStateHandle[KEY_SELECTED_INDEX] ?: 0
@@ -29,18 +27,15 @@ class ZekkrViewModel @Inject constructor(
     )
     val state: StateFlow<ZekkrState> = _state.asStateFlow()
 
-    /* ---------------- COUNTER ---------------- */
-
     private val _count = MutableStateFlow(
         savedStateHandle[KEY_COUNTER] ?: 0
     )
     val count: StateFlow<Int> = _count.asStateFlow()
 
-    init {
-        loadAzkaar()
-    }
-
-    /* ---------------- EVENTS ---------------- */
+    // ✅ FIX: شلنا loadAzkaar() من init —
+    // كانت بتعمل collect على StateFlow وبتحدّث الـ state بـ ALL azkar
+    // وبعدين selectCategory بتجيب filtered — فكانت بتحصل 2 updates متعارضين
+    // دلوقتي الـ ViewModel بس بيشتغل لما selectCategory يتبعت
 
     fun onEvent(event: ZekkrEvent) {
         when (event) {
@@ -53,28 +48,21 @@ class ZekkrViewModel @Inject constructor(
 
             is ZekkrEvent.IncreaseCount -> increaseCount(event.zekrCount)
 
-            ZekkrEvent.LoadAzkaar -> loadAzkaar()
-        }
-    }
-
-    /* ---------------- DATA ---------------- */
-
-    private fun loadAzkaar() {
-        viewModelScope.launch {
-            zekrRepository.azkaarList.collect { azkaar ->
-                _state.update { it.copy(azkaar = azkaar) }
-            }
+            // ✅ LoadAzkaar مش محتاجينه دلوقتي — selectCategory بتعمل نفس الشغل
+            ZekkrEvent.LoadAzkaar -> { /* no-op */ }
         }
     }
 
     private fun selectCategory(category: String?) {
-        viewModelScope.launch {
-            val filteredAzkaar = if (category.isNullOrEmpty()) {
-                emptyList()
-            } else {
-                zekrRepository.getZekrByCategory(category)
-            }
+        if (category.isNullOrEmpty()) {
+            _state.update { it.copy(selectedCategory = null, azkaar = emptyList()) }
+            return
+        }
 
+        // ✅ نحدّث الـ state إن الداتا بتتحمل (لو عايز تضيف loading indicator)
+        viewModelScope.launch {
+            // getZekrByCategory دلوقتي بتستخدم cache — تاني مرة فورية
+            val filteredAzkaar = zekrRepository.getZekrByCategory(category)
             _state.update {
                 it.copy(
                     selectedCategory = category,
@@ -83,8 +71,6 @@ class ZekkrViewModel @Inject constructor(
             }
         }
     }
-
-    /* ---------------- COUNTER LOGIC ---------------- */
 
     private fun increaseCount(zekrCount: Int) {
         _count.update {

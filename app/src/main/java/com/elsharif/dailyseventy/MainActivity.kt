@@ -47,6 +47,9 @@ import com.elsharif.dailyseventy.util.Navigation.AppNavHost
 import com.elsharif.dailyseventy.util.Permissions.requestExactAlarmPermission
 import com.elsharif.dailyseventy.util.Permissions.requestNotificationPermission
 import com.elsharif.dailyseventy.util.Permissions.requestSensorPermission
+import com.elsharif.dailyseventy.util.notification.DailyRescheduleWorker
+import com.elsharif.dailyseventy.util.notification.DhikrNotificationScheduler
+import com.elsharif.dailyseventy.util.notification.NotificationHelper
 import com.elsharif.dailyseventy.util.setCurrentLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
@@ -158,6 +161,10 @@ class MainActivity : ComponentActivity() {
         requestIgnoreBatteryOptimization()
         requestExactAlarmPermission(this)
         requestNotificationPermission(this)
+
+        NotificationHelper.createChannels(this)
+        DhikrNotificationScheduler.scheduleAll(this)
+        DailyRescheduleWorker.schedule(this)
 
 
         setContent {

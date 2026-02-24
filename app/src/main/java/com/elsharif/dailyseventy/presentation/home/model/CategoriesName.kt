@@ -48,6 +48,25 @@ internal val listOfCategories=listOf(
         iconRes = R.drawable.mecca,
         routeInt = Screen.Qible.titleRes,
         route = Screen.AnimatedQibla.route
-    )
+    ),
+    CategoriesName(
+        title = "شجرة الأجر",
+        iconRes = R.drawable.tree,
+        routeInt = Screen.TreeScreenRoute.titleRes,
+        route = Screen.TreeScreenRoute.route
+    ),
+
+    CategoriesName(
+        title =" دلبل السفر" ,
+        iconRes = R.drawable.travel,
+        routeInt = Screen.TravelScreenRoute.titleRes,
+        route = Screen.TravelScreenRoute.route
+    ),
+    CategoriesName(
+        title ="غراس الجنة" ,
+        iconRes = R.drawable.garden,
+        routeInt = Screen.GardenScreenRoute.titleRes,
+        route = Screen.GardenScreenRoute.route
+    ),
 
 )

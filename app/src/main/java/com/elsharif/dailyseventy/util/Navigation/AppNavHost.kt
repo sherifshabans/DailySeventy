@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,12 +15,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.elsharif.dailyseventy.MainActivity
-import com.elsharif.dailyseventy.presentation.sensor.StepAlarmScreen
-import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
-import com.elsharif.dailyseventy.presentation.qibla.QiblaPage
-import com.elsharif.dailyseventy.presentation.qibla.QiblaPageWithSplash
 import com.elsharif.dailyseventy.presentation.azkarcategories.CategoryScreen
 import com.elsharif.dailyseventy.presentation.comingsoon.ComingSoonPage
+import com.elsharif.dailyseventy.presentation.garden.DhikrGardenScreen
 import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
 import com.elsharif.dailyseventy.presentation.home.view.HomePage
 import com.elsharif.dailyseventy.presentation.home.view.SplashScreen
@@ -28,14 +26,19 @@ import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimesPage
 import com.elsharif.dailyseventy.presentation.privacypolicy.PrivacyPolicy
 import com.elsharif.dailyseventy.presentation.problems.FormWebViewScreen
+import com.elsharif.dailyseventy.presentation.qibla.QiblaPage
+import com.elsharif.dailyseventy.presentation.qibla.QiblaPageWithSplash
+import com.elsharif.dailyseventy.presentation.sensor.StepAlarmScreen
+import com.elsharif.dailyseventy.presentation.sensor.StepAlarmViewModel
 import com.elsharif.dailyseventy.presentation.settings.SettingsScreen
 import com.elsharif.dailyseventy.presentation.tasbeeh.CustomZikrSebhaPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.ImageSebhaPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehLandingPage
 import com.elsharif.dailyseventy.presentation.tasbeeh.TasbeehViewModel
 import com.elsharif.dailyseventy.presentation.tasbeeh.ZikrListSebhaPage
+import com.elsharif.dailyseventy.presentation.travel.TravelScreen
+import com.elsharif.dailyseventy.presentation.tree.TreeScreen
 import com.elsharif.dailyseventy.presentation.zekr.ZekkrArcScreen
-import com.elsharif.dailyseventy.presentation.zekr.ZekkrScreen
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
 import com.elsharif.dailyseventy.util.Screen
 import java.time.chrono.HijrahDate
@@ -50,12 +53,18 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
     // التحقق من Intent للمنبه
     val startCategoryFromIntent = (context as? MainActivity)?.intent?.getStringExtra("category") ?: ""
     val stepAlarmCategory = (context as? MainActivity)?.intent?.getStringExtra("step_alarm") ?: ""
+    val navigateTo = (context as? MainActivity)?.intent?.getStringExtra("navigate_to")
+
 
     val startDestination = when {
-        stepAlarmCategory == "step_alarm" -> Screen.AalarmRoute.route
+        stepAlarmCategory == "step_alarm"  -> Screen.AalarmRoute.route
         startCategoryFromIntent.isNotEmpty() -> "zekkr_screen/$startCategoryFromIntent"
-        else -> Screen.HomeScreen.route
+        navigateTo == "tree"               -> Screen.TreeScreenRoute.route
+        navigateTo == "garden"             -> Screen.GardenScreenRoute.route
+        navigateTo == "travel"               -> Screen.TravelScreenRoute.route
+        else                               -> Screen.HomeScreen.route
     }
+
     if (showSplash) {
         SplashScreen(
             onSplashFinished = { showSplash = false }
@@ -145,6 +154,25 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
 
             PrivacyPolicy(navController)
         }
+
+        composable(Screen.TreeScreenRoute.route) {
+            TreeScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.TravelScreenRoute.route) {
+            TravelScreen(
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(Screen.GardenScreenRoute.route) {
+            DhikrGardenScreen(
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
 
     }
     }

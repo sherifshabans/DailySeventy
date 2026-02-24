@@ -27,4 +27,15 @@ sealed class Screen(val route: String, @StringRes val titleRes: Int) {
     object FeedbackScreen: Screen("feedback_title", R.string.feedback_title)
 
     object PrivacyPolicyScreen: Screen("privacy_policy", R.string.privacy_policy)
+
+
+    object  TreeScreenRoute :Screen("tree_screen", R.string.tree_of_good_deeds)
+
+
+    object  TravelScreenRoute :Screen("travel_screen", R.string.travel_mode)
+
+
+    object GardenScreenRoute :Screen("garden_screen", R.string.rawdat_al_dhakireen)
+
+
 }

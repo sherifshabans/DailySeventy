@@ -371,4 +371,20 @@
     <string name="well_done">أحسنت!</string>
     <string name="keep_it_up">داوم عليها</string>
 
+    <!-- في res/values/strings.xml -->
+    <string name="tree_of_good_deeds">شجرة الأجر</string>
+    <string name="challenges">التحديات</string>
+    <string name="travel_mode">دليل السفر</string>
+
+
+    <string name="spiritual_journey">المسيرة الروحية</string>
+    <string name="daily_streak">السلسلة اليومية</string>
+    <string name="journey_to_mecca">الرحلة إلى مكة</string>
+    <string name="achievements">الإنجازات</string>
+    <string name="streak_freeze">جليد الحماية</string>
+    <string name="level_progress">تقدم المستوى</string>
+    <string name="last_seven_days">آخر سبعة أيام</string>
+
+    <string name="rawdat_al_dhakireen">روضة الذاكرين</string>
+
 </resources>

@@ -375,5 +375,20 @@
     <string name="well_done">Well done!</string>
     <string name="keep_it_up">Keep it up</string>
 
+    <!-- في res/values/strings.xml -->
+    <string name="tree_of_good_deeds">Tree of Good Deeds</string>
+    <string name="challenges">Challenges</string>
+    <string name="travel_mode">Travel Mode</string>
+
+    <string name="spiritual_journey">Spiritual Journey</string>
+    <string name="daily_streak">Daily Streak</string>
+    <string name="journey_to_mecca">Journey to Mecca</string>
+    <string name="achievements">Achievements</string>
+    <string name="streak_freeze">Streak Freeze</string>
+    <string name="level_progress">Level Progress</string>
+    <string name="last_seven_days">Last Seven Days</string>
+
+    <string name="rawdat_al_dhakireen">Garden of the Remembrancers</string>
+
 
 </resources>

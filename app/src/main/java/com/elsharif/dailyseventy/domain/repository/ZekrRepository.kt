@@ -3,46 +3,86 @@ package com.elsharif.dailyseventy.domain.repository
 import android.content.Context
 import android.util.Log
 import com.elsharif.dailyseventy.domain.data.model.Zakker
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 class ZekrRepository(private val context: Context) {
 
-    private val _azkaarList = MutableStateFlow<List<Zakker>>(emptyList()) // Holds all data
+    // ✅ scope خاص بالـ repository — بيشتغل على IO من الأول
+    private val repositoryScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    private val _azkaarList = MutableStateFlow<List<Zakker>>(emptyList())
     val azkaarList: StateFlow<List<Zakker>> get() = _azkaarList
 
+    // ✅ cache للفئات المفلترة عشان مانقراش الـ list كل مرة
+    private val categoryCache = mutableMapOf<String, List<Zakker>>()
+
     init {
-        loadAzkar() // Load data when repository is initialized
+        repositoryScope.launch {
+            loadAzkar()
+        }
     }
 
-    private fun loadAzkar() {
+    private suspend fun loadAzkar() {
         try {
-            val jsonText = context.assets.open("Azkar.json")
-                .bufferedReader()
-                .use { it.readText() }
+            // ✅ FIX 1: IO dispatcher — الـ JSON بيتقرأ على background thread
+            val allAzkar = withContext(Dispatchers.IO) {
+                val jsonText = context.assets.open("Azkar.json")
+                    .bufferedReader()
+                    .use { it.readText() }
 
-            Log.d("JsonDebug", jsonText)
+                // ✅ FIX 2: شلنا الـ Log.d اللي كان بيطبع الـ JSON كله —
+                // ده كان بيسبب lag كبير خصوصاً لو الملف أكبر من 1MB
+                // Log.d("JsonDebug", jsonText)  ← المشكلة كانت هنا
 
-            // Parse JSON as a map where keys are categories and values are lists of Zakker
-            val azkarMap: Map<String, List<Zakker>> = Json.decodeFromString(jsonText)
+                val azkarMap: Map<String, List<Zakker>> = Json {
+                    ignoreUnknownKeys = true  // ✅ أكثر robustness
+                }.decodeFromString(jsonText)
 
-            // Flatten all azkar into a single list
-            val allAzkar = azkarMap.values.flatten()
+                azkarMap.values.flatten()
+            }
 
             _azkaarList.value = allAzkar
 
         } catch (e: Exception) {
-            Log.e("JsonError", "Error parsing JSON: ${e.message}")
+            Log.e("ZekrRepository", "Error loading azkar: ${e.message}")
         }
     }
 
-    // Fetch azkaar for a specific category
+    // ✅ FIX 3: cache النتائج — مانعيدش الـ filter في كل navigation
     suspend fun getZekrByCategory(name: String): List<Zakker> {
-        return withContext(Dispatchers.IO) {
-            _azkaarList.value.filter { it.category == name }
+        // لو عندنا cache نرجعه فوراً
+        categoryCache[name]?.let { return it }
+
+        // لو الـ list لسه فاضية (تحميل لسه شغّال) ننتظر
+        val list = if (_azkaarList.value.isEmpty()) {
+            withContext(Dispatchers.IO) {
+                // ننتظر حتى يتحمل
+                var attempts = 0
+                while (_azkaarList.value.isEmpty() && attempts < 50) {
+                    kotlinx.coroutines.delay(100)
+                    attempts++
+                }
+                _azkaarList.value.filter { it.category == name }
+            }
+        } else {
+            withContext(Dispatchers.Default) {
+                _azkaarList.value.filter { it.category == name }
+            }
         }
+
+        categoryCache[name] = list
+        return list
+    }
+
+    // ✅ تنظيف الـ cache لو الداتا اتحدّثت
+    fun clearCache() {
+        categoryCache.clear()
     }
 }

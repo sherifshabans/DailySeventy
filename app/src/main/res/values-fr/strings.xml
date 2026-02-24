@@ -376,4 +376,22 @@
     <string name="zikr_shield">Tes invocations sont ta protection contre tout mal</string>
     <string name="well_done">Bien joué !</string>
     <string name="keep_it_up">Continue comme ça</string>
+
+
+    <!-- في res/values/strings.xml -->
+    <string name="tree_of_good_deeds">Arbre des Bonnes Actions</string>
+    <string name="challenges">Défis</string>
+    <string name="travel_mode">Mode Voyage</string>
+
+    <string name="spiritual_journey">Parcours Spirituel</string>
+    <string name="daily_streak">Série Quotidienne</string>
+    <string name="journey_to_mecca">Voyage vers La Mecque</string>
+    <string name="achievements">Réalisations</string>
+    <string name="streak_freeze">Gel de Protection</string>
+    <string name="level_progress">Progression du Niveau</string>
+    <string name="last_seven_days">Les Sept Derniers Jours</string>
+
+    <string name="rawdat_al_dhakireen">Le jardin des invocateurs</string>
+
+
 </resources>
