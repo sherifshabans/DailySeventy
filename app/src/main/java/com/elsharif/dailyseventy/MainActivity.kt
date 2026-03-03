@@ -18,7 +18,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
@@ -40,6 +47,7 @@ import com.elsharif.dailyseventy.domain.data.preferences.ThemePreferences
 import com.elsharif.dailyseventy.domain.data.preferences.ZekrPrefs
 import com.elsharif.dailyseventy.domain.islamicReminder.IslamicReminderManager
 import com.elsharif.dailyseventy.domain.zekr.ZekrAlarmManager
+import com.elsharif.dailyseventy.presentation.components.RamadanDecoration
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.ui.theme.DailySeventyTheme
 import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
@@ -176,12 +184,20 @@ class MainActivity : ComponentActivity() {
 
                 val context = LocalContext.current
 
-                AppNavHost(
-                    context = context,
-                    themeViewModel = themeViewModel,
-                    navController = navController,
-                    prayerTimeViewModel = prayerTimeViewModel
-                )
+                // ✅ Box بيلف كل حاجة
+                Box(modifier = Modifier.fillMaxSize()) {
+
+                    // المحتوى الأصلي — مش بتعدل فيه حاجة
+                    AppNavHost(
+                        context = context,
+                        themeViewModel = themeViewModel,
+                        navController = navController,
+                        prayerTimeViewModel = prayerTimeViewModel
+                    )
+
+                    val topInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                    RamadanDecoration(topPadding = topInset + 64.dp)
+                }
             }
         }
         Log.d("PermissionCheck", "Requesting ACTIVITY_RECOGNITION permission...")
@@ -329,7 +345,10 @@ class MainActivity : ComponentActivity() {
         }
 
         // Check if language changed and recreate if needed
+       // val currentLanguage = Locale.getDefault().language
+
         val currentLanguage = Locale.getDefault().language
+            .let { if (it == "in") "id" else it }  // normalize
         val savedLanguage = appPreferences.getSavedLanguageCode()
 
         if (currentLanguage != savedLanguage) {

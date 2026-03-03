@@ -78,6 +78,7 @@ fun QiblaPage(
 
     Scaffold(
         topBar = { DashboardScreenTopBar(Screen.Qible.titleRes, navController =navController ) }
+
     ) { paddingValues ->
 
 

@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -101,6 +102,7 @@ fun TopAddressSection(
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
+            .padding(bottom = 3.dp)
     ) {
         // ✅ السماء الديناميكية بدل الصورة الثابتة
         PrayerSkyBackground(

@@ -25,11 +25,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -46,7 +49,8 @@ private enum class TimeOfDay { FAJR, MORNING, AFTERNOON, MAGHRIB, NIGHT }
 data class SkyTheme(
     val skyTop: Color, val skyMid: Color, val skyBottom: Color,
     val groundTop: Color, val groundBot: Color, val fogColor: Color,
-    val greeting: String, val icon: String,
+    val greetingRes: Int,
+    val icon: String,
     val hasSun: Boolean, val sunPosX: Float, val sunPosY: Float,
     val sunColor: Color, val sunGlow: Color,
     val hasMoon: Boolean, val moonPosX: Float, val moonPosY: Float,
@@ -86,7 +90,9 @@ private fun buildSkyTheme(tod: TimeOfDay) = when (tod) {
     TimeOfDay.FAJR -> SkyTheme(
         skyTop = Color(0xFF0D1B4B), skyMid = Color(0xFF5C2070), skyBottom = Color(0xFFFF8A65),
         groundTop = Color(0xFF2E7D32), groundBot = Color(0xFF0A1A0A),
-        fogColor = Color(0xFFFF7043), greeting = "الفجر ينير الدرب", icon = "🌅",
+        fogColor = Color(0xFFFF7043),
+        greetingRes = R.string.tree_greeting_fajr,
+        icon = "🌅",
         hasSun = true, sunPosX = 0.50f, sunPosY = 0.88f,
         sunColor = Color(0xFFFF7043), sunGlow = Color(0xFFFFCCBC),
         hasMoon = true, moonPosX = 0.18f, moonPosY = 0.13f,
@@ -102,7 +108,9 @@ private fun buildSkyTheme(tod: TimeOfDay) = when (tod) {
     TimeOfDay.MORNING -> SkyTheme(
         skyTop = Color(0xFF1565C0), skyMid = Color(0xFF1E88E5), skyBottom = Color(0xFF90CAF9),
         groundTop = Color(0xFF4CAF50), groundBot = Color(0xFF1B5E20),
-        fogColor = Color(0xFF90CAF9), greeting = "صباح النور والبركة", icon = "☀️",
+        fogColor = Color(0xFF90CAF9),
+        greetingRes = R.string.tree_greeting_morning,
+        icon = "☀️",
         hasSun = true, sunPosX = 0.76f, sunPosY = 0.18f,
         sunColor = Color(0xFFFDD835), sunGlow = Color(0xFFFFF9C4),
         hasMoon = false, moonPosX = 0f, moonPosY = 0f,
@@ -118,7 +126,9 @@ private fun buildSkyTheme(tod: TimeOfDay) = when (tod) {
     TimeOfDay.AFTERNOON -> SkyTheme(
         skyTop = Color(0xFF0277BD), skyMid = Color(0xFF039BE5), skyBottom = Color(0xFF4FC3F7),
         groundTop = Color(0xFF558B2F), groundBot = Color(0xFF1B5E20),
-        fogColor = Color(0xFF4FC3F7), greeting = "نهارك مبارك ومنير", icon = "🌤️",
+        fogColor = Color(0xFF4FC3F7),
+        greetingRes = R.string.tree_greeting_afternoon,
+        icon = "🌤️",
         hasSun = true, sunPosX = 0.82f, sunPosY = 0.10f,
         sunColor = Color(0xFFFFF59D), sunGlow = Color(0xFFFFFDE7),
         hasMoon = false, moonPosX = 0f, moonPosY = 0f,
@@ -133,7 +143,9 @@ private fun buildSkyTheme(tod: TimeOfDay) = when (tod) {
     TimeOfDay.MAGHRIB -> SkyTheme(
         skyTop = Color(0xFF4A148C), skyMid = Color(0xFFBF360C), skyBottom = Color(0xFFFF8F00),
         groundTop = Color(0xFF2E7D32), groundBot = Color(0xFF061206),
-        fogColor = Color(0xFFFF6F00), greeting = "المغرب يُقبل بالرحمة", icon = "🌇",
+        fogColor = Color(0xFFFF6F00),
+        greetingRes = R.string.tree_greeting_maghrib,
+        icon = "🌇",
         hasSun = true, sunPosX = 0.10f, sunPosY = 0.82f,
         sunColor = Color(0xFFFF6D00), sunGlow = Color(0xFFFFAB40),
         hasMoon = false, moonPosX = 0f, moonPosY = 0f,
@@ -147,7 +159,9 @@ private fun buildSkyTheme(tod: TimeOfDay) = when (tod) {
     TimeOfDay.NIGHT -> SkyTheme(
         skyTop = Color(0xFF020408), skyMid = Color(0xFF060A18), skyBottom = Color(0xFF0A1428),
         groundTop = Color(0xFF1B5E20), groundBot = Color(0xFF020802),
-        fogColor = Color(0xFF5C6BC0), greeting = "ليلة مباركة هادئة", icon = "🌙",
+        fogColor = Color(0xFF5C6BC0),
+        greetingRes = R.string.tree_greeting_night,
+        icon = "🌙",
         hasSun = false, sunPosX = 0f, sunPosY = 0f,
         sunColor = Color.Transparent, sunGlow = Color.Transparent,
         hasMoon = true, moonPosX = 0.68f, moonPosY = 0.12f,
@@ -312,7 +326,6 @@ private fun buildBranches(
     }
     return list
 }
-
 // ══════════════════════════════════════════════════════════════════════════════
 //  DRAWING HELPERS (same as original — kept intact)
 // ══════════════════════════════════════════════════════════════════════════════
@@ -917,7 +930,6 @@ private fun DrawScope.drawFruit(cx: Float, cy: Float, sz: Float) {
     drawCircle(Color.White.copy(alpha=0.20f), sz*.10f, Offset(cx-sz*.16f, cy-sz*.46f))
     drawCircle(Color(0xFFFF8A65).copy(alpha=0.25f), sz*.82f, Offset(cx,cy), style=Stroke(sz*.07f))
 }
-
 // ══════════════════════════════════════════════════════════════════════════════
 //  MAIN SCREEN
 // ══════════════════════════════════════════════════════════════════════════════
@@ -942,8 +954,16 @@ fun TreeScreen(onBackClick: () -> Unit, viewModel: TreeViewModel = hiltViewModel
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(sky.icon, fontSize = 20.sp)
                     Column {
-                        Text(sky.greeting, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-                        Text("المستوى ${state.level} · ${state.totalPoints} نقطة", style = MaterialTheme.typography.labelMedium, color = GreenStart)
+                        Text(
+                            stringResource(sky.greetingRes),
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            stringResource(R.string.tree_level_points, state.level, state.totalPoints),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = GreenStart
+                        )
                     }
                 }
             },
@@ -1001,12 +1021,17 @@ fun TreeScreen(onBackClick: () -> Unit, viewModel: TreeViewModel = hiltViewModel
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  ZIKR DATA MODEL
+//  ZIKR DATA MODEL (with resource IDs)
 // ══════════════════════════════════════════════════════════════════════════════
 
 private data class ZikrItem(
-    val key: String, val arabic: String, val points: String,
-    val color: Color, val emoji: String, val count: Int
+    val key: String,
+    val arabicRes: Int,
+    val pointsFormatRes: Int,
+    val pointsValue: Int,
+    val color: Color,
+    val emoji: String,
+    val count: Int
 )
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1027,17 +1052,18 @@ private fun TreeCardWithButtons(
 ) {
     val fps   = remember { mutableStateListOf<FP>() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val zikrList = listOf(
-        ZikrItem("subhanallah",   "سبحان الله",          "+١٠", Color(0xFF1B5E20), "🌿", subhanallahCount),
-        ZikrItem("alhamdulillah", "الحمد لله",            "+١٥", Color(0xFF0D47A1), "💙", alhamdulillahCount),
-        ZikrItem("allahuakbar",   "الله أكبر",            "+٢٠", Color(0xFF4A148C), "✨", allahuakbarCount),
-        ZikrItem("lailaha",       "لا إله إلا الله",      "+٢٥", Color(0xFF880E4F), "💎", laIlahaCount),
-        ZikrItem("hawqala",       "لا حول ولا قوةإلا بالله",       "+١٥", Color(0xFF4E342E), "🤲", hawqalaCount),
-        ZikrItem("astaghfir",     "أستغفر الله",          "+١٠", Color(0xFF1A237E), "🌊", astaghfirCount),
-        ZikrItem("salawat",       "اللهم صل على النبي",   "+٢٠", Color(0xFFE65100), "🌙", salawatCount),
-        ZikrItem("bismillah",     "سبحان الله وبحمده",             "+٥",  Color(0xFF2E7D32), "🌱", bismillahCount),
-        ZikrItem("mashallah",     "سبحان الله العظيم",          "+٥",  Color(0xFF00695C), "🌸", mashallahCount),
+        ZikrItem("subhanallah",   R.string.dhikr_short_subhanallah, R.string.plus_d, 10, Color(0xFF1B5E20), "🌿", subhanallahCount),
+        ZikrItem("alhamdulillah", R.string.dhikr_short_hamd,        R.string.plus_d, 15, Color(0xFF0D47A1), "💙", alhamdulillahCount),
+        ZikrItem("allahuakbar",   R.string.dhikr_short_akbar,       R.string.plus_d, 20, Color(0xFF4A148C), "✨", allahuakbarCount),
+        ZikrItem("lailaha",       R.string.dhikr_short_tahleel,     R.string.plus_d, 25, Color(0xFF880E4F), "💎", laIlahaCount),
+        ZikrItem("hawqala",       R.string.dhikr_short_hawqala,     R.string.plus_d, 15, Color(0xFF4E342E), "🤲", hawqalaCount),
+        ZikrItem("astaghfir",     R.string.dhikr_short_istighfar,   R.string.plus_d, 10, Color(0xFF1A237E), "🌊", astaghfirCount),
+        ZikrItem("salawat",       R.string.dhikr_short_salah,       R.string.plus_d, 20, Color(0xFFE65100), "🌙", salawatCount),
+        ZikrItem("bismillah",     R.string.dhikr_short_bismillah,   R.string.plus_d, 5,  Color(0xFF2E7D32), "🌱", bismillahCount),
+        ZikrItem("mashallah",     R.string.dhikr_short_mashallah,   R.string.plus_d, 5,  Color(0xFF00695C), "🌸", mashallahCount),
     )
 
     Card(modifier = modifier, shape = RoundedCornerShape(28.dp), elevation = CardDefaults.cardElevation(24.dp)) {
@@ -1056,26 +1082,40 @@ private fun TreeCardWithButtons(
                     Box(Modifier.clip(RoundedCornerShape(12.dp)).background(Color.Black.copy(alpha = 0.42f)).padding(horizontal = 10.dp, vertical = 6.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                             Text(sky.icon, fontSize = 12.sp)
-                            Text("المستوى $level", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 12.sp)
+                            Text(
+                                stringResource(R.string.tree_level, level),
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
                         }
                     }
                 }
                 // Prayer hint
                 Box(Modifier.fillMaxSize().padding(12.dp), Alignment.BottomStart) {
                     Box(Modifier.clip(RoundedCornerShape(12.dp)).background(Color.Black.copy(alpha = 0.30f)).padding(horizontal = 9.dp, vertical = 6.dp)) {
-                        Text(getPrayerTimeHint(getTimeOfDay()), color = Color.White.copy(alpha = 0.92f), fontSize = 9.sp)
+                        Text(
+                            stringResource(getPrayerTimeHintRes(getTimeOfDay())),
+                            color = Color.White.copy(alpha = 0.92f),
+                            fontSize = 9.sp
+                        )
                     }
                 }
                 // Stage badge
                 Box(Modifier.fillMaxSize().padding(bottom = 12.dp, end = 12.dp), Alignment.BottomEnd) {
                     val stageColor = getStageBadgeColor(level)
-                    val (stageEmoji, stageLabel) = getStageParts(level)
+                    val (stageEmoji, stageLabelRes) = getStageParts(level)
                     Row(
                         Modifier.clip(RoundedCornerShape(50.dp)).background(Brush.linearGradient(listOf(stageColor, darken(stageColor, 0.20f)))).padding(horizontal = 13.dp, vertical = 7.dp),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         Text(stageEmoji, fontSize = 13.sp)
-                        Text(stageLabel, fontWeight = FontWeight.Bold, color = Color.White, fontSize = 11.sp)
+                        Text(
+                            stringResource(stageLabelRes),
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontSize = 11.sp
+                        )
                     }
                 }
             }
@@ -1088,8 +1128,16 @@ private fun TreeCardWithButtons(
                     .padding(top = 16.dp, bottom = 18.dp)
             ) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                    Text("سبّح لتنمو شجرتك", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    Text("كل تسبيحة تُثمر 🌿", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        stringResource(R.string.tree_dhikr_prompt),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(R.string.tree_each_dhikr_bears_fruit),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
                 Spacer(Modifier.height(12.dp))
                 LazyRow(
@@ -1099,7 +1147,11 @@ private fun TreeCardWithButtons(
                     items(zikrList) { zikr ->
                         ZikrCard(zikr = zikr, onClick = {
                             onZikr(zikr.key)
-                            fps.add(FP(System.currentTimeMillis() + Random.nextLong(0, 999), "${zikr.points} ✨", zikr.color))
+                            fps.add(FP(
+                                System.currentTimeMillis() + Random.nextLong(0, 999),
+                                context.getString(R.string.plus_d, zikr.pointsValue) + " ✨",
+                                zikr.color
+                            ))
                         })
                     }
                 }
@@ -1124,7 +1176,7 @@ private fun TreeCardWithButtons(
 // ══════════════════════════════════════════════════════════════════════════════
 
 @Composable
-private fun ZikrCard(zikr: ZikrItem, onClick: () -> Unit) {
+private fun ZikrCard(zikr: ZikrItem, onClick:  () -> Unit) {
     var pressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
         targetValue = if (pressed) 0.91f else 1f,
@@ -1153,11 +1205,30 @@ private fun ZikrCard(zikr: ZikrItem, onClick: () -> Unit) {
             Box(Modifier.size(44.dp).background(zikr.color.copy(alpha = 0.15f), CircleShape).border(1.5.dp, zikr.color.copy(alpha = 0.30f), CircleShape), Alignment.Center) {
                 Text(zikr.emoji, fontSize = 18.sp)
             }
-            Text(zikr.arabic, fontWeight = FontWeight.Bold, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center, lineHeight = 15.sp, maxLines = 2)
+            Text(
+                stringResource(zikr.arabicRes),
+                fontWeight = FontWeight.Bold,
+                fontSize = 10.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                lineHeight = 15.sp,
+                maxLines = 2
+            )
             Surface(shape = RoundedCornerShape(8.dp), color = zikr.color.copy(alpha = 0.15f)) {
-                Text(zikr.points, Modifier.padding(horizontal = 8.dp, vertical = 3.dp), fontSize = 10.sp, fontWeight = FontWeight.Bold, color = zikr.color)
+                Text(
+                    stringResource(zikr.pointsFormatRes, zikr.pointsValue),
+                    Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = zikr.color
+                )
             }
-            Text("$countAnim مرة", fontSize = 8.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+            Text(
+                stringResource(R.string.tree_times_format, countAnim),
+                fontSize = 8.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
@@ -1322,30 +1393,60 @@ private fun NaturalTreeScene(
 
 @Composable
 fun QuoteCard(quote: String) {
-    Card(Modifier.fillMaxWidth().padding(horizontal=16.dp), RoundedCornerShape(20.dp), CardDefaults.cardColors(GreenStart.copy(alpha=0.07f)), CardDefaults.cardElevation(0.dp)) {
-        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-            Box(Modifier.size(42.dp).background(GreenStart.copy(alpha=0.15f), CircleShape), Alignment.Center) { Text("📖", fontSize=20.sp) }
-            Text(quote, style=MaterialTheme.typography.bodyMedium, color=MaterialTheme.colorScheme.onSurface.copy(alpha=0.88f), lineHeight=22.sp, modifier=Modifier.weight(1f))
+    Card(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        RoundedCornerShape(20.dp),
+        CardDefaults.cardColors(GreenStart.copy(alpha = 0.07f)),
+        CardDefaults.cardElevation(0.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(Modifier.size(42.dp).background(GreenStart.copy(alpha = 0.15f), CircleShape), Alignment.Center) {
+                Text("📖", fontSize = 20.sp)
+            }
+            Text(
+                quote,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.88f),
+                lineHeight = 22.sp,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
 
 @Composable
 fun ProgressCard(level: Int, progress: Float, pointsToNext: Int) {
-    val p by animateFloatAsState(targetValue=progress, animationSpec=tween(800, easing=FastOutSlowInEasing), label="p")
-    Card(Modifier.fillMaxWidth().padding(horizontal=16.dp), RoundedCornerShape(20.dp), elevation=CardDefaults.cardElevation(2.dp)) {
+    val p by animateFloatAsState(targetValue = progress, animationSpec = tween(800, easing = FastOutSlowInEasing), label = "p")
+    Card(Modifier.fillMaxWidth().padding(horizontal = 16.dp), RoundedCornerShape(20.dp), elevation = CardDefaults.cardElevation(2.dp)) {
         Column(Modifier.padding(20.dp)) {
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
                 Column {
-                    Text("المستوى $level", style=MaterialTheme.typography.titleMedium, fontWeight=FontWeight.Bold)
-                    Text("$pointsToNext نقطة للمستوى التالي", style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        stringResource(R.string.tree_level, level),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        stringResource(R.string.tree_progress_to_next, pointsToNext),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-                Box(Modifier.size(54.dp).background(GreenStart.copy(alpha=0.12f), CircleShape), Alignment.Center) {
-                    Text("${(p*100).toInt()}%", fontWeight=FontWeight.Bold, color=GreenStart, style=MaterialTheme.typography.labelLarge)
+                Box(Modifier.size(54.dp).background(GreenStart.copy(alpha = 0.12f), CircleShape), Alignment.Center) {
+                    Text(
+                        "${(p * 100).toInt()}%",
+                        fontWeight = FontWeight.Bold,
+                        color = GreenStart,
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
             Spacer(Modifier.height(14.dp))
-            Box(Modifier.fillMaxWidth().height(14.dp).clip(RoundedCornerShape(7.dp)).background(GreenStart.copy(alpha=0.12f))) {
+            Box(Modifier.fillMaxWidth().height(14.dp).clip(RoundedCornerShape(7.dp)).background(GreenStart.copy(alpha = 0.12f))) {
                 Box(Modifier.fillMaxHeight().fillMaxWidth(p).clip(RoundedCornerShape(7.dp)).background(Brush.horizontalGradient(listOf(Color(0xFF1B5E20), GreenStart, Color(0xFF81C784)))))
             }
         }
@@ -1356,10 +1457,10 @@ fun ProgressCard(level: Int, progress: Float, pointsToNext: Int) {
 fun StatsRow(totalPoints: Int, leaves: Int, flowers: Int, fruits: Int, branchStrength: Int) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(Modifier.fillMaxWidth(), Arrangement.spacedBy(8.dp)) {
-            StatBox(Icons.Default.Star,         totalPoints.toString(), "نقاط",  Color(0xFFFFC107), Modifier.weight(1f))
-            StatBox(Icons.Default.Spa,          leaves.toString(),      "أوراق", GreenStart,        Modifier.weight(1f))
-            StatBox(Icons.Default.LocalFlorist, flowers.toString(),     "زهور",  Color(0xFFEC407A), Modifier.weight(1f))
-            StatBox(Icons.Default.Forest,       fruits.toString(),      "ثمار",  Color(0xFFFF7043), Modifier.weight(1f))
+            StatBox(Icons.Default.Star, totalPoints.toString(), stringResource(R.string.tree_total_points), Color(0xFFFFC107), Modifier.weight(1f))
+            StatBox(Icons.Default.Spa, leaves.toString(), stringResource(R.string.tree_leaves), GreenStart, Modifier.weight(1f))
+            StatBox(Icons.Default.LocalFlorist, flowers.toString(), stringResource(R.string.tree_flowers), Color(0xFFEC407A), Modifier.weight(1f))
+            StatBox(Icons.Default.Forest, fruits.toString(), stringResource(R.string.tree_fruits), Color(0xFFFF7043), Modifier.weight(1f))
         }
         BranchStrengthBar(branchStrength)
     }
@@ -1367,8 +1468,8 @@ fun StatsRow(totalPoints: Int, leaves: Int, flowers: Int, fruits: Int, branchStr
 
 @Composable
 private fun BranchStrengthBar(branchStrength: Int) {
-    val maxStrength  = 10
-    val displayStr   = branchStrength.coerceAtMost(maxStrength)
+    val maxStrength = 10
+    val displayStr = branchStrength.coerceAtMost(maxStrength)
     val animFill by animateFloatAsState(targetValue = displayStr / maxStrength.toFloat(), animationSpec = tween(800, easing = FastOutSlowInEasing), label = "branchFill")
 
     Card(Modifier.fillMaxWidth(), RoundedCornerShape(16.dp), CardDefaults.cardColors(Color(0xFF4E342E).copy(alpha = 0.07f)), CardDefaults.cardElevation(0.dp)) {
@@ -1378,33 +1479,47 @@ private fun BranchStrengthBar(branchStrength: Int) {
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                    Text("قوة الأغصان 🌿", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = Color(0xFF4E342E))
-                    Text(if (displayStr >= maxStrength) "أقصى قوة ✨" else "$displayStr / $maxStrength", style = MaterialTheme.typography.labelSmall, color = Color(0xFF6D4C41))
+                    Text(
+                        stringResource(R.string.tree_branch_strength) + " 🌿",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF4E342E)
+                    )
+                    Text(
+                        if (displayStr >= maxStrength) stringResource(R.string.tree_branch_max)
+                        else stringResource(R.string.tree_branch_progress, displayStr, maxStrength),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color(0xFF6D4C41)
+                    )
                 }
                 Box(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)).background(Color(0xFF4E342E).copy(alpha = 0.12f))) {
                     Box(Modifier.fillMaxHeight().fillMaxWidth(animFill).clip(RoundedCornerShape(4.dp)).background(Brush.horizontalGradient(listOf(Color(0xFF6D4C41), Color(0xFF8D6E63), Color(0xFFBCAAA4)))))
                 }
-                Text("كل ٣ حوقلات تُقوّي غصناً جديداً", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    stringResource(R.string.tree_branch_strength_detail),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
 }
 
 @Composable
-fun StatBox(icon: ImageVector, value: String, label: String, color: Color, modifier: Modifier=Modifier) {
-    val anim by animateIntAsState(targetValue=value.toIntOrNull()?:0, animationSpec=tween(600), label="s")
-    Card(modifier, RoundedCornerShape(18.dp), CardDefaults.cardColors(color.copy(alpha=0.08f)), CardDefaults.cardElevation(0.dp)) {
-        Column(Modifier.fillMaxWidth().padding(12.dp), horizontalAlignment=Alignment.CenterHorizontally) {
-            Icon(icon, null, tint=color, modifier=Modifier.size(22.dp))
+fun StatBox(icon: ImageVector, value: String, label: String, color: Color, modifier: Modifier = Modifier) {
+    val anim by animateIntAsState(targetValue = value.toIntOrNull() ?: 0, animationSpec = tween(600), label = "s")
+    Card(modifier, RoundedCornerShape(18.dp), CardDefaults.cardColors(color.copy(alpha = 0.08f)), CardDefaults.cardElevation(0.dp)) {
+        Column(Modifier.fillMaxWidth().padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(icon, null, tint = color, modifier = Modifier.size(22.dp))
             Spacer(Modifier.height(6.dp))
-            Text(anim.toString(), style=MaterialTheme.typography.titleMedium, fontWeight=FontWeight.Bold, color=color)
-            Text(label, style=MaterialTheme.typography.labelSmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(anim.toString(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = color)
+            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  ZIKR COUNTERS CARD
+//  ZIKR COUNTERS CARD (with resources)
 // ══════════════════════════════════════════════════════════════════════════════
 
 @Composable
@@ -1422,53 +1537,71 @@ fun ZikrCountersCard(
 
             // Header
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                Text("إجمالي التسبيح", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                Text(
+                    stringResource(R.string.tree_total_dhikr),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
                 Surface(shape = RoundedCornerShape(10.dp), color = GreenStart.copy(alpha = 0.12f)) {
-                    Text("$total مرة", Modifier.padding(horizontal = 10.dp, vertical = 4.dp), style = MaterialTheme.typography.labelMedium, color = GreenStart, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        stringResource(R.string.tree_times_format, total),
+                        Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = GreenStart,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
 
-            // 🍃 أوراق
+            // 🍃 Leaves group
             ZikrGroupCard(
-                groupEmoji = "🍃", groupLabel = "تُنمي الأوراق", groupColor = GreenStart,
+                groupEmoji = "🍃",
+                groupLabel = stringResource(R.string.tree_group_leaves),
+                groupColor = GreenStart,
                 items = listOf(
-                    ZikrStatItem("سبحان الله",      subhanallahCount, Color(0xFF2E7D32), "كل ٥ = ورقة"),
-                    ZikrStatItem("لا إله إلا الله",  laIlahaCount,    Color(0xFF1B5E20), "كل ٤ = ورقتان"),
-                    ZikrStatItem("أستغفر الله",      astaghfirCount,  Color(0xFF388E3C), "كل ٥ = ورقة جديدة")
+                    ZikrStatItem(R.string.dhikr_short_subhanallah, subhanallahCount, Color(0xFF2E7D32), R.string.tree_hint_subhanallah),
+                    ZikrStatItem(R.string.dhikr_short_tahleel, laIlahaCount, Color(0xFF1B5E20), R.string.tree_hint_lailaha),
+                    ZikrStatItem(R.string.dhikr_short_istighfar, astaghfirCount, Color(0xFF388E3C), R.string.tree_hint_astaghfirullah)
                 )
             )
 
-            // 🌸 زهور
+            // 🌸 Flowers group
             ZikrGroupCard(
-                groupEmoji = "🌸", groupLabel = "تُفتح الزهور", groupColor = Color(0xFFEC407A),
+                groupEmoji = "🌸",
+                groupLabel = stringResource(R.string.tree_group_flowers),
+                groupColor = Color(0xFFEC407A),
                 items = listOf(
-                    ZikrStatItem("الحمد لله",   alhamdulillahCount, Color(0xFF1565C0), "كل ٥ = زهرة"),
-                    ZikrStatItem("بسم الله",    bismillahCount,     Color(0xFF2E7D32), "كل ٨ = زهرة"),
-                    ZikrStatItem("ما شاء الله", mashallahCount,     Color(0xFF00695C), "كل ٨ = زهرة")
+                    ZikrStatItem(R.string.dhikr_short_hamd, alhamdulillahCount, Color(0xFF1565C0), R.string.tree_hint_alhamdulillah),
+                    ZikrStatItem(R.string.dhikr_short_bismillah, bismillahCount, Color(0xFF2E7D32), R.string.tree_hint_bismillah),
+                    ZikrStatItem(R.string.dhikr_short_mashallah, mashallahCount, Color(0xFF00695C), R.string.tree_hint_mashallah)
                 )
             )
 
-            // 🍎 ثمار
+            // 🍎 Fruits group
             ZikrGroupCard(
-                groupEmoji = "🍎", groupLabel = "تُثمر الشجرة", groupColor = Color(0xFFFF7043),
+                groupEmoji = "🍎",
+                groupLabel = stringResource(R.string.tree_group_fruits),
+                groupColor = Color(0xFFFF7043),
                 items = listOf(
-                    ZikrStatItem("الله أكبر",           allahuakbarCount, Color(0xFF6A1B9A), "كل ١٠ = ثمرة"),
-                    ZikrStatItem("الصلاة على النبي ﷺ",  salawatCount,     Color(0xFFE65100), "كل ٥ = ثمرتان")
+                    ZikrStatItem(R.string.dhikr_short_akbar, allahuakbarCount, Color(0xFF6A1B9A), R.string.tree_hint_allahuakbar),
+                    ZikrStatItem(R.string.dhikr_short_salah, salawatCount, Color(0xFFE65100), R.string.tree_hint_salawat)
                 )
             )
 
-            // 🌿 أغصان
+            // 🌿 Branches group
             ZikrGroupCard(
-                groupEmoji = "🌿", groupLabel = "تُقوّي الأغصان", groupColor = Color(0xFF4E342E),
+                groupEmoji = "🌿",
+                groupLabel = stringResource(R.string.tree_group_branches),
+                groupColor = Color(0xFF4E342E),
                 items = listOf(
-                    ZikrStatItem("لا حول ولا قوة إلا بالله", hawqalaCount, Color(0xFF4E342E), "كل ٣ = غصن أقوى")
+                    ZikrStatItem(R.string.dhikr_short_hawqala, hawqalaCount, Color(0xFF4E342E), R.string.tree_hint_hawqala)
                 )
             )
         }
     }
 }
 
-private data class ZikrStatItem(val label: String, val count: Int, val color: Color, val hint: String)
+private data class ZikrStatItem(val labelRes: Int, val count: Int, val color: Color, val hintRes: Int)
 
 @Composable
 private fun ZikrGroupCard(groupEmoji: String, groupLabel: String, groupColor: Color, items: List<ZikrStatItem>) {
@@ -1488,13 +1621,28 @@ private fun ZikrGroupCard(groupEmoji: String, groupLabel: String, groupColor: Co
 
 @Composable
 private fun ZikrStatRow(item: ZikrStatItem) {
-    val countAnim by animateIntAsState(targetValue = item.count, animationSpec = tween(500), label = "cnt_${item.label}")
+    val countAnim by animateIntAsState(targetValue = item.count, animationSpec = tween(500), label = "cnt_${item.labelRes}")
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Box(Modifier.size(8.dp).background(item.color, CircleShape))
-        Text(item.label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-        Text(item.hint, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(
+            stringResource(item.labelRes),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.weight(1f)
+        )
+        Text(
+            stringResource(item.hintRes),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
         Surface(shape = RoundedCornerShape(8.dp), color = item.color.copy(alpha = 0.12f)) {
-            Text("$countAnim×", Modifier.padding(horizontal = 8.dp, vertical = 3.dp), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = item.color)
+            Text(
+                stringResource(R.string.tree_times_x, countAnim),
+                Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                color = item.color
+            )
         }
     }
 }
@@ -1505,25 +1653,41 @@ private fun ZikrStatRow(item: ZikrStatItem) {
 
 @Composable
 fun ActivitiesList(activities: List<TreeActivity>) {
-    Column(Modifier.fillMaxWidth().padding(horizontal=16.dp)) {
-        Text("آخر الأنشطة", style=MaterialTheme.typography.titleMedium, fontWeight=FontWeight.Bold, modifier=Modifier.padding(bottom=10.dp))
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Text(
+            stringResource(R.string.tree_activities),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
         activities.take(10).forEach { ActivityItem(it) }
     }
 }
 
 @Composable
 fun ActivityItem(activity: TreeActivity) {
-    Card(modifier = Modifier.fillMaxWidth().padding(vertical=3.dp), RoundedCornerShape(14.dp), elevation = CardDefaults.cardElevation(0.dp), colors =  CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant.copy(alpha=0.5f))) {
-        Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment=Alignment.CenterVertically) {
-            Box(Modifier.size(42.dp).background(activity.color.copy(alpha=0.15f), CircleShape), Alignment.Center) {
-                Icon(activity.icon, null, tint=activity.color, modifier=Modifier.size(22.dp))
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
+        RoundedCornerShape(14.dp),
+        elevation = CardDefaults.cardElevation(0.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+    ) {
+        Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(42.dp).background(activity.color.copy(alpha = 0.15f), CircleShape), Alignment.Center) {
+                Icon(activity.icon, null, tint = activity.color, modifier = Modifier.size(22.dp))
             }
-            Column(Modifier.weight(1f).padding(horizontal=12.dp)) {
-                Text(activity.title, style=MaterialTheme.typography.bodyMedium, fontWeight=FontWeight.SemiBold)
-                Text(activity.time, style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.onSurfaceVariant)
+            Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
+                Text(activity.title, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text(activity.time, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Surface(shape=RoundedCornerShape(10.dp), color=GreenStart.copy(alpha=0.10f)) {
-                Text("+${activity.points}", Modifier.padding(horizontal=10.dp, vertical=4.dp), fontWeight=FontWeight.Bold, color=GreenStart, style=MaterialTheme.typography.labelLarge)
+            Surface(shape = RoundedCornerShape(10.dp), color = GreenStart.copy(alpha = 0.10f)) {
+                Text(
+                    stringResource(R.string.plus_d, activity.points),
+                    Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                    fontWeight = FontWeight.Bold,
+                    color = GreenStart,
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         }
     }
@@ -1537,23 +1701,50 @@ fun ActivityItem(activity: TreeActivity) {
 fun LevelUpDialog(level: Int, sky: SkyTheme, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon  = { Text("🌳", style=MaterialTheme.typography.displayLarge) },
-        title = { Text("ارتقت شجرتك! ${sky.icon}", fontWeight=FontWeight.Bold, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth(), color=GreenStart) },
-        text  = {
-            Column(horizontalAlignment=Alignment.CenterHorizontally, modifier=Modifier.fillMaxWidth()) {
-                Text("بارك الله فيك، وصلت للمستوى $level", textAlign=TextAlign.Center, fontWeight=FontWeight.SemiBold)
+        icon = { Text("🌳", style = MaterialTheme.typography.displayLarge) },
+        title = {
+            Text(
+                stringResource(R.string.tree_level_up, sky.icon),
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                color = GreenStart
+            )
+        },
+        text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    stringResource(R.string.tree_level_up_detail, level),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold
+                )
                 Spacer(Modifier.height(8.dp))
-                Surface(shape=RoundedCornerShape(12.dp), color=GreenStart.copy(alpha=0.08f)) {
-                    val (e,l) = getStageParts(level)
-                    Text("$e $l", Modifier.padding(horizontal=14.dp, vertical=6.dp), style=MaterialTheme.typography.titleSmall, color=GreenStart, fontWeight=FontWeight.Bold)
+                Surface(shape = RoundedCornerShape(12.dp), color = GreenStart.copy(alpha = 0.08f)) {
+                    val (e, lRes) = getStageParts(level)
+                    Text(
+                        "$e ${stringResource(lRes)}",
+                        Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = GreenStart,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
                 Spacer(Modifier.height(8.dp))
-                Text("استمر في الذكر لتنمو شجرتك وتُزهر وتُثمر", textAlign=TextAlign.Center, color=MaterialTheme.colorScheme.onSurfaceVariant, style=MaterialTheme.typography.bodySmall)
+                Text(
+                    stringResource(R.string.tree_level_up_continue),
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         },
         confirmButton = {
-            Button(onClick=onDismiss, colors=ButtonDefaults.buttonColors(GreenStart), modifier=Modifier.fillMaxWidth()) {
-                Text("بإذن الله نكمل 🌿", fontWeight=FontWeight.Bold)
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(GreenStart),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.tree_level_up_button), fontWeight = FontWeight.Bold)
             }
         },
         shape = RoundedCornerShape(28.dp)
@@ -1564,44 +1755,57 @@ fun LevelUpDialog(level: Int, sky: SkyTheme, onDismiss: () -> Unit) {
 fun ResetConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon    = { Text("⚠️", style=MaterialTheme.typography.displaySmall) },
-        title   = { Text("إعادة تعيين الشجرة؟", fontWeight=FontWeight.Bold) },
-        text    = { Text("ستُحذف جميع نقاطك وتسبيحاتك ومستواك نهائياً.\nهذا الإجراء لا يمكن التراجع عنه.", color=MaterialTheme.colorScheme.onSurfaceVariant) },
-        confirmButton  = { Button(onClick=onConfirm, colors=ButtonDefaults.buttonColors(Color(0xFFB71C1C))) { Text("نعم، إعادة تعيين") } },
-        dismissButton  = { OutlinedButton(onClick=onDismiss) { Text("إلغاء") } }
+        icon = { Text("⚠️", style = MaterialTheme.typography.displaySmall) },
+        title = { Text(stringResource(R.string.tree_reset_title), fontWeight = FontWeight.Bold) },
+        text = { Text(stringResource(R.string.tree_reset_message), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+        confirmButton = {
+            Button(onClick = onConfirm, colors = ButtonDefaults.buttonColors(Color(0xFFB71C1C))) {
+                Text(stringResource(R.string.tree_reset_confirm))
+            }
+        },
+        dismissButton = {
+            OutlinedButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        }
     )
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  HELPERS
+//  HELPERS (return resource IDs now)
 // ══════════════════════════════════════════════════════════════════════════════
 
-private fun getStageParts(level: Int): Pair<String, String> = when {
-    level <= 1 -> "🌱" to "بذرة";  level <= 2 -> "🌿" to "شتلة"
-    level <= 3 -> "🌳" to "شجرة";  level <= 4 -> "🌸" to "مزهرة"
-    level <= 5 -> "🍎" to "مثمرة"; else       -> "✨" to "باسقة"
+private fun getStageParts(level: Int): Pair<String, Int> = when {
+    level <= 1 -> "🌱" to R.string.tree_stage_seed
+    level <= 2 -> "🌿" to R.string.tree_stage_sapling
+    level <= 3 -> "🌳" to R.string.tree_stage_tree
+    level <= 4 -> "🌸" to R.string.tree_stage_blooming
+    level <= 5 -> "🍎" to R.string.tree_stage_fruiting
+    else -> "✨" to R.string.tree_stage_towering
 }
 
 private fun getStageBadgeColor(level: Int) = when {
     level <= 1 -> Color(0xFF6D4C41); level <= 2 -> Color(0xFF388E3C)
     level <= 3 -> Color(0xFF1B5E20); level <= 4 -> Color(0xFFC2185B)
-    level <= 5 -> Color(0xFFE64A19); else       -> Color(0xFFF57F17)
+    level <= 5 -> Color(0xFFE64A19); else -> Color(0xFFF57F17)
 }
 
 private fun darken(c: Color, f: Float) = Color(
-    (c.red*(1f-f)).coerceIn(0f,1f), (c.green*(1f-f)).coerceIn(0f,1f),
-    (c.blue*(1f-f)).coerceIn(0f,1f), c.alpha
+    (c.red * (1f - f)).coerceIn(0f, 1f),
+    (c.green * (1f - f)).coerceIn(0f, 1f),
+    (c.blue * (1f - f)).coerceIn(0f, 1f),
+    c.alpha
 )
 
-private fun getPrayerTimeHint(tod: TimeOfDay) = when (tod) {
-    TimeOfDay.FAJR      -> "🕌 وقت صلاة الفجر"
-    TimeOfDay.MORNING   -> "🌅 بعد صلاة الفجر"
-    TimeOfDay.AFTERNOON -> "🕌 قريباً وقت العصر"
-    TimeOfDay.MAGHRIB   -> "🕌 وقت صلاة المغرب"
-    TimeOfDay.NIGHT     -> "🕌 وقت صلاة العشاء"
+private fun getPrayerTimeHintRes(tod: TimeOfDay): Int = when (tod) {
+    TimeOfDay.FAJR -> R.string.prayer_hint_fajr
+    TimeOfDay.MORNING -> R.string.prayer_hint_morning
+    TimeOfDay.AFTERNOON -> R.string.prayer_hint_afternoon
+    TimeOfDay.MAGHRIB -> R.string.prayer_hint_maghrib
+    TimeOfDay.NIGHT -> R.string.prayer_hint_night
 }
 
-private fun hypot(dx: Float, dy: Float) = sqrt(dx*dx + dy*dy)
+private fun hypot(dx: Float, dy: Float) = sqrt(dx * dx + dy * dy)
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  DATA
@@ -1616,9 +1820,9 @@ private data class FP(val id: Long, val text: String, val color: Color)
 
 @Composable
 private fun FloatLabel(fp: FP) {
-    val oy by animateFloatAsState(targetValue=-90f, animationSpec=tween(1400, easing=FastOutSlowInEasing), label="y${fp.id}")
-    val al by animateFloatAsState(targetValue=0f,   animationSpec=tween(1400, easing=FastOutSlowInEasing), label="a${fp.id}")
-    Box(Modifier.fillMaxWidth().offset(y=oy.dp), Alignment.Center) {
-        Text(fp.text, color=fp.color.copy(alpha=(1f-al).coerceIn(0f,1f)), fontWeight=FontWeight.Bold, fontSize=20.sp)
+    val oy by animateFloatAsState(targetValue = -90f, animationSpec = tween(1400, easing = FastOutSlowInEasing), label = "y${fp.id}")
+    val al by animateFloatAsState(targetValue = 0f, animationSpec = tween(1400, easing = FastOutSlowInEasing), label = "a${fp.id}")
+    Box(Modifier.fillMaxWidth().offset(y = oy.dp), Alignment.Center) {
+        Text(fp.text, color = fp.color.copy(alpha = (1f - al).coerceIn(0f, 1f)), fontWeight = FontWeight.Bold, fontSize = 20.sp)
     }
 }

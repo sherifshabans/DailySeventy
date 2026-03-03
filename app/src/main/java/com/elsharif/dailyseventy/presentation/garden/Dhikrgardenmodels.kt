@@ -1,20 +1,20 @@
 package com.elsharif.dailyseventy.presentation.garden
 
 import androidx.compose.ui.graphics.Color
+import com.elsharif.dailyseventy.R
 import kotlin.random.Random
-
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  GROWTH STAGES
 // ══════════════════════════════════════════════════════════════════════════════
 
-enum class PlantStage(val label: String, val growDurationSec: Float) {
-    EMPTY   ("فارغة",   0f),
-    SEED    ("بذرة",   20f),
-    SPROUT  ("شتلة",   28f),
-    YOUNG   ("ناشئة",  35f),
-    MATURE  ("ناضجة",  40f),
-    BLOOMING("مزهرة",   0f)  // ready to harvest — no auto-advance
+enum class PlantStage(val labelRes: Int, val growDurationSec: Float) {
+    EMPTY   (R.string.garden_plant_empty,   0f),
+    SEED    (R.string.garden_plant_seed,   20f),
+    SPROUT  (R.string.garden_plant_sprout, 28f),
+    YOUNG   (R.string.garden_plant_young,  35f),
+    MATURE  (R.string.garden_plant_mature, 40f),
+    BLOOMING(R.string.garden_plant_blooming, 0f)  // ready to harvest — no auto-advance
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -37,7 +37,6 @@ data class GardenPlot(
         return if (d <= 0f) 1f else (progressSec / d).coerceIn(0f, 1f)
     }
 }
-
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  FULL GAME STATE
@@ -134,49 +133,48 @@ fun plotRect(row: Int, col: Int, W: Float, H: Float): PlotRect {
     return PlotRect(left, top, plotW, rowHeights[ri])
 }
 
-
 // ══════════════════════════════════════════════════════════════════════════════
 //  1. PLANT TYPES — 8 نباتات
 // ══════════════════════════════════════════════════════════════════════════════
 
 enum class PlantType(
-    val arabicName : String,
+    val nameRes: Int,
     val emoji      : String,
     val stemColor  : Color,
     val petalColor : Color,
     val glowColor  : Color,
-    val anwarBase  : Int       // ← renamed from anwar to anwarBase for harvest calc
+    val anwarBase  : Int
 ) {
     JASMINE(
-        "ياسمين",     "🌸",
+        R.string.garden_plant_jasmine, "🌸",
         Color(0xFF2A5828), Color(0xFFF5F0E8), Color(0xFFE8F5E0), anwarBase = 10
     ),
     SUNFLOWER(
-        "عباد الشمس", "🌻",
+        R.string.garden_plant_sunflower, "🌻",
         Color(0xFF2A5010), Color(0xFFD49010), Color(0xFFFFF080), anwarBase = 15
     ),
     ROSE(
-        "وردة",       "🌹",
+        R.string.garden_plant_rose, "🌹",
         Color(0xFF1E4818), Color(0xFFAA1830), Color(0xFFFF8090), anwarBase = 20
     ),
     LOTUS(
-        "لوتس",       "🪷",
+        R.string.garden_plant_lotus, "🪷",
         Color(0xFF1A4A38), Color(0xFFE070A0), Color(0xFFFFB0D0), anwarBase = 12
     ),
     LAVENDER(
-        "خزامى",      "💜",
+        R.string.garden_plant_lavender, "💜",
         Color(0xFF2A3050), Color(0xFF9070D0), Color(0xFFD0B8F8), anwarBase = 10
     ),
     MINT(
-        "نعناع",      "🌿",
+        R.string.garden_plant_mint, "🌿",
         Color(0xFF1A4828), Color(0xFF40C870), Color(0xFF90F0B0), anwarBase = 8
     ),
     TULIP(
-        "زنبق",       "🌷",
+        R.string.garden_plant_tulip, "🌷",
         Color(0xFF204818), Color(0xFFE04040), Color(0xFFFF9090), anwarBase = 18
     ),
     CHAMOMILE(
-        "بابونج",     "🌼",
+        R.string.garden_plant_chamomile, "🌼",
         Color(0xFF2A5018), Color(0xFFF8E060), Color(0xFFFFF4A0), anwarBase = 14
     )
 }
@@ -186,70 +184,61 @@ enum class PlantType(
 // ══════════════════════════════════════════════════════════════════════════════
 
 data class DhikrButton(
-    val id      : String,
-    val arabic  : String,
-    val fullText: String,
-    val target  : Int,
-    val plant   : PlantType,
-    val darkBg  : Color,
-    val litBg   : Color,
-    val arcColor: Color
+    val id          : String,
+    val shortNameRes: Int,          // الاسم المختصر (مثل "سبحان الله")
+    val fullTextRes : Int,          // النص الكامل للذكر
+    val target      : Int,
+    val plant       : PlantType,
+    val darkBg      : Color,
+    val litBg       : Color,
+    val arcColor    : Color
 )
 
 val DHIKR_BUTTONS = listOf(
     DhikrButton(
-        "subhan", "سبحان الله",
-        "سُبْحَانَ اللَّهِ",
+        "subhan", R.string.dhikr_short_subhanallah, R.string.dhikr_subhanallah,
         target = 33, plant = PlantType.JASMINE,
         darkBg = Color(0xFF12280E), litBg = Color(0xFF1C3C16),
         arcColor = Color(0xFF3A7030)
     ),
     DhikrButton(
-        "hamd", "الحمد لله",
-        "الْحَمْدُ لِلَّهِ",
+        "hamd", R.string.dhikr_short_hamd, R.string.dhikr_alhamdulillah,
         target = 33, plant = PlantType.SUNFLOWER,
         darkBg = Color(0xFF2A1A04), litBg = Color(0xFF3E2A08),
         arcColor = Color(0xFFB06C10)
     ),
     DhikrButton(
-        "akbar", "الله أكبر",
-        "اللَّهُ أَكْبَرُ",
+        "akbar", R.string.dhikr_short_akbar, R.string.dhikr_allahuakbar,
         target = 34, plant = PlantType.ROSE,
         darkBg = Color(0xFF220A12), litBg = Color(0xFF34101C),
         arcColor = Color(0xFF882040)
     ),
     DhikrButton(
-        "istighfar", "أستغفر الله",
-        "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+        "istighfar", R.string.dhikr_short_istighfar, R.string.dhikr_astaghfirullah,
         target = 100, plant = PlantType.LOTUS,
         darkBg = Color(0xFF0E1828), litBg = Color(0xFF162238),
         arcColor = Color(0xFF5060B0)
     ),
     DhikrButton(
-        "salah", "صلِّ على النبي",
-        "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ ﷺ",
-        target = 100, // ✅ تم التعديل من 10 إلى 100
-        plant = PlantType.LAVENDER,
+        "salah", R.string.dhikr_short_salah, R.string.dhikr_salawat,
+        target = 100, plant = PlantType.LAVENDER,
         darkBg = Color(0xFF160A28), litBg = Color(0xFF221438),
         arcColor = Color(0xFF8060C8)
     ),
     DhikrButton(
-        "tahleel", "لا إله إلا الله",
-        "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+        "tahleel", R.string.dhikr_short_tahleel, R.string.dhikr_tahleel,
         target = 100, plant = PlantType.MINT,
         darkBg = Color(0xFF0A2010), litBg = Color(0xFF123018),
         arcColor = Color(0xFF308850)
     ),
     DhikrButton(
-        "hawqala", "لا حول ولا قوة إلا بالله",
-        "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ",
+        "hawqala", R.string.dhikr_short_hawqala, R.string.dhikr_hawqala,
         target = 33, plant = PlantType.TULIP,
         darkBg = Color(0xFF200808), litBg = Color(0xFF300E0E),
         arcColor = Color(0xFFB03030)
     ),
     DhikrButton(
-        "hasbiyallah", "حسبي الله",
-        "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+        "hasbiyallah", R.string.dhikr_short_hasbiyallah, R.string.dhikr_hasbiyallah,
         target = 7, plant = PlantType.CHAMOMILE,
         darkBg = Color(0xFF201A04), litBg = Color(0xFF302808),
         arcColor = Color(0xFFB09020)

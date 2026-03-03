@@ -26,21 +26,26 @@ import com.elsharif.dailyseventy.domain.data.preferences.AzanSoundPrefs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AzanSoundSelectorDialog(
     context: Context,
     onDismiss: () -> Unit
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val sounds = listOf(
         AzanSound(stringResource(R.string.azan_ali_elmola), R.raw.elmola),
         AzanSound(stringResource(R.string.azan_abo_elenin), R.raw.aboelenin),
         AzanSound(stringResource(R.string.azan_abdelbasset), R.raw.abdelbasset),
         AzanSound(stringResource(R.string.muezzin_nuaaynah), R.raw.nayna),
-        AzanSound(stringResource(R.string.muezzin_saad_alghamidi), R.raw.ghamdy)
+        AzanSound(stringResource(R.string.muezzin_saad_alghamidi), R.raw.ghamdy),
+        AzanSound(stringResource(R.string.elbna), R.raw.elbna),
+        AzanSound(stringResource(R.string.refat), R.raw.refat),
+
     )
-    val fajrSounds=listOf(
+    val fajrSounds = listOf(
         AzanSound(stringResource(R.string.azan_mosharyfajr), R.raw.mosharyfajr),
         AzanSound(stringResource(R.string.muezzin_ahmed_alnafees), R.raw.nafesfajr),
     )
@@ -48,7 +53,6 @@ fun AzanSoundSelectorDialog(
     val selectedRegularSound = remember {
         mutableIntStateOf(AzanSoundPrefs.loadSelectedSound(context))
     }
-
     val selectedFajrSound = remember {
         mutableIntStateOf(AzanSoundPrefs.loadSelectedFajrSound(context))
     }
@@ -77,122 +81,125 @@ fun AzanSoundSelectorDialog(
         }
     }
 
-    AlertDialog(
+    ModalBottomSheet(
         onDismissRequest = {
             mediaPlayer?.stop()
             mediaPlayer?.release()
             mediaPlayer = null
             onDismiss()
         },
-        title = null,
-        text = {
-            Column(
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 8.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 40.dp)
+        ) {
+            // Header
+            Text(
+                text = stringResource(R.string.select_azan_sound),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                text = stringResource(R.string.select_preferred_sound),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            // Custom Tabs
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = 600.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                // Header
-                Text(
-                    text = stringResource(R.string.select_azan_sound),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                TabItem(
+                    text = stringResource(R.string.regular_prayers),
+                    icon = "🕌",
+                    selected = selectedTab == 0,
+                    onClick = { selectedTab = 0 },
+                    modifier = Modifier.weight(1f)
                 )
-
-                Text(
-                    text = stringResource(R.string.select_preferred_sound),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                TabItem(
+                    text = stringResource(R.string.fajr_prayer),
+                    icon = "🌅",
+                    selected = selectedTab == 1,
+                    onClick = { selectedTab = 1 },
+                    modifier = Modifier.weight(1f)
                 )
+            }
 
-                // Custom Tabs
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    TabItem(
-                        text = stringResource(R.string.regular_prayers),
-                        icon = "🕌",
-                        selected = selectedTab == 0,
-                        onClick = { selectedTab = 0 },
-                        modifier = Modifier.weight(1f)
-                    )
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    TabItem(
-                        text = stringResource(R.string.fajr_prayer),
-                        icon = "🌅",
-                        selected = selectedTab == 1,
-                        onClick = { selectedTab = 1 },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+            val currentSelectedSound = if (selectedTab == 0) selectedRegularSound else selectedFajrSound
+            val isFajrTab = selectedTab == 1
+            val soundList = if (isFajrTab) fajrSounds else sounds
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Content
-                val currentSelectedSound = if (selectedTab == 0) selectedRegularSound else selectedFajrSound
-                val isFajrTab = selectedTab == 1
-
-               val soundList = if(isFajrTab) fajrSounds else sounds
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(soundList) { sound ->
-                        SoundItemCard(
-                            sound = sound,
-                            isSelected = sound.resId == currentSelectedSound.intValue,
-                            isPlaying = isPlaying && currentPlayingResId == sound.resId,
-                            currentPosition = if (currentPlayingResId == sound.resId) currentPosition else 0f,
-                            duration = if (currentPlayingResId == sound.resId) duration else 0f,
-                            onSelect = {
-                                currentSelectedSound.intValue = sound.resId
-                                if (isFajrTab) {
-                                    AzanSoundPrefs.saveSelectedFajrSound(context, sound.resId)
-                                } else {
-                                    AzanSoundPrefs.saveSelectedSound(context, sound.resId)
-                                }
-                            },
-                            onPlayPause = {
-                                if (currentPlayingResId == sound.resId && isPlaying) {
-                                    mediaPlayer?.pause()
-                                    isPlaying = false
-                                } else if (currentPlayingResId == sound.resId && !isPlaying) {
-                                    mediaPlayer?.start()
-                                    isPlaying = true
-                                } else {
-                                    mediaPlayer?.stop()
-                                    mediaPlayer?.release()
-                                    mediaPlayer = android.media.MediaPlayer.create(context, sound.resId)
-                                    mediaPlayer?.let { mp ->
-                                        mp.setOnCompletionListener {
-                                            isPlaying = false
-                                            currentPlayingResId = -1
-                                        }
-                                        mp.start()
-                                        isPlaying = true
-                                        currentPlayingResId = sound.resId
-                                        duration = mp.duration.toFloat()
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 400.dp)
+            ) {
+                items(soundList) { sound ->
+                    SoundItemCard(
+                        sound = sound,
+                        isSelected = sound.resId == currentSelectedSound.intValue,
+                        isPlaying = isPlaying && currentPlayingResId == sound.resId,
+                        currentPosition = if (currentPlayingResId == sound.resId) currentPosition else 0f,
+                        duration = if (currentPlayingResId == sound.resId) duration else 0f,
+                        onSelect = {
+                            currentSelectedSound.intValue = sound.resId
+                            if (isFajrTab) {
+                                AzanSoundPrefs.saveSelectedFajrSound(context, sound.resId)
+                            } else {
+                                AzanSoundPrefs.saveSelectedSound(context, sound.resId)
+                            }
+                        },
+                        onPlayPause = {
+                            if (currentPlayingResId == sound.resId && isPlaying) {
+                                mediaPlayer?.pause()
+                                isPlaying = false
+                            } else if (currentPlayingResId == sound.resId && !isPlaying) {
+                                mediaPlayer?.start()
+                                isPlaying = true
+                            } else {
+                                mediaPlayer?.stop()
+                                mediaPlayer?.release()
+                                mediaPlayer = android.media.MediaPlayer.create(context, sound.resId)
+                                mediaPlayer?.let { mp ->
+                                    mp.setOnCompletionListener {
+                                        isPlaying = false
+                                        currentPlayingResId = -1
                                     }
-                                }
-                            },
-                            onSeek = { position ->
-                                if (currentPlayingResId == sound.resId) {
-                                    mediaPlayer?.seekTo(position.toInt())
-                                    currentPosition = position
+                                    mp.start()
+                                    isPlaying = true
+                                    currentPlayingResId = sound.resId
+                                    duration = mp.duration.toFloat()
                                 }
                             }
-                        )
-                    }
+                        },
+                        onSeek = { position ->
+                            if (currentPlayingResId == sound.resId) {
+                                mediaPlayer?.seekTo(position.toInt())
+                                currentPosition = position
+                            }
+                        }
+                    )
                 }
             }
-        },
-        confirmButton = {
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Close button - always visible
             Button(
                 onClick = {
                     mediaPlayer?.stop()
@@ -200,9 +207,7 @@ fun AzanSoundSelectorDialog(
                     mediaPlayer = null
                     onDismiss()
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
+                modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
@@ -210,10 +215,8 @@ fun AzanSoundSelectorDialog(
                     fontWeight = FontWeight.Medium
                 )
             }
-        },
-        shape = RoundedCornerShape(28.dp),
-        modifier = Modifier.padding(16.dp)
-    )
+        }
+    }
 }
 
 @Composable
@@ -240,8 +243,7 @@ private fun TabItem(
         tonalElevation = backgroundColor
     ) {
         Row(
-            modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 8.dp),
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -290,9 +292,7 @@ private fun SoundItemCard(
             else
                 MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = elevation
-        )
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation)
     ) {
         Column(
             modifier = Modifier
@@ -316,9 +316,7 @@ private fun SoundItemCard(
                             unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
-
                     Spacer(modifier = Modifier.width(12.dp))
-
                     Column {
                         Text(
                             text = sound.name,
@@ -329,7 +327,6 @@ private fun SoundItemCard(
                             else
                                 MaterialTheme.colorScheme.onSurface
                         )
-
                         if (isSelected) {
                             Text(
                                 text = stringResource(R.string.selected_currently),
@@ -367,7 +364,6 @@ private fun SoundItemCard(
 
             if (isPlaying && duration > 0) {
                 Spacer(modifier = Modifier.height(16.dp))
-
                 Column {
                     Slider(
                         value = currentPosition,
@@ -379,7 +375,6 @@ private fun SoundItemCard(
                             inactiveTrackColor = MaterialTheme.colorScheme.primaryContainer
                         )
                     )
-
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween

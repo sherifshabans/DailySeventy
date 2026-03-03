@@ -46,6 +46,7 @@ fun DashboardScreenTopBar (@StringRes  name: Int  = R.string.app_name, navContro
             }
         },
         actions = {
+            if(name!=Screen.Settings.titleRes)
             IconButton(onClick = {
                 navController.navigate(Screen.Settings.route) // ✅ Navigate to settings
             }) {

@@ -6,17 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessAlarm
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.Language
@@ -24,7 +21,6 @@ import androidx.compose.material.icons.filled.Mosque
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PermDataSetting
 import androidx.compose.material.icons.filled.PrivacyTip
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,14 +44,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.data.preferences.IslamicReminderPreferences
-import com.elsharif.dailyseventy.presentation.colorselection.ColorPickerDialog
+import com.elsharif.dailyseventy.presentation.colorselection.ColorPickerBottomSheet
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
-import com.elsharif.dailyseventy.presentation.friday.FridayReminderDialog
+import com.elsharif.dailyseventy.presentation.friday.FridayReminderBottomSheet
 import com.elsharif.dailyseventy.presentation.islamicReminders.ReminderSettingsDialog
-import com.elsharif.dailyseventy.presentation.islamicReminders.ZekrReminderDialog
-import com.elsharif.dailyseventy.presentation.language.LanguageSelectionDialog
+import com.elsharif.dailyseventy.presentation.islamicReminders.ZekrReminderBottomSheet
+import com.elsharif.dailyseventy.presentation.language.LanguageSelectionBottomSheet
 import com.elsharif.dailyseventy.presentation.language.LanguageViewModel
-import com.elsharif.dailyseventy.presentation.permissins.PermissionsGuideDialog
+import com.elsharif.dailyseventy.presentation.permissins.PermissionsGuideBottomSheet
 import com.elsharif.dailyseventy.presentation.prayertimes.AzanSoundSelectorDialog
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 import com.elsharif.dailyseventy.presentation.sensor.StepAlarmSettingsDialog
@@ -110,7 +106,7 @@ fun SettingsScreen(
 
     // Show Language Selection Dialog
     if (showLanguageDialog) {
-        LanguageSelectionDialog(
+        LanguageSelectionBottomSheet(
             currentLanguage = currentLanguage,
             onLanguageSelected = { language ->
                 languageViewModel.changeLanguage(language)
@@ -150,7 +146,7 @@ fun SettingsScreen(
                     showColorDialog = true
                 }
                 if (showColorDialog) {
-                    ColorPickerDialog(
+                    ColorPickerBottomSheet(
                         onDismiss = { showColorDialog = false },
                         onColorSelected = { selectedColor ->
                             themeViewModel.updateColor(selectedColor)
@@ -185,7 +181,7 @@ fun SettingsScreen(
                     showZekrDialog = true
                 }
                 if (showZekrDialog) {
-                    ZekrReminderDialog(
+                    ZekrReminderBottomSheet(
                         context = context,
                         onDismiss = { showZekrDialog = false }
                     )
@@ -196,7 +192,7 @@ fun SettingsScreen(
                     showFridayDialog = true
                 }
                 if (showFridayDialog) {
-                    FridayReminderDialog(
+                    FridayReminderBottomSheet(
                         context = LocalContext.current,
                         prayerTimeViewModel = prayerTimeViewModel
                     ) {
@@ -236,9 +232,9 @@ fun SettingsScreen(
                     showPermissionsDialog =true
                 }
 
-                PermissionsGuideDialog(
+                if(showPermissionsDialog)
+                PermissionsGuideBottomSheet(
                     context = context,
-                    showDialog = showPermissionsDialog,
                     onDismiss = { showPermissionsDialog = false }
                 )
 

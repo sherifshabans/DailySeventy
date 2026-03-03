@@ -9,11 +9,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.elsharif.dailyseventy.presentation.components.DashboardScreenTopBar
+import com.elsharif.dailyseventy.presentation.onboarding.OnboardingPrefs
+import com.elsharif.dailyseventy.presentation.onboarding.OnboardingScreen
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -23,6 +30,24 @@ fun HomePage(
     navController: NavController,
     viewModel: PrayerTimeViewModel
 ) {
+
+
+    val ctx = LocalContext.current
+
+    // ✅ بنتحقق من الـ SharedPreferences مرة واحدة عند الفتح
+    var showOnboarding by remember {
+        mutableStateOf(!OnboardingPrefs.isDone(ctx))
+    }
+
+    // ── لو أول مرة → الـ Onboarding ──────────────────────────────────────
+    if (showOnboarding) {
+        OnboardingScreen(
+            onFinish = { showOnboarding = false }
+        )
+        return
+    }
+
+
     Scaffold(
         topBar =
             {

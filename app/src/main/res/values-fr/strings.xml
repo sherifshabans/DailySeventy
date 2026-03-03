@@ -313,6 +313,8 @@
     <string name="muezzin_nuaaynah">Nuaaynah</string>
     <string name="muezzin_saad_alghamidi">Saad Al-Ghamdi</string>
 
+    <string name="elbna">Mahmoud Al-Banna</string>
+    <string name="refat">Mohamed Refaat</string>
     <string name="select_preferred_sound">Choisissez le son préféré pour chaque prière</string>
     <string name="regular_prayers">Prières régulières</string>
     <string name="fajr_prayer">Prière de Fajr</string>
@@ -393,5 +395,448 @@
 
     <string name="rawdat_al_dhakireen">Le jardin des invocateurs</string>
 
+
+
+
+
+        <!-- General -->
+        <string name="shafii_madhab">École shafi\'ite</string>
+        <string name="umdat_al_salik">‘Umdat al-Salik</string>
+        <string name="skip">Passer</string>
+        <string name="previous">Précédent</string>
+        <string name="next">Suivant →</string>
+        <string name="start_now">Commencer 🌙</string>
+        <string name="confirm">Confirmer</string>
+        <string name="done">Terminé</string>
+        <string name="info">Info</string>
+        <string name="warning">Attention</string>
+        <string name="note">Remarque</string>
+        <string name="error">Erreur</string>
+        <string name="clear">Effacer</string>
+        <string name="settings">Paramètres</string>
+        <string name="about">À propos</string>
+        <string name="back">Retour</string>
+        <string name="yes">Oui</string>
+        <string name="no">Non</string>
+
+        <!-- Travel Screen -->
+        <string name="travel_mode_title">Mode voyage</string>
+        <string name="travel_mode_active">Actif</string>
+        <string name="travel_mode_inactive">Chaféite · Raccourcissement &amp; Combinaison</string>
+        <string name="destination">Destination</string>
+        <string name="from">De</string>
+        <string name="to">À</string>
+        <string name="time_difference">Décalage horaire</string>
+        <string name="duration">Durée</string>
+        <string name="status">Statut</string>
+        <string name="active">Actif</string>
+        <string name="inactive">Inactif</string>
+        <string name="km">km</string>
+        <string name="hours">h</string>
+        <string name="same_time">Même heure</string>
+        <string name="search_destination">Recherchez votre destination</string>
+        <string name="city_hint">Exemple : Le Caire / Londres</string>
+        <string name="selected_city">Ville sélectionnée</string>
+        <string name="distance_to_kaaba">Distance de la Kaaba</string>
+        <string name="north">N</string>
+        <string name="south">S</string>
+        <string name="east">E</string>
+        <string name="west">O</string>
+        <string name="turn_left">Tournez à gauche %d°</string>
+        <string name="turn_right">Tournez à droite %d°</string>
+        <string name="facing_qibla">✓ Face à la Qibla</string>
+        <string name="qibla_compass">Boussole de la Qibla</string>
+        <string name="prayer_times">Heures de prière</string>
+        <string name="normal">Normales</string>
+        <string name="shortened_combined">Raccourcies &amp; Combinées</string>
+        <string name="rakats">rak\'ats</string>
+        <string name="shortened">Raccourcie</string>
+        <string name="combined_with">Combinée avec %s</string>
+        <string name="change_destination">Changer la destination</string>
+        <string name="deactivate_travel">Désactiver le voyage</string>
+        <string name="activate_travel">Activer le voyage vers %s</string>
+        <string name="change_destination_confirm">Votre destination sera changée pour %s. Le mode voyage restera actif avec les nouvelles données.</string>
+        <string name="search_error_no_internet">Pas de connexion Internet. Vérifiez et réessayez.</string>
+        <string name="search_error_generic">Une erreur est survenue. Veuillez réessayer.</string>
+        <string name="travel_sharia_distance">Voyage légal ✅</string>
+        <string name="travel_not_sharia_distance">Pas un voyage légal ❌</string>
+        <string name="local_transport">🚂 Local</string>
+        <string name="international_transport">✈️ International</string>
+        <string name="home">🏠 Domicile</string>
+        <string name="your_current_location">Votre position actuelle</string>
+        <string name="distance_is_approx">La distance calculée est aérienne. La règle religieuse se base sur la distance réelle du voyage.</string>
+        <string name="qibla_bar_left">← Gauche</string>
+        <string name="qibla_bar_right">Droite →</string>
+        <string name="qibla_bar_correct">✓ Bonne direction</string>
+
+        <!-- Islamic Rulings Card -->
+        <string name="rulings_title">Règles du voyageur</string>
+        <string name="rulings_conditions_qasr">Conditions du raccourcissement (8)</string>
+        <string name="rulings_qasr_or_complete">Raccourcir ou compléter ?</string>
+        <string name="rulings_when_travel_ends">Quand le voyage prend‑il fin ?</string>
+        <string name="rulings_categories_sinners">Catégories de pêcheurs</string>
+        <string name="rulings_conditions_taqdeem">Conditions de la combinaison avancée</string>
+        <string name="rulings_conditions_takheer">Conditions de la combinaison retardée</string>
+        <string name="rulings_comparison">Avance vs Retard</string>
+        <string name="rulings_fasting_ramadan">Jeûne de Ramadan en voyage</string>
+        <string name="rulings_mash_on_khuff">Essuyage sur les khuffs</string>
+        <string name="rulings_summary_conditions">8 conditions à remplir</string>
+        <string name="rulings_summary_qasr_better">Par défaut, meilleur, obligatoire</string>
+        <string name="rulings_summary_end">3 scénarios</string>
+        <string name="rulings_summary_sinners">3 catégories et leurs règles</string>
+        <string name="rulings_summary_taqdeem">4 conditions + réserves</string>
+        <string name="rulings_summary_takheer">Deux conditions seulement</string>
+        <string name="rulings_summary_comparison">Comparaison complète</string>
+        <string name="rulings_summary_fasting">Règle, conditions, rattrapage</string>
+        <string name="rulings_summary_mash">3 jours pour le voyageur, 1 pour le résident</string>
+        <string name="rulings_condition_1">1 – Prière de quatre rak‘ats accomplie à l’heure</string>
+        <string name="rulings_condition_1_detail">Seules Dhuhr, ‘Asr et ‘Ishā’ sont raccourcies (de 4 à 2). Fajr et Maghrib ne le sont pas. La prière doit être accomplie à l’heure, non rattrapée : si l’on rattrape en voyage une prière manquée en résidence, on la fait entièrement ; de même si l’on rattrape en résidence une prière manquée en voyage, on la fait entièrement.</string>
+        <string name="rulings_condition_2">2 – Voyage long (≥ 82 km)</string>
+        <string name="rulings_condition_2_detail">Deux étapes ou plus = environ 82 kilomètres au pas des chameaux chargés, une journée et une nuit de marche. Le critère est la distance parcourue, pas le temps ; si on la parcourt en avion ou en bateau en un instant, le raccourcissement est permis.</string>
+        <string name="rulings_condition_3">3 – Voyage licite (non désobéissant)</string>
+        <string name="rulings_condition_3_detail">Obligatoire, recommandé, permis, déconseillé : le raccourcissement est permis. Interdit : pas de raccourcissement. Si un pécheur se repent pendant son voyage et qu’il lui reste au moins deux étapes, le raccourcissement devient permis ; sinon non.</string>
+        <string name="rulings_condition_4">4 – Destination connue</string>
+        <string name="rulings_condition_4_detail">Il doit savoir que la distance est de deux étapes ou plus. L’errant qui ne connaît pas sa destination ne raccourcit pas. Si l’on cherche un esclave en fuite sans savoir où il se trouve, ce n’est pas permis, sauf si l’on sait qu’on ne le trouvera qu’après deux étapes.</string>
+        <string name="rulings_condition_5">5 – Dépassement de la zone bâtie de la ville</string>
+        <string name="rulings_condition_5_detail">Si la ville a une muraille → le raccourcissement commence dès qu’on dépasse la muraille (même s’il y a une zone habitée au‑delà). S’il n’y a pas de muraille → il faut dépasser toutes les zones habitées, même si des ruines s’y intercalent. Les fermes, vergers et cimetières derrière la ville n’ont pas à être dépassés. Le bédouin commence son voyage en quittant les tentes de son peuple, pas seulement la sienne.</string>
+        <string name="rulings_condition_6">6 – Poursuite du voyage jusqu’à la fin de la prière</string>
+        <string name="rulings_condition_6_detail">S’il a l’intention de s’installer pendant la prière ou s’installe effectivement, il doit compléter la prière. L’intention de rester 4 jours complets, hors jours d’arrivée et de départ, annule la concession dès l’instant de l’intention.</string>
+        <string name="rulings_condition_7">7 – Intention de raccourcir au takbīr d’ouverture</string>
+        <string name="rulings_condition_7_detail">L’intention de raccourcir doit être liée au takbīr d’ouverture avec certitude. Si elle est retardée ou anticipée, l’accomplissement complet est obligatoire. (Al‑Muzanī : l’intention peut être faite pendant la prière. Abū Ḥanīfah : le raccourcissement est une résolution qui ne nécessite pas d’intention.)</string>
+        <string name="rulings_condition_8">8 – Ne pas suivre un résident dans une partie de la prière</string>
+        <string name="rulings_condition_8_detail">Si un voyageur suit un résident dans une partie quelconque de la prière, même dans le dernier tashahhud ou le salām, l’accomplissement complet devient obligatoire. S’il ignore l’intention de l’imam et attache la sienne à elle, c’est valide : si l’imam raccourcit, il raccourcit ; s’il complète, il complète.</string>
+        <string name="rulings_conditions_required_completion">⚠️ Cas où l’accomplissement complet est obligatoire</string>
+        <string name="rulings_conditions_required_completion_detail">• Il a l’intention de s’installer pendant la prière\n• Il doute d’avoir eu l’intention de raccourcir\n• Il hésite entre compléter ou raccourcir\n• Il fuit son voyage pendant la prière</string>
+        <string name="rulings_qasr_default">Par défaut : compléter est mieux</string>
+        <string name="rulings_qasr_default_detail">En dehors des cas mentionnés, compléter est mieux pour le voyageur, pour éviter la divergence. Exemple : le marin qui a sa famille avec lui sur le bateau ; l’imam Mālik ne lui permet pas de raccourcir, donc il vaut mieux qu’il complète.</string>
+        <string name="rulings_qasr_better_4">Raccourcir est mieux dans 4 cas</string>
+        <string name="rulings_qasr_better_4_detail">1) Si la distance est ≥ 123 km (3 étapes), pour éviter l’avis d’Abū Ḥanīfah qui le rendait obligatoire.\n2) S’il éprouve de l’aversion pour le raccourcissement.\n3) S’il doute de la preuve permettant le raccourcissement.\n4) S’il est un exemple à suivre devant les gens.</string>
+        <string name="rulings_qasr_obligatory_one">Raccourcir est obligatoire dans un cas</string>
+        <string name="rulings_qasr_obligatory_one_detail">Si le temps est trop court pour accomplir la prière entière en voyage, le raccourcissement devient obligatoire, afin qu’aucune partie de la prière ne sorte de son temps.</string>
+        <string name="rulings_end_scenario1">Premier scénario : arrivée au pays</string>
+        <string name="rulings_end_scenario1_detail">Dès qu’il atteint la muraille de son pays (s’il est muré) ou sa zone bâtie (sinon), son voyage prend fin même s’il n’y entre pas.</string>
+        <string name="rulings_end_scenario2">Deuxième scénario : intention de rester 4 jours</string>
+        <string name="rulings_end_scenario2_detail">L’intention de rester 4 jours complets avec leurs nuits, hors jours d’arrivée et de départ, le rend résident dès l’instant de l’intention. Preuve : « L’émigrant peut demeurer après avoir accompli ses rites pendant trois jours » – trois jours ne le rendent pas résident, plus que cela le rend résident. La résidence s’établit partout, même dans le désert.</string>
+        <string name="rulings_end_scenario3">Troisième scénario : séjour effectif de 4 jours</string>
+        <string name="rulings_end_scenario3_detail">S’il reste effectivement 4 jours, hors jours d’arrivée et de départ, il doit compléter même sans avoir eu l’intention de s’installer, car le séjour effectif prime sur l’intention.</string>
+        <string name="rulings_end_exception">Exception : celui qui reste pour un besoin en attendant qu’il se termine</string>
+        <string name="rulings_end_exception_detail">S’il reste pour un besoin qu’il espère voir aboutir à tout moment et qu’il a l’intention de repartir dès qu’il sera terminé, il peut raccourcir jusqu’à 18 jours complets. Preuve : le Prophète ﷺ resta pendant la campagne de Hawāzin 18 jours en raccourcissant, attendant la fin de la guerre. Si son besoin tarde davantage, il doit compléter.</string>
+        <string name="rulings_end_day_rule">📌 Règle pour le jour d’arrivée et de départ</string>
+        <string name="rulings_end_day_rule_detail">• Le jour d’arrivée et le jour de départ ne comptent pas dans les quatre jours.\n• S’il entre de nuit, le reste de la nuit n’est pas compté et le jour suivant est compté.\n• Abū Ḥanīfah : 15 jours (incluant arrivée/départ) imposent de compléter.</string>
+        <string name="rulings_sinners_category1">Première catégorie : le voyage lui‑même est un péché</string>
+        <string name="rulings_sinners_category1_detail">Il a entrepris le voyage dans un but de péché dès le départ (ex : voyage pour voler ou boire de l’alcool). Il ne peut pas raccourcir. S’il se repent et qu’il lui reste au moins deux étapes, le raccourcissement devient permis ; sinon non.</string>
+        <string name="rulings_sinners_category2">Deuxième catégorie : son voyage devient péché en cours de route</string>
+        <string name="rulings_sinners_category2_detail">Il a entrepris le voyage pour un but licite puis l’a transformé en péché. S’il se repent, le raccourcissement est permis absolument, quelle que soit la distance restante, car l’origine de son voyage était licite.</string>
+        <string name="rulings_sinners_category3">Troisième catégorie : pêcheur pendant le voyage</string>
+        <string name="rulings_sinners_category3_detail">Il a entrepris un voyage licite et un péché survient incidemment. Il n’est pas empêché de raccourcir, car personne n’est exempt de péché.</string>
+        <string name="rulings_sinners_note">📌 Avis des opposants</string>
+        <string name="rulings_sinners_note_detail">Abū Ḥanīfah, al‑Thawrī, al‑Awzā‘ī, al‑Muzanī : le pécheur peut bénéficier de toutes les concessions du voyage. La position retenue dans l’école chaféite : pas de concession pour un voyage de désobéissance.</string>
+        <string name="rulings_taqdeem_condition1">Première condition : l’ordre</string>
+        <string name="rulings_taqdeem_condition1_detail">Commencer par la première : Dhuhr avant ‘Asr, Maghrib avant ‘Ishā’. Si inversé : la première est valide, la seconde compte comme prière surérogatoire pour celui qui est ignorant ou oublieux.</string>
+        <string name="rulings_taqdeem_condition2">Deuxième condition : intention de combiner avant la fin de la première</string>
+        <string name="rulings_taqdeem_condition2_detail">Il a l’intention de combiner par avance pendant la première prière, même avec son salām. Il est préférable de faire l’intention avec le takbīr d’ouverture. (Al‑Muzanī : l’intention n’est pas requise. La position retenue : elle est requise.)\nDifférence avec le raccourcissement : pour le raccourcissement, l’intention doit être liée au takbīr, car la retarder ferait accomplir une partie de la prière sous sa forme complète.</string>
+        <string name="rulings_taqdeem_condition3">Troisième condition : la continuité</string>
+        <string name="rulings_taqdeem_condition3_detail">Il ne doit pas y avoir un long intervalle coutumier entre les deux prières. Le repère : moins de deux rak‘ats légères selon certains. Un léger délai pour la personne qui fait tayammum est excusé car elle a besoin d’un nouveau tayammum pour la seconde prière.</string>
+        <string name="rulings_taqdeem_condition4">Quatrième condition : persistance du voyage jusqu’à l’ouverture de la seconde</string>
+        <string name="rulings_taqdeem_condition4_detail">L’excuse du voyage doit durer jusqu’à la fin du takbīr d’ouverture de la seconde prière. S’il s’installe ou a l’intention de s’installer avant cela, la combinaison n’est pas valide.</string>
+        <string name="rulings_taqdeem_caveats">Réserves : quand elle devient invalide ou que le retard devient obligatoire</string>
+        <string name="rulings_taqdeem_caveats_detail">• S’il fait la seconde avant la première → la seconde est invalide.\n• S’il n’a pas eu l’intention de combiner dans la première → la seconde doit être retardée à son heure.\n• S’il les sépare par un long intervalle → la seconde doit être retardée.\n• S’il s’installe avant de commencer la seconde → elle doit être retardée.\n• S’il s’installe après les avoir achevées ou pendant la seconde → elles restent valides.</string>
+        <string name="rulings_taqdeem_sunnah_note">📌 Prières surérogatoires avec la combinaison avancée</string>
+        <string name="rulings_taqdeem_sunnah_note_detail">La sunna avant Dhuhr, puis les deux prières obligatoires, puis la sunna après Dhuhr, puis la sunna de ‘Asr. Il n’est pas permis d’offrir la sunna de la seconde avant les deux prières obligatoires.</string>
+        <string name="rulings_takheer_condition1">Première condition : intention de retarder avant la fin du temps de la première</string>
+        <string name="rulings_takheer_condition1_detail">Il a l’intention de retarder la première jusqu’au temps de la seconde avant que le temps de la première ne s’écoule. Al‑Ramli et al‑Khaṭīb : le temps de l’intention s’étend jusqu’à ce qu’il reste de quoi accomplir toute la prière. Ibn Ḥajar : il suffit qu’il reste de quoi faire une rak‘at. S’il retarde la première sans intention de combiner, il pèche et elle compte comme rattrapage.</string>
+        <string name="rulings_takheer_condition2">Deuxième condition : persistance du voyage jusqu’à l’achèvement des deux prières</string>
+        <string name="rulings_takheer_condition2_detail">Le voyage doit durer jusqu’à la fin de la seconde prière. S’il s’installe avant de les accomplir, la combinaison est nulle et la seconde devient un rattrapage sans péché.</string>
+        <string name="rulings_takheer_diff_from_taqdeem">Différence avec l’avance : l’ordre et la continuité sont recommandés</string>
+        <string name="rulings_takheer_diff_from_taqdeem_detail">Dans la combinaison retardée :\n• L’ordre (première avant seconde) : recommandé, non obligatoire.\n• La continuité : recommandée, non obligatoire.\n• L’intention dans la première : recommandée.</string>
+        <string name="rulings_comparison_time_of_intention">Moment de l’intention</string>
+        <string name="rulings_comparison_time_of_intention_taqdeem">Avance : du takbīr au salām de la première</string>
+        <string name="rulings_comparison_time_of_intention_takheer">Retard : de l’entrée du temps de la première jusqu’à ce qu’il reste assez de temps pour l’accomplir</string>
+        <string name="rulings_comparison_duration_of_excuse">Durée de l’excuse</string>
+        <string name="rulings_comparison_duration_of_excuse_taqdeem">Avance : jusqu’à l’achèvement du takbīr de la seconde</string>
+        <string name="rulings_comparison_duration_of_excuse_takheer">Retard : jusqu’à l’achèvement complet des deux prières</string>
+        <string name="rulings_comparison_consecutiveness_order">Continuité &amp; ordre</string>
+        <string name="rulings_comparison_consecutiveness_order_taqdeem">Avance : obligatoires</string>
+        <string name="rulings_comparison_consecutiveness_order_takheer">Retard : recommandés</string>
+        <string name="rulings_comparison_which_better">Lequel est meilleur pour le voyageur ?</string>
+        <string name="rulings_comparison_which_better_detail">• En voyage pendant le temps de la première et en repos pendant le temps de la seconde → le retard est meilleur (plus facile pour lui).\n• En repos pendant le temps de la première et en voyage pendant le temps de la seconde → l’avance est meilleure.\n• En repos pendant les deux temps ou en voyage pendant les deux → divergence : Ibn Ḥajar : l’avance est meilleure (décharge de responsabilité). Al‑Ramli : le retard est meilleur (le temps de la seconde est aussi un temps pour la première).</string>
+        <string name="rulings_fasting_permits">Le jeûne est permis sous conditions</string>
+        <string name="rulings_fasting_permits_detail">Il est permis de jeûner si la distance atteint la limite légale et qu’il quitte sa ville avant l’aube. Le jeûne est meilleur s’il ne lui nuit pas.</string>
+        <string name="rulings_fasting_makeup">Rattrapage et expiation</string>
+        <string name="rulings_fasting_makeup_detail">Il doit rattraper le nombre de jours manqués. Il n’y a pas d’expiation pour le voyageur qui rompt le jeûne.</string>
+        <string name="rulings_fasting_start_then_travel">S’il commence à jeûner puis voyage</string>
+        <string name="rulings_fasting_start_then_travel_detail">Il est autorisé à rompre ce jour‑là.</string>
+        <string name="rulings_mash_duration">Durée de l’essuyage</string>
+        <string name="rulings_mash_duration_detail">Voyageur : 3 jours et nuits (72 h). Résident : un jour et une nuit (24 h).</string>
+        <string name="rulings_mash_start">Début du calcul et conditions du chaussage</string>
+        <string name="rulings_mash_start_detail">La durée se calcule à partir du premier essuyage après une impureté, pas à partir du moment où l’on chausse. Il faut avoir chaussé les khuffs en état de pureté complète.</string>
+        <string name="rulings_mash_invalidators">Ce qui annule l’essuyage</string>
+        <string name="rulings_mash_invalidators_detail">Impureté majeure (janābah), enlèvement des khuffs, ou expiration du délai.</string>
+
+        <!-- Tree Screen -->
+        <string name="tree_title">Arbre de la récompense</string>
+        <string name="tree_greeting_fajr">Fajr illumine le chemin</string>
+        <string name="tree_greeting_morning">Matin de lumière et de bénédiction</string>
+        <string name="tree_greeting_afternoon">Ta journée bénie et illuminée</string>
+        <string name="tree_greeting_maghrib">Maghrib approche avec miséricorde</string>
+        <string name="tree_greeting_night">Nuit bénie et paisible</string>
+        <string name="tree_level">Niveau %d</string>
+        <string name="tree_points">%d points</string>
+        <string name="tree_total_points">Points totaux</string>
+        <string name="tree_leaves">Feuilles</string>
+        <string name="tree_flowers">Fleurs</string>
+        <string name="tree_fruits">Fruits</string>
+        <string name="tree_branch_strength">Force des branches</string>
+        <string name="tree_branch_strength_detail">Chaque 3 Ḥawqalah renforce une nouvelle branche</string>
+        <string name="tree_progress_to_next">%d points pour le niveau suivant</string>
+        <string name="tree_prayer_hint_fajr">🕌 Heure de Fajr</string>
+        <string name="tree_prayer_hint_morning">🌅 Après Fajr</string>
+        <string name="tree_prayer_hint_afternoon">🕌 ‘Asr bientôt</string>
+        <string name="tree_prayer_hint_maghrib">🕌 Heure de Maghrib</string>
+        <string name="tree_prayer_hint_night">🕌 Heure de ‘Ishā’</string>
+        <string name="tree_dhikr_prompt">Invoque Allah pour faire grandir ton arbre</string>
+        <string name="tree_each_dhikr_bears_fruit">🌿 Chaque dhikr porte fruit</string>
+        <string name="tree_total_dhikr">Total dhikr</string>
+        <string name="tree_times">fois</string>
+        <string name="tree_group_leaves">🍃 Fait pousser des feuilles</string>
+        <string name="tree_group_flowers">🌸 Ouvre les fleurs</string>
+        <string name="tree_group_fruits">🍎 Fait fructifier</string>
+        <string name="tree_group_branches">🌿 Renforce les branches</string>
+        <string name="tree_hint_subhanallah">Tous les 5 = feuille</string>
+        <string name="tree_hint_alhamdulillah">Tous les 5 = fleur</string>
+        <string name="tree_hint_allahuakbar">Tous les 10 = fruit</string>
+        <string name="tree_hint_lailaha">Tous les 4 = 2 feuilles</string>
+        <string name="tree_hint_astaghfirullah">Tous les 5 = nouvelle feuille</string>
+        <string name="tree_hint_bismillah">Tous les 8 = fleur</string>
+        <string name="tree_hint_mashallah">Tous les 8 = fleur</string>
+        <string name="tree_hint_salawat">Tous les 5 = 2 fruits</string>
+        <string name="tree_hint_hawqala">Tous les 3 = branche plus forte</string>
+        <string name="tree_activities">Activités récentes</string>
+        <string name="tree_level_up">Ton arbre a grandi ! %s</string>
+        <string name="tree_level_up_detail">Qu’Allah te bénisse, tu as atteint le niveau %d</string>
+        <string name="tree_level_up_continue">Continue le dhikr pour que ton arbre grandisse, fleurisse et fructifie</string>
+        <string name="tree_level_up_button">Avec la permission d’Allah nous continuons 🌿</string>
+        <string name="tree_reset_title">Réinitialiser l’arbre ?</string>
+        <string name="tree_reset_message">Tous tes points, tes dhikr et ton niveau seront définitivement effacés. Cette action est irréversible.</string>
+        <string name="tree_reset_confirm">Oui, réinitialiser</string>
+        <string name="tree_stage_seed">🌱 Graine</string>
+        <string name="tree_stage_sapling">🌿 Jeune pousse</string>
+        <string name="tree_stage_tree">🌳 Arbre</string>
+        <string name="tree_stage_blooming">🌸 En fleurs</string>
+        <string name="tree_stage_fruiting">🍎 Fruitier</string>
+        <string name="tree_stage_towering">✨ Élevé</string>
+
+        <!-- Onboarding -->
+        <string name="onboarding_welcome_title">Bienvenue dans Soixante‑dix fois 🌙</string>
+        <string name="onboarding_welcome_subtitle">Ton compagnon quotidien pour le dhikr et l’adoration</string>
+        <string name="onboarding_welcome_description">Une application islamique conçue pour être avec toi à tout moment,\nte rappelant les heures de prière, les dhikr du matin et du soir,\net t’aidant à revivre les sunnas quotidiennes et les actes d’adoration avec facilité.</string>
+        <string name="onboarding_welcome_tip">Laisse‑nous te montrer ce que tu peux faire 👇</string>
+        <string name="onboarding_azkar_title">Adhkār</string>
+        <string name="onboarding_azkar_subtitle">Adhkār du matin, du soir et du sommeil</string>
+        <string name="onboarding_azkar_description">Une collection complète des dhikr du matin et du soir,\ndes dhikr pour dormir et se réveiller, avec le nombre requis\npour chaque dhikr et sa vertu.</string>
+        <string name="onboarding_azkar_tip">💡 Appuie sur un dhikr pour compter, appuie longuement pour voir les détails</string>
+        <string name="onboarding_hijri_title">Date hégirienne</string>
+        <string name="onboarding_hijri_subtitle">Reste informé du calendrier islamique</string>
+        <string name="onboarding_hijri_description">Affiche la date hégirienne actuelle avec précision,\navec les occasions islamiques et les jours vertueux\ncomme les jours blancs, ‘Āshūrā’, et autres.</string>
+        <string name="onboarding_hijri_tip">💡 La date se met à jour automatiquement chaque jour</string>
+        <string name="onboarding_location_title">Définis ta localisation</string>
+        <string name="onboarding_location_subtitle">Définis ta ville une fois pour des horaires de prière et une Qibla précis</string>
+        <string name="onboarding_location_description">Règle ta position géographique une seule fois\npour que l’application calcule les heures de prière et la direction de la Qibla\navec une grande précision pour n’importe quelle ville du monde.</string>
+        <string name="onboarding_location_tip">⚠️ Important : commence par définir ta localisation pour que les autres services fonctionnent correctement</string>
+        <string name="onboarding_prayer_times_title">Heures de prière</string>
+        <string name="onboarding_prayer_times_subtitle">Ne manque jamais une prière</string>
+        <string name="onboarding_prayer_times_description">Les cinq heures de prière quotidiennes sont calculées avec précision\nselon ta localisation, avec des notifications personnalisables\net un calendrier mensuel complet.</string>
+        <string name="onboarding_prayer_times_tip">💡 Active les notifications dans les paramètres pour être rappelé avant chaque prière</string>
+        <string name="onboarding_tasbih_title">Tasbīḥ numérique</string>
+        <string name="onboarding_tasbih_subtitle">Invoque Allah n’importe quand, n’importe où</string>
+        <string name="onboarding_tasbih_description">Un tasbīḥ numérique élégant qui compte tes glorifications,\nte permet de fixer un objectif et de réinitialiser,\net enregistre ton total quotidien.</string>
+        <string name="onboarding_tasbih_tip">💡 Appuie n’importe où sur l’écran pour compter</string>
+        <string name="onboarding_qibla_title">Direction de la Qibla</string>
+        <string name="onboarding_qibla_subtitle">Connais la direction de la Kaaba où que tu sois</string>
+        <string name="onboarding_qibla_description">Une boussole précise montrant la direction de la Qibla\nselon ta position actuelle, avec la\ndistance de La Mecque.</string>
+        <string name="onboarding_qibla_tip">💡 Active la localisation pour une meilleure précision</string>
+        <string name="onboarding_tree_title">Arbre de la récompense</string>
+        <string name="onboarding_tree_subtitle">Transforme ton dhikr en récompense croissante</string>
+        <string name="onboarding_tree_description">Visualise la rétribution de ton dhikr de façon magnifique ;\nchaque fois que tu invoques Allah, ton arbre grandit\net ta récompense augmente, si Allah le veut.</string>
+        <string name="onboarding_tree_tip">💡 Un dhikr peut peser des montagnes — ne sous‑estime pas</string>
+        <string name="onboarding_travel_title">Guide du voyageur</string>
+        <string name="onboarding_travel_subtitle">Adhkār et règles pour le voyageur</string>
+        <string name="onboarding_travel_description">Ton guide complet du voyage : adhkār du voyage,\nrègles sur le raccourcissement et la combinaison des prières,\net étiquette islamique du voyage.</string>
+        <string name="onboarding_travel_tip">💡 Enregistre‑le avant ton voyage pour le consulter hors ligne</string>
+        <string name="onboarding_garden_title">Jardin du Paradis</string>
+        <string name="onboarding_garden_subtitle">Plante dans ton jardin chaque jour</string>
+        <string name="onboarding_garden_description">Les quatre paroles les plus aimées d’Allah :\nSubḥānallāh, walḥamdulillāh,\nwalā ilāha illallāh, wallāhu akbar.\nRécite‑les régulièrement et suis tes progrès.</string>
+        <string name="onboarding_garden_tip">💡 « Deux paroles légères sur la langue, lourdes dans la balance »</string>
+
+        <!-- Garden Screen -->
+        <string name="garden_title">Jardin de ceux qui se souviennent</string>
+        <string name="garden_anwar">%d nūr</string>
+        <string name="garden_today_awrad">%d wird aujourd’hui</string>
+        <string name="garden_combo_excellent">Excellent</string>
+        <string name="garden_combo_amazing">Incroyable !</string>
+        <string name="garden_combo_brilliant">Brillant !</string>
+        <string name="garden_combo_mashaAllah">Mā shā’ Allāh</string>
+        <string name="garden_combo_x">×%d</string>
+        <string name="garden_wird">Wird : %d</string>
+        <string name="garden_nur">%d nūr</string>
+        <string name="garden_wird_complete">Wird terminé</string>
+        <string name="garden_wird_complete_message">Ô Allah, accepte de nous — wird #%d</string>
+        <string name="garden_wird_complete_hadith">« Que ta langue reste humide du rappel d’Allah »</string>
+        <string name="garden_wird_reward">+%d nūr  ·  Récompense du wird</string>
+        <string name="garden_plant_empty">Vide</string>
+        <string name="garden_plant_seed">Graine</string>
+        <string name="garden_plant_sprout">Pousse</string>
+        <string name="garden_plant_young">Jeune</string>
+        <string name="garden_plant_mature">Mature</string>
+        <string name="garden_plant_blooming">En fleur</string>
+        <string name="garden_plant_jasmine">Jasmin</string>
+        <string name="garden_plant_sunflower">Tournesol</string>
+        <string name="garden_plant_rose">Rose</string>
+        <string name="garden_plant_lotus">Lotus</string>
+        <string name="garden_plant_lavender">Lavande</string>
+        <string name="garden_plant_mint">Menthe</string>
+        <string name="garden_plant_tulip">Tulipe</string>
+        <string name="garden_plant_chamomile">Camomille</string>
+        <string name="garden_anwar_base">%d nūr</string>
+
+    <string name="garden_session_info">%1$d nūr · %2$d wird aujourd’hui</string>
+    <string name="garden_plus_anwar">+%d nūr</string>
+    <string name="garden_combo_format">×%1$d %2$s</string>
+    <string name="garden_wird_count">Wird : %d</string>
+
+        <!-- Dhikr phrases (full) -->
+        <string name="dhikr_subhanallah">سُبْحَانَ اللَّهِ</string>
+        <string name="dhikr_alhamdulillah">الْحَمْدُ لِلَّهِ</string>
+        <string name="dhikr_allahuakbar">اللَّهُ أَكْبَرُ</string>
+        <string name="dhikr_astaghfirullah">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</string>
+        <string name="dhikr_salawat">اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ ﷺ</string>
+        <string name="dhikr_tahleel">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</string>
+        <string name="dhikr_hawqala">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ</string>
+        <string name="dhikr_hasbiyallah">حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ</string>
+        <string name="dhikr_short_subhanallah">سبحان الله</string>
+        <string name="dhikr_short_hamd">الحمد لله</string>
+        <string name="dhikr_short_akbar">الله أكبر</string>
+        <string name="dhikr_short_istighfar">أستغفر الله</string>
+        <string name="dhikr_short_salah">صلِّ على النبي</string>
+        <string name="dhikr_short_tahleel">لا إله إلا الله</string>
+        <string name="dhikr_short_hawqala">لا حول ولا قوة إلا بالله</string>
+        <string name="dhikr_short_hasbiyallah">حسبي الله</string>
+        <string name="dhikr_plus_points">+%d</string>
+
+        <!-- Prayer names -->
+        <string name="prayer_fajr">Fajr</string>
+        <string name="prayer_dhuhr">Dhuhr</string>
+        <string name="prayer_asr">‘Asr</string>
+        <string name="prayer_maghrib">Maghrib</string>
+        <string name="prayer_isha">‘Ishā’</string>
+
+        <!-- Travel status -->
+        <string name="travel_status_active_train">🚂  Mode voyage actif</string>
+        <string name="travel_status_active_plane">✈️  Mode voyage actif</string>
+        <string name="travel_status_departure">Départ</string>
+        <string name="travel_status_destination">Destination</string>
+        <string name="travel_status_current_location">Votre position actuelle</string>
+        <string name="travel_status_duration_unknown">—</string>
+
+        <!-- City search -->
+        <string name="city_search_hint">Exemple : Le Caire / Londres</string>
+        <string name="city_search_placeholder">Rechercher une ville</string>
+        <string name="city_search_no_results">Aucune ville trouvée</string>
+        <string name="city_search_error">Erreur lors de la recherche</string>
+
+
+    <!-- Additional strings for TravelScreen -->
+    <string name="city_search_instruction">Tapez le nom de la ville dans n’importe quelle langue</string>
+    <string name="travel_sharia">Voyage légal</string>
+    <string name="travel_not_sharia">Pas un voyage légal</string>
+    <string name="rulings_permitted_summary">✅ Raccourcissement, combinaison et rupture du jeûne sont permis</string>
+    <string name="rulings_not_permitted_summary">❌ La distance (%d km env.) est inférieure à la limite légale (%d km)</string>
+    <string name="rulings_qasr_label">Raccourcissement</string>
+    <string name="rulings_jam_label">Combinaison</string>
+    <string name="rulings_fitr_label">Rupture du jeûne</string>
+    <string name="rulings_mash_label">Essuyage 3 jours</string>
+    <string name="hide_details">Cacher les détails</string>
+    <string name="show_details">Afficher les détails</string>
+    <string name="change_destination_confirm_note">Le mode voyage restera actif avec les nouvelles données.</string>
+    <string name="north_east">Nord‑Est</string>
+    <string name="south_east">Sud‑Est</string>
+    <string name="south_west">Sud‑Ouest</string>
+    <string name="north_west">Nord‑Ouest</string>
+
+    <!-- Islamic Rulings Card -->
+    <string name="rulings_subtitle">École chaféite – ‘Umdat al-Salik</string>
+
+    <!-- 1. Conditions du raccourcissement -->
+    <string name="rulings_qasr_conditions_title">Conditions du raccourcissement</string>
+    <string name="rulings_qasr_conditions_summary">8 conditions à remplir</string>
+
+    <!-- 2. Raccourcir ou compléter ? -->
+    <string name="rulings_qasr_better_title">Raccourcir ou compléter ?</string>
+    <string name="rulings_qasr_better_summary">Par défaut, meilleur, obligatoire</string>
+
+    <!-- 3. Quand le voyage prend‑il fin ? -->
+    <string name="rulings_end_title">Quand le voyage prend‑il fin ?</string>
+    <string name="rulings_end_summary">3 scénarios</string>
+
+    <!-- 4. Catégories de pêcheurs -->
+    <string name="rulings_sinners_title">Catégories de pêcheurs</string>
+    <string name="rulings_sinners_summary">3 catégories et leurs règles</string>
+
+    <!-- 5. Conditions de la combinaison avancée -->
+    <string name="rulings_taqdeem_title">Conditions de la combinaison avancée</string>
+    <string name="rulings_taqdeem_summary">4 conditions + réserves</string>
+
+    <!-- 6. Conditions de la combinaison retardée -->
+    <string name="rulings_takheer_title">Conditions de la combinaison retardée</string>
+    <string name="rulings_takheer_summary">Deux conditions seulement</string>
+
+    <!-- 7. Comparaison : Avance vs Retard -->
+    <string name="rulings_comparison_title">Avance vs Retard</string>
+    <string name="rulings_comparison_summary">Comparaison complète</string>
+
+    <!-- 8. Rupture du jeûne en Ramadan -->
+    <string name="rulings_fitr_title">Jeûne de Ramadan en voyage</string>
+    <string name="rulings_fitr_summary">Règle, conditions, rattrapage</string>
+
+    <string name="rulings_fitr_permits">Le jeûne est permis sous conditions</string>
+    <string name="rulings_fitr_permits_detail">Il est permis de jeûner si la distance atteint la limite légale et qu’il quitte sa ville avant l’aube. Le jeûne est meilleur s’il ne lui nuit pas.</string>
+    <string name="rulings_fitr_makeup">Rattrapage et expiation</string>
+    <string name="rulings_fitr_makeup_detail">Il doit rattraper le nombre de jours manqués. Il n’y a pas d’expiation pour le voyageur qui rompt le jeûne.</string>
+    <string name="rulings_fitr_start_then_travel">S’il commence à jeûner puis voyage</string>
+    <string name="rulings_fitr_start_then_travel_detail">Il est autorisé à rompre ce jour‑là.</string>
+
+    <!-- 9. Essuyage sur les khuffs -->
+    <string name="rulings_mash_title">Essuyage sur les khuffs</string>
+    <string name="rulings_mash_summary">3 jours pour le voyageur, 1 pour le résident</string>
+
+    <string name="plus_d">+%d</string>
+
+    <!-- Tree Screen - إضافات جديدة -->
+    <string name="tree_times_format">%d fois</string>
+    <string name="tree_branch_max">Force maximale ✨</string>
+    <string name="tree_branch_progress">%1$d / %2$d</string>
+    <string name="tree_times_x">%d×</string>
+
+    <!-- Dhikr short names (إضافة ما هو مفقود) -->
+    <string name="dhikr_short_bismillah">سبحان الله وبحمده</string>  <!-- يبقى عربي كما هو -->
+    <string name="dhikr_short_mashallah">سبحان الله العظيم</string>
+
+    <!-- Prayer hints -->
+    <string name="prayer_hint_fajr">🕌 Heure de Fajr</string>
+    <string name="prayer_hint_morning">🌅 Après Fajr</string>
+    <string name="prayer_hint_afternoon">🕌 ‘Asr bientôt</string>
+    <string name="prayer_hint_maghrib">🕌 Heure de Maghrib</string>
+    <string name="prayer_hint_night">🕌 Heure de ‘Ishā’</string>
+    <string name="tree_level_points">Niveau %1$d · %2$d points</string>
+
+    <string name="color_blue">Bleu</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_green">Vert</string>
+    <string name="color_purple">Violet</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_yellow">Jaune</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_brown">Marron</string>
+    <string name="color_gray">Gris</string>
 
 </resources>

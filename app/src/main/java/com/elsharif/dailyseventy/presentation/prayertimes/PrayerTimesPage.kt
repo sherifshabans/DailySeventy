@@ -564,6 +564,11 @@ private fun PrayerTimesViews(
 }
 
 
+// ─────────────────────────────────────────────────────────────────────────────
+// التعديل المطلوب في PrayerTimesPage.kt
+// فقط دالة PrayerTimesMapView — بدّل بيها الموجودة
+// ─────────────────────────────────────────────────────────────────────────────
+
 @Composable
 fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) -> Unit) {
     val mapState by viewModel.mapState.collectAsState()
@@ -573,7 +578,7 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
+                    .height(300.dp)
                     .background(Color.LightGray),
                 contentAlignment = Alignment.Center
             ) {
@@ -589,23 +594,29 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
+                    .height(300.dp)
                     .background(Color.Gray),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = (mapState as MapUiState.Error).message ?: stringResource(R.string.map_loading_error),
+                        text = (mapState as MapUiState.Error).message
+                            ?: stringResource(R.string.map_loading_error),
                         color = Color.White,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = stringResource(R.string.check_internet), color = Color.LightGray, fontSize = 12.sp)
-
+                    Text(
+                        text = stringResource(R.string.check_internet),
+                        color = Color.LightGray,
+                        fontSize = 12.sp
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = { viewModel.retryConnection() },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
                     ) {
                         Text(stringResource(R.string.retry), color = Color.White)
                     }
@@ -617,30 +628,31 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
+                    .height(300.dp)
                     .background(Color(0xFF37474F)),
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         imageVector = Icons.Default.CloudOff,
-                        contentDescription = "غير متصل",
+                        contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(48.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = stringResource(R.string.offline_mode), color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-
+                    Text(
+                        text = stringResource(R.string.offline_mode),
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = stringResource(R.string.prayer_times_saved_locally), color = Color.LightGray, fontSize = 14.sp, textAlign = TextAlign.Center)
-
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = stringResource(R.string.last_saved_location), color = Color.LightGray, fontSize = 12.sp)
-
-                    Spacer(modifier = Modifier.height(12.dp))
                     Button(
                         onClick = { viewModel.retryConnection() },
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -655,15 +667,16 @@ fun PrayerTimesMapView(viewModel: PrayerTimeViewModel, onMapClick: (GeoPoint) ->
         }
 
         is MapUiState.Success -> {
+            // ✅ الـ MapView الجديد بيحتوي على Search Bar جوّاه تلقائياً
             MapView(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp),
+                    .height(300.dp),
                 currentLocation = (mapState as MapUiState.Success).location,
                 onMapClick = { geoPoint ->
-                    // 🔥 تأكد أن هذا يستدعي updateLocation أيضاً
                     viewModel.updateLocation(geoPoint)
                     viewModel.updateAddressFromGeoPoint(geoPoint)
+                    onMapClick(geoPoint)
                 }
             )
         }
@@ -926,174 +939,6 @@ private fun GetLocationButton(
     }
 }
 
-@SuppressLint("MissingPermission", "ServiceCast")
-@Composable
-fun LocationButton(
-    enabled: Boolean = true,
-    context: Context,
-    viewModel: PrayerTimeViewModel,
-    modifier: Modifier = Modifier
-) {
-    var isGettingLocation by remember { mutableStateOf(false) }
-    var showPermissionDialog by remember { mutableStateOf(false) }
-    var showLocationSettingsDialog by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    // فحص الصلاحيات
-    val hasLocationPermission = remember(context) {
-        ContextCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(
-                    context, Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    // فحص تفعيل الموقع
-    val isLocationEnabled = remember(context) {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-    }
-
-    // طلب الصلاحيات
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val fineLocationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
-        val coarseLocationGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
-
-        if (fineLocationGranted || coarseLocationGranted) {
-            // تم منح الصلاحية، فحص تفعيل الموقع
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                // كله تمام، جلب الموقع
-                getCurrentLocation(context, viewModel) { loading, error ->
-                    isGettingLocation = loading
-                    errorMessage = error
-                }
-            } else {
-                showLocationSettingsDialog = true
-            }
-        } else {
-            errorMessage = "يجب السماح بصلاحية الموقع لاستخدام هذه الخاصية"
-        }
-    }
-
-    Button(
-
-        onClick = {
-            errorMessage = null
-            when {
-                !hasLocationPermission -> {
-                    permissionLauncher.launch(
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        )
-                    )
-                }
-                !isLocationEnabled -> {
-                    showLocationSettingsDialog = true
-                }
-                else -> {
-                    getCurrentLocation(context, viewModel) { loading, error ->
-                        isGettingLocation = loading
-                        errorMessage = error
-                    }
-                }
-            }
-        },
-        enabled = !isGettingLocation||!enabled,
-        modifier = modifier
-    ) {
-        if (isGettingLocation) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(16.dp),
-                strokeWidth = 2.dp,
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("جاري التحديد...")
-        } else {
-            Icon(
-                imageVector = Icons.Default.MyLocation,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(stringResource(R.string.GetMyLocation))
-        }
-    }
-
-    // إظهار رسالة الخطأ
-    errorMessage?.let { error ->
-        LaunchedEffect(error) {
-            delay(4000)
-            errorMessage = null
-        }
-        Text(
-            text = error,
-            color = MaterialTheme.colorScheme.error,
-            fontSize = 12.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp),
-            textAlign = TextAlign.Center
-        )
-    }
-
-    // حوار طلب الصلاحيات
-    if (showPermissionDialog) {
-        AlertDialog(
-            onDismissRequest = { showPermissionDialog = false },
-            title = { Text("صلاحية الموقع") },
-            text = { Text("يحتاج التطبيق لصلاحية الوصول للموقع لتحديد موقعك الحالي وعرض مواقيت الصلاة المناسبة") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showPermissionDialog = false
-                    permissionLauncher.launch(
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        )
-                    )
-                }) {
-                    Text("موافق")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showPermissionDialog = false }) {
-                    Text("إلغاء")
-                }
-            }
-        )
-    }
-
-    // حوار تفعيل الموقع
-    if (showLocationSettingsDialog) {
-        AlertDialog(
-            onDismissRequest = { showLocationSettingsDialog = false },
-            title = { Text("تفعيل خدمة الموقع") },
-            text = { Text("يرجى تفعيل خدمة الموقع في الإعدادات لتتمكن من استخدام هذه الخاصية") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showLocationSettingsDialog = false
-                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    context.startActivity(intent)
-                }) {
-                    Text("فتح الإعدادات")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showLocationSettingsDialog = false }) {
-                    Text("إلغاء")
-                }
-            }
-        )
-    }
-}
 
 @SuppressLint("MissingPermission")
 private fun getCurrentLocation(

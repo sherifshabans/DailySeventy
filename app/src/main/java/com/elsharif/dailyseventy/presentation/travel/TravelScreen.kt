@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,9 +38,9 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Marker
 import com.elsharif.dailyseventy.BuildConfig
+import com.elsharif.dailyseventy.R
 import kotlin.math.*
 import androidx.compose.foundation.BorderStroke
-
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -60,12 +61,12 @@ fun TravelScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("وضع السفر", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.travel_mode_title), fontWeight = FontWeight.Bold)
                         Text(
                             if (state.isActive) {
                                 val emoji = if (state.activeDistanceKm in 1..<LOCAL_TRANSPORT_KM) "🚂" else "✈️"
-                                "$emoji نشط · ${state.destination}"
-                            } else "المذهب الشافعي · القصر والجمع",
+                                "$emoji ${stringResource(R.string.travel_mode_active)} · ${state.destination}"
+                            } else stringResource(R.string.travel_mode_inactive),
                             style = MaterialTheme.typography.bodySmall,
                             color = if (state.isActive) Color(0xFF0288D1)
                             else MaterialTheme.colorScheme.onSurfaceVariant
@@ -138,7 +139,6 @@ fun TravelScreen(
                         userCity    = state.userCityName,
                         timeDiff    = state.timeDiff,
                         distance    = state.activeDistanceKm,
-                        // ✅ activeDuration — مش بتتغير غير لما نفعّل أو نغيّر الوجهة
                         duration    = state.activeDuration,
                         onToggle    = viewModel::toggleTravelMode
                     )
@@ -148,8 +148,10 @@ fun TravelScreen(
             // ── 4. أوقات الصلاة
             item {
                 SectionTitle(
-                    "أوقات الصلاة",
-                    if (state.fiqhResult?.isSafar == true || state.isActive) "قصر وجمع" else "عادية"
+                    title = stringResource(R.string.prayer_times),
+                    subtitle = if (state.fiqhResult?.isSafar == true || state.isActive)
+                        stringResource(R.string.shortened_combined)
+                    else stringResource(R.string.normal)
                 )
             }
             items(state.prayerTimes) { prayer ->
@@ -274,7 +276,7 @@ fun QiblaCompassCard(
                     Icon(Icons.Default.Explore, null,
                         tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(22.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text("اتجاه القبلة",
+                    Text(stringResource(R.string.qibla_direction),
                         style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
                 AnimatedVisibility(
@@ -289,7 +291,7 @@ fun QiblaCompassCard(
                         ) {
                             Text("🕋", fontSize = 14.sp)
                             Spacer(Modifier.width(4.dp))
-                            Text("اتجهت للقبلة!",
+                            Text(stringResource(R.string.facing_qibla),
                                 style      = MaterialTheme.typography.labelMedium,
                                 color      = Color.White,
                                 fontWeight = FontWeight.Bold)
@@ -369,13 +371,13 @@ fun QiblaCompassCard(
                     }
                 }
 
-                Text("N", Modifier.align(Alignment.TopCenter).padding(top = 4.dp),
+                Text(stringResource(R.string.north), Modifier.align(Alignment.TopCenter).padding(top = 4.dp),
                     fontWeight = FontWeight.Bold, fontSize = 11.sp, color = Color(0xFFF44336))
-                Text("S", Modifier.align(Alignment.BottomCenter).padding(bottom = 4.dp),
+                Text(stringResource(R.string.south), Modifier.align(Alignment.BottomCenter).padding(bottom = 4.dp),
                     fontWeight = FontWeight.Bold, fontSize = 11.sp, color = Color(0xFF9E9E9E))
-                Text("E", Modifier.align(Alignment.CenterEnd).padding(end = 4.dp),
+                Text(stringResource(R.string.east), Modifier.align(Alignment.CenterEnd).padding(end = 4.dp),
                     fontWeight = FontWeight.Bold, fontSize = 10.sp, color = Color(0xFF9E9E9E))
-                Text("W", Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
+                Text(stringResource(R.string.west), Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
                     fontWeight = FontWeight.Bold, fontSize = 10.sp, color = Color(0xFF9E9E9E))
             }
 
@@ -398,7 +400,7 @@ fun QiblaCompassCard(
                     Text(getDirectionText(qiblaHeading),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text("اتجاه القبلة",
+                    Text(stringResource(R.string.qibla_direction),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
@@ -407,11 +409,11 @@ fun QiblaCompassCard(
                     .background(MaterialTheme.colorScheme.outlineVariant))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    val dist = if (distanceToKaaba > 0) "$distanceToKaaba كم" else "—"
+                    val dist = if (distanceToKaaba > 0) "$distanceToKaaba ${stringResource(R.string.km)}" else "—"
                     Text(dist,
                         style      = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold)
-                    Text("للكعبة المشرفة",
+                    Text(stringResource(R.string.distance_to_kaaba),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
@@ -459,20 +461,21 @@ private fun QiblaDirectionBar(
         Spacer(Modifier.height(4.dp))
 
         Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-            Text("← يسار", style = MaterialTheme.typography.labelSmall,
+            Text(stringResource(R.string.qibla_bar_left), style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(
-                if (isFacingQibla) "✓ في الاتجاه الصحيح"
+                if (isFacingQibla) stringResource(R.string.facing_qibla)
                 else {
                     val deg = normalizedAngle.toInt()
-                    if (deg < 0) "انعطف ${-deg}° يساراً" else "انعطف ${deg}° يميناً"
+                    if (deg < 0) stringResource(R.string.turn_left, -deg)
+                    else stringResource(R.string.turn_right, deg)
                 },
                 style      = MaterialTheme.typography.labelSmall,
                 fontWeight = if (isFacingQibla) FontWeight.Bold else FontWeight.Normal,
                 color      = if (isFacingQibla) Color(0xFF2E7D32)
                 else MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Text("يمين →", style = MaterialTheme.typography.labelSmall,
+            Text(stringResource(R.string.qibla_bar_right), style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
@@ -515,10 +518,11 @@ private fun CitySearchWithMapCard(
                     modifier = Modifier.size(22.dp))
                 Spacer(Modifier.width(8.dp))
                 Column {
-                    Text("ابحث عن وجهتك",
+                    Text(
+                        stringResource(R.string.search_destination),
                         style      = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold)
-                    Text("اكتب اسم المدينة بأي لغة",
+                    Text(stringResource(R.string.city_search_instruction), // need to add this resource
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
@@ -530,7 +534,7 @@ private fun CitySearchWithMapCard(
                 value         = query,
                 onValueChange = onQueryChange,
                 modifier      = Modifier.fillMaxWidth(),
-                placeholder   = { Text("مثال: أسيوط / ليبيا / Cairo") },
+                placeholder   = { Text(stringResource(R.string.city_hint)) },
                 leadingIcon   = {
                     if (isSearching)
                         CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
@@ -593,7 +597,7 @@ private fun CitySearchWithMapCard(
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
-                                Text("${city.distanceKm} كم",
+                                Text("${city.distanceKm} ${stringResource(R.string.km)}",
                                     fontWeight = FontWeight.Bold,
                                     color = if (city.isTravelShafii) Color(0xFF2E7D32)
                                     else Color(0xFFC62828))
@@ -657,7 +661,6 @@ private fun CityResultRow(city: CityResult, isSelected: Boolean, onClick: () -> 
                     CircleShape
                 ), Alignment.Center
             ) {
-                // ✅ قطار لو أقل من 1000 كم، طيارة لو أكثر
                 Text(
                     if (!isSafar) "🚗"
                     else if (city.isLocalTransport) "🚂"
@@ -675,10 +678,10 @@ private fun CityResultRow(city: CityResult, isSelected: Boolean, onClick: () -> 
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text("${city.distanceKm} كم",
+                Text("${city.distanceKm} ${stringResource(R.string.km)}",
                     fontWeight = FontWeight.Bold, fontSize = 13.sp,
                     color = if (isSafar) Color(0xFF2E7D32) else Color(0xFFC62828))
-                Text(if (isSafar) "سفر شرعي ✅" else "ليس سفراً ❌",
+                Text(if (isSafar) stringResource(R.string.travel_sharia_distance) else stringResource(R.string.travel_not_sharia_distance),
                     style = MaterialTheme.typography.labelSmall,
                     color = if (isSafar) Color(0xFF2E7D32) else Color(0xFFC62828))
             }
@@ -725,7 +728,6 @@ private fun ShafiiFiqhCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.size(46.dp).background(mainColor.copy(0.14f), CircleShape),
                         Alignment.Center) {
-                        // ✅ قطار لو مسافة محلية، طيارة لو دولي، بيت لو مش سفر
                         Text(
                             when {
                                 !isSafar -> "🏠"
@@ -737,9 +739,9 @@ private fun ShafiiFiqhCard(
                     }
                     Spacer(Modifier.width(10.dp))
                     Column {
-                        Text(if (isSafar) "سفر شرعي" else "ليس سفراً شرعياً",
+                        Text(if (isSafar) stringResource(R.string.travel_sharia) else stringResource(R.string.travel_not_sharia), // need plain resources
                             fontWeight = FontWeight.ExtraBold, fontSize = 17.sp, color = mainColor)
-                        Text("المذهب الشافعي",
+                        Text(stringResource(R.string.shafii_madhab),
                             style = MaterialTheme.typography.bodySmall,
                             color = mainColor.copy(0.70f))
                     }
@@ -755,8 +757,8 @@ private fun ShafiiFiqhCard(
             Spacer(Modifier.height(12.dp))
             Surface(shape = RoundedCornerShape(12.dp), color = mainColor.copy(0.10f)) {
                 Text(
-                    if (isSafar) "✅ يجوز القصر والجمع والفطر"
-                    else "❌ المسافة (${fiqh.distanceKm} كم تقريبًا) دون الحد الشرعي (${SHAFII_TRAVEL_KM.toInt()} كم)",
+                    if (isSafar) stringResource(R.string.rulings_permitted_summary)
+                    else stringResource(R.string.rulings_not_permitted_summary, fiqh.distanceKm, SHAFII_TRAVEL_KM.toInt()),
                     Modifier.fillMaxWidth().padding(12.dp),
                     fontWeight = FontWeight.Bold, color = mainColor, textAlign = TextAlign.Center
                 )
@@ -765,32 +767,36 @@ private fun ShafiiFiqhCard(
             if (isSafar) {
                 Spacer(Modifier.height(12.dp))
                 Row(Modifier.fillMaxWidth(), Arrangement.spacedBy(6.dp)) {
-                    listOf("🧎" to "القصر", "🔗" to "الجمع", "🌴" to "فطر رمضان", "💧" to "مسح ٣ أيام")
-                        .forEach { (emoji, label) ->
-                            Surface(
-                                shape    = RoundedCornerShape(10.dp),
-                                color    = mainColor.copy(0.10f),
-                                modifier = Modifier.weight(1f)
+                    listOf(
+                        "🧎" to stringResource(R.string.rulings_qasr_label),
+                        "🔗" to stringResource(R.string.rulings_jam_label),
+                        "🌴" to stringResource(R.string.rulings_fitr_label),
+                        "💧" to stringResource(R.string.rulings_mash_label)
+                    ).forEach { (emoji, label) ->
+                        Surface(
+                            shape    = RoundedCornerShape(10.dp),
+                            color    = mainColor.copy(0.10f),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Column(
+                                Modifier.padding(vertical = 6.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Column(
-                                    Modifier.padding(vertical = 6.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(emoji, fontSize = 14.sp)
-                                    Text(label,
-                                        style    = MaterialTheme.typography.labelSmall,
-                                        color    = mainColor,
-                                        textAlign = TextAlign.Center,
-                                        maxLines = 1)
-                                }
+                                Text(emoji, fontSize = 14.sp)
+                                Text(label,
+                                    style    = MaterialTheme.typography.labelSmall,
+                                    color    = mainColor,
+                                    textAlign = TextAlign.Center,
+                                    maxLines = 1)
                             }
                         }
+                    }
                 }
             }
 
             Spacer(Modifier.height(8.dp))
             TextButton(onClick = onToggleDetails, Modifier.fillMaxWidth()) {
-                Text(if (showDetails) "إخفاء التفاصيل" else "عرض التفاصيل الفقهية", color = mainColor)
+                Text(if (showDetails) stringResource(R.string.hide_details) else stringResource(R.string.show_details), color = mainColor)
                 Icon(if (showDetails) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     null, Modifier.size(18.dp), tint = mainColor)
             }
@@ -811,7 +817,7 @@ private fun ShafiiFiqhCard(
                                 tint     = Color(0xFFF57F17),
                                 modifier = Modifier.size(15.dp))
                             Spacer(Modifier.width(6.dp))
-                            Text("المسافة المحسوبة هوائية. الاعتبار الفقهي بالطريق الفعلي.",
+                            Text(stringResource(R.string.distance_is_approx),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color(0xFFE65100))
                         }
@@ -832,7 +838,7 @@ private fun ShafiiFiqhCard(
                         ) {
                             Icon(Icons.Default.SyncAlt, null, Modifier.size(16.dp))
                             Spacer(Modifier.width(4.dp))
-                            Text("تغيير الوجهة", maxLines = 1)
+                            Text(stringResource(R.string.change_destination), maxLines = 1)
                         }
                         OutlinedButton(
                             onClick  = onDeactivate,
@@ -843,7 +849,7 @@ private fun ShafiiFiqhCard(
                         ) {
                             Icon(Icons.Default.FlightLand, null, Modifier.size(16.dp))
                             Spacer(Modifier.width(4.dp))
-                            Text("إيقاف السفر", maxLines = 1)
+                            Text(stringResource(R.string.deactivate_travel), maxLines = 1)
                         }
                     }
                 } else {
@@ -855,7 +861,7 @@ private fun ShafiiFiqhCard(
                     ) {
                         Icon(Icons.Default.FlightTakeoff, null, Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("تفعيل السفر إلى ${selectedCity.nameAr}")
+                        Text(stringResource(R.string.activate_travel, selectedCity.nameAr))
                     }
                 }
 
@@ -864,7 +870,7 @@ private fun ShafiiFiqhCard(
                         onDismissRequest = onDismissChangeDialog,
                         icon  = { Text("✈️", fontSize = 28.sp) },
                         title = {
-                            Text("تغيير الوجهة",
+                            Text(stringResource(R.string.change_destination),
                                 fontWeight = FontWeight.Bold,
                                 textAlign  = TextAlign.Center,
                                 modifier   = Modifier.fillMaxWidth())
@@ -874,14 +880,14 @@ private fun ShafiiFiqhCard(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier            = Modifier.fillMaxWidth()
                             ) {
-                                Text("سيتم تغيير وجهة سفرك إلى:",
+                                Text(stringResource(R.string.change_destination_confirm, selectedCity.nameAr),
                                     style     = MaterialTheme.typography.bodyMedium,
                                     color     = MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = TextAlign.Center)
                                 Spacer(Modifier.height(8.dp))
                                 Surface(shape = RoundedCornerShape(10.dp), color = mainColor.copy(0.10f)) {
                                     Text(
-                                        "${selectedCity.nameAr}  •  ${selectedCity.distanceKm} كم",
+                                        "${selectedCity.nameAr}  •  ${selectedCity.distanceKm} ${stringResource(R.string.km)}",
                                         Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
                                         fontWeight = FontWeight.Bold,
                                         color      = mainColor,
@@ -889,7 +895,7 @@ private fun ShafiiFiqhCard(
                                     )
                                 }
                                 Spacer(Modifier.height(6.dp))
-                                Text("سيستمر وضع السفر نشطاً بالبيانات الجديدة",
+                                Text(stringResource(R.string.change_destination_confirm_note),
                                     style     = MaterialTheme.typography.labelSmall,
                                     color     = MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = TextAlign.Center)
@@ -903,12 +909,12 @@ private fun ShafiiFiqhCard(
                             ) {
                                 Icon(Icons.Default.SyncAlt, null, Modifier.size(16.dp))
                                 Spacer(Modifier.width(4.dp))
-                                Text("تأكيد التغيير")
+                                Text(stringResource(R.string.confirm))
                             }
                         },
                         dismissButton = {
                             TextButton(onClick = onDismissChangeDialog) {
-                                Text("إلغاء", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         },
                         shape = RoundedCornerShape(20.dp)
@@ -942,7 +948,7 @@ private fun DistanceMeter(distanceKm: Int, minKm: Double, color: Color) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(distanceKm.toString(),
                 fontWeight = FontWeight.Bold, fontSize = 11.sp, color = color)
-            Text("كم", fontSize = 8.sp, color = color.copy(0.65f))
+            Text(stringResource(R.string.km), fontSize = 8.sp, color = color.copy(0.65f))
         }
     }
 }
@@ -967,7 +973,7 @@ private fun RouteRow(from: String, to: String, color: Color) {
                 maxLines  = 1,
                 overflow  = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center)
-            Text("موقعك الحالي",
+            Text(stringResource(R.string.your_current_location),
                 style     = MaterialTheme.typography.labelSmall,
                 color     = color.copy(0.6f),
                 textAlign = TextAlign.Center)
@@ -986,7 +992,7 @@ private fun RouteRow(from: String, to: String, color: Color) {
                 maxLines  = 1,
                 overflow  = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center)
-            Text("الوجهة",
+            Text(stringResource(R.string.destination),
                 style     = MaterialTheme.typography.labelSmall,
                 color     = color.copy(0.6f),
                 textAlign = TextAlign.Center)
@@ -1048,9 +1054,8 @@ fun TravelStatusCard(
 
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
                     Text(
-                        // ✅ قطار لو مسافة محلية، طيارة لو دولي
-                        if (distance in 1..<LOCAL_TRANSPORT_KM) "🚂  وضع السفر نشط"
-                        else "✈️  وضع السفر نشط",
+                        if (distance in 1..<LOCAL_TRANSPORT_KM) stringResource(R.string.travel_status_active_train)
+                        else stringResource(R.string.travel_status_active_plane),
                         style      = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color      = Color.White)
@@ -1076,14 +1081,14 @@ fun TravelStatusCard(
                                 tint     = Color.White.copy(0.85f),
                                 modifier = Modifier.size(18.dp))
                             Spacer(Modifier.height(4.dp))
-                            Text(userCity.ifBlank { "موقعك" },
+                            Text(userCity.ifBlank { stringResource(R.string.your_current_location) },
                                 style      = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.SemiBold,
                                 color      = Color.White,
                                 maxLines   = 1,
                                 overflow   = TextOverflow.Ellipsis,
                                 textAlign  = TextAlign.Center)
-                            Text("منطلق",
+                            Text(stringResource(R.string.travel_status_departure),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color.White.copy(0.65f))
                         }
@@ -1096,8 +1101,7 @@ fun TravelStatusCard(
                                     modifier = Modifier.size(20.dp))
                                 HorizontalDivider(Modifier.weight(1f), color = Color.White.copy(0.4f))
                             }
-                            // ✅ distance هنا هو activeDistanceKm المرّر من TravelScreen
-                            Text(if (distance > 0) "$distance كم" else "—",
+                            Text(if (distance > 0) "$distance ${stringResource(R.string.km)}" else "—",
                                 style      = MaterialTheme.typography.labelSmall,
                                 color      = Color.White.copy(0.85f),
                                 fontWeight = FontWeight.SemiBold)
@@ -1108,14 +1112,14 @@ fun TravelStatusCard(
                                 tint     = Color.White.copy(0.85f),
                                 modifier = Modifier.size(18.dp))
                             Spacer(Modifier.height(4.dp))
-                            Text(destination.ifBlank { "الوجهة" },
+                            Text(destination.ifBlank { stringResource(R.string.destination) },
                                 style      = MaterialTheme.typography.labelMedium,
                                 fontWeight = FontWeight.SemiBold,
                                 color      = Color.White,
                                 maxLines   = 1,
                                 overflow   = TextOverflow.Ellipsis,
                                 textAlign  = TextAlign.Center)
-                            Text("وجهة",
+                            Text(stringResource(R.string.travel_status_destination),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color.White.copy(0.65f))
                         }
@@ -1126,10 +1130,10 @@ fun TravelStatusCard(
 
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceEvenly) {
                     TravelChip(Icons.Default.Schedule,
-                        if (timeDiff == "0" || timeDiff.isBlank()) "نفس التوقيت" else "+${timeDiff}س",
-                        "فرق التوقيت")
-                    TravelChip(Icons.Default.AccessTime, duration.ifBlank { "—" }, "مدة الرحلة")
-                    TravelChip(Icons.Default.CheckCircle, "نشط", "الوضع")
+                        if (timeDiff == "0" || timeDiff.isBlank()) stringResource(R.string.same_time) else "+${timeDiff}${stringResource(R.string.hours)}",
+                        stringResource(R.string.time_difference))
+                    TravelChip(Icons.Default.AccessTime, duration.ifBlank { "—" }, stringResource(R.string.duration))
+                    TravelChip(Icons.Default.CheckCircle, stringResource(R.string.active), stringResource(R.string.status))
                 }
             }
         }
@@ -1188,7 +1192,7 @@ fun PrayerCard(prayer: TravelPrayer) {
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (prayer.canMerge && prayer.mergeWith != null) {
-                        Text("يُجمع مع ${prayer.mergeWith}",
+                        Text(stringResource(R.string.combined_with, prayer.mergeWith),
                             style = MaterialTheme.typography.labelSmall,
                             color = prayer.color.copy(0.80f))
                     }
@@ -1196,7 +1200,7 @@ fun PrayerCard(prayer: TravelPrayer) {
             }
             Column(horizontalAlignment = Alignment.End) {
                 Surface(shape = RoundedCornerShape(8.dp), color = prayer.color.copy(0.15f)) {
-                    Text("${prayer.rakaat} ركعات",
+                    Text("${prayer.rakaat} ${stringResource(R.string.rakats)}",
                         Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                         style      = MaterialTheme.typography.labelMedium,
                         color      = prayer.color,
@@ -1204,7 +1208,7 @@ fun PrayerCard(prayer: TravelPrayer) {
                 }
                 if (prayer.isShortened) {
                     Spacer(Modifier.height(4.dp))
-                    Text("قصر",
+                    Text(stringResource(R.string.shortened),
                         style = MaterialTheme.typography.labelSmall,
                         color = prayer.color)
                 }
@@ -1217,21 +1221,16 @@ fun PrayerCard(prayer: TravelPrayer) {
 //  HELPERS
 // ══════════════════════════════════════════════════════════════════════════════
 
-private fun defaultPrayers(): List<TravelPrayer> = listOf(
-    TravelPrayer("الفجر",  "—", 2, Icons.Default.WbTwilight, Color(0xFF5C6BC0), false, false),
-    TravelPrayer("الظهر",  "—", 4, Icons.Default.WbSunny,    Color(0xFFFF8F00), false, false),
-    TravelPrayer("العصر",  "—", 4, Icons.Default.WbSunny,    Color(0xFFEF6C00), false, false),
-    TravelPrayer("المغرب", "—", 3, Icons.Default.WbTwilight, Color(0xFFE53935), false, false),
-    TravelPrayer("العشاء", "—", 4, Icons.Default.NightsStay, Color(0xFF283593), false, false)
-)
 
+
+@Composable
 fun getDirectionText(degrees: Float): String = when {
-    degrees >= 337.5 || degrees < 22.5  -> "شمال"
-    degrees >= 22.5  && degrees < 67.5  -> "شمال شرق"
-    degrees >= 67.5  && degrees < 112.5 -> "شرق"
-    degrees >= 112.5 && degrees < 157.5 -> "جنوب شرق"
-    degrees >= 157.5 && degrees < 202.5 -> "جنوب"
-    degrees >= 202.5 && degrees < 247.5 -> "جنوب غرب"
-    degrees >= 247.5 && degrees < 292.5 -> "غرب"
-    else                                 -> "شمال غرب"
+    degrees >= 337.5 || degrees < 22.5  -> stringResource(R.string.north)
+    degrees >= 22.5  && degrees < 67.5  -> stringResource(R.string.north_east)
+    degrees >= 67.5  && degrees < 112.5 -> stringResource(R.string.east)
+    degrees >= 112.5 && degrees < 157.5 -> stringResource(R.string.south_east)
+    degrees >= 157.5 && degrees < 202.5 -> stringResource(R.string.south)
+    degrees >= 202.5 && degrees < 247.5 -> stringResource(R.string.south_west)
+    degrees >= 247.5 && degrees < 292.5 -> stringResource(R.string.west)
+    else                                 -> stringResource(R.string.north_west)
 }

@@ -3,6 +3,7 @@ package com.elsharif.dailyseventy.domain.dailyazkar
 
 import android.content.Context
 import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.Calendar
@@ -29,5 +30,9 @@ fun scheduleSunriseReminder(context: Context, hour: Int, minute: Int) {
         .setInputData(inputData)
         .build()
 
-    WorkManager.getInstance(context).enqueue(workRequest)
+    WorkManager.getInstance(context).enqueueUniqueWork(
+        "sunrise_azkar_work",
+        ExistingWorkPolicy.REPLACE, // أو KEEP حسب مزاجك
+        workRequest
+    )
 }

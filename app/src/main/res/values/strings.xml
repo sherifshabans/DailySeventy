@@ -308,6 +308,8 @@
     <string name="muezzin_ahmed_alnafees">أحمد النفيس</string>
     <string name="muezzin_nuaaynah">نعينع</string>
     <string name="muezzin_saad_alghamidi">سعد الغامدي</string>
+    <string name="elbna">محمود البنا</string>
+    <string name="refat">محمد رفعت</string>
 
     <string name="select_preferred_sound">اختر الصوت المفضل لديك لكل صلاة</string>
     <string name="regular_prayers">الصلوات العادية</string>
@@ -386,5 +388,447 @@
     <string name="last_seven_days">آخر سبعة أيام</string>
 
     <string name="rawdat_al_dhakireen">روضة الذاكرين</string>
+
+     <string name="shafii_madhab">المذهب الشافعي</string>
+        <string name="umdat_al_salik">عمدة السالك</string>
+        <string name="skip">تخطي</string>
+        <string name="previous">السابق</string>
+        <string name="next">التالي ←</string>
+        <string name="start_now">ابدأ الآن 🌙</string>
+        <string name="confirm">تأكيد</string>
+        <string name="done">تم</string>
+        <string name="info">معلومات</string>
+        <string name="warning">تحذير</string>
+        <string name="note">ملاحظة</string>
+        <string name="error">خطأ</string>
+        <string name="clear">مسح</string>
+        <string name="settings">الإعدادات</string>
+        <string name="about">عن التطبيق</string>
+        <string name="back">رجوع</string>
+        <string name="yes">نعم</string>
+        <string name="no">لا</string>
+
+        <!-- Travel Screen -->
+        <string name="travel_mode_title">وضع السفر</string>
+        <string name="travel_mode_active">نشط</string>
+        <string name="travel_mode_inactive">المذهب الشافعي · القصر والجمع</string>
+        <string name="destination">الوجهة</string>
+        <string name="from">من</string>
+        <string name="to">إلى</string>
+        <string name="time_difference">فرق التوقيت</string>
+        <string name="duration">المدة</string>
+        <string name="status">الحالة</string>
+        <string name="active">نشط</string>
+        <string name="inactive">غير نشط</string>
+        <string name="km">كم</string>
+        <string name="hours">س</string>
+        <string name="same_time">نفس التوقيت</string>
+        <string name="search_destination">ابحث عن وجهتك</string>
+        <string name="city_hint">مثال: أسيوط / ليبيا / Cairo</string>
+        <string name="selected_city">المدينة المحددة</string>
+        <string name="distance_to_kaaba">المسافة للكعبة</string>
+        <string name="north">شمال</string>
+        <string name="south">جنوب</string>
+        <string name="east">شرق</string>
+        <string name="west">غرب</string>
+        <string name="turn_left">انعطف %d° يساراً</string>
+        <string name="turn_right">انعطف %d° يميناً</string>
+        <string name="facing_qibla">✓ في الاتجاه الصحيح</string>
+        <string name="qibla_compass">اتجاه القبلة</string>
+        <string name="prayer_times">أوقات الصلاة</string>
+        <string name="normal">عادية</string>
+        <string name="shortened_combined">قصر وجمع</string>
+        <string name="rakats">ركعات</string>
+        <string name="shortened">قصر</string>
+        <string name="combined_with">يُجمع مع %s</string>
+        <string name="change_destination">تغيير الوجهة</string>
+        <string name="deactivate_travel">إيقاف السفر</string>
+        <string name="activate_travel">تفعيل السفر إلى %s</string>
+        <string name="change_destination_confirm">سيتم تغيير وجهة سفرك إلى %s. سيستمر وضع السفر نشطاً بالبيانات الجديدة.</string>
+        <string name="search_error_no_internet">لا يوجد اتصال بالإنترنت. تحقق وحاول مرة أخرى.</string>
+        <string name="search_error_generic">حدث خطأ. حاول مرة أخرى.</string>
+        <string name="travel_sharia_distance">سفر شرعي ✅</string>
+        <string name="travel_not_sharia_distance">ليس سفراً شرعياً ❌</string>
+        <string name="local_transport">🚂 محلي</string>
+        <string name="international_transport">✈️ دولي</string>
+        <string name="home">🏠 المنزل</string>
+        <string name="your_current_location">موقعك الحالي</string>
+        <string name="distance_is_approx">المسافة المحسوبة هوائية. الاعتبار الفقهي بالطريق الفعلي.</string>
+        <string name="qibla_bar_left">← يسار</string>
+        <string name="qibla_bar_right">يمين →</string>
+        <string name="qibla_bar_correct">✓ في الاتجاه الصحيح</string>
+
+        <!-- Islamic Rulings Card -->
+        <string name="rulings_title">أحكام المسافر</string>
+        <string name="rulings_conditions_qasr">شروط جواز القصر (٨)</string>
+        <string name="rulings_qasr_or_complete">القصر أم الإتمام؟</string>
+        <string name="rulings_when_travel_ends">متى ينتهي السفر؟</string>
+        <string name="rulings_categories_sinners">أقسام العصاة في السفر</string>
+        <string name="rulings_conditions_taqdeem">شروط جمع التقديم</string>
+        <string name="rulings_conditions_takheer">شروط جمع التأخير</string>
+        <string name="rulings_comparison">التقديم vs التأخير</string>
+        <string name="rulings_fasting_ramadan">فطر رمضان للمسافر</string>
+        <string name="rulings_mash_on_khuff">المسح على الخفين</string>
+        <string name="rulings_summary_conditions">٨ شروط يجب توافرها</string>
+        <string name="rulings_summary_qasr_better">الأصل، والأفضل، والواجب</string>
+        <string name="rulings_summary_end">٣ صور لانقطاع رخصة السفر</string>
+        <string name="rulings_summary_sinners">٣ أقسام وأحكامها</string>
+        <string name="rulings_summary_taqdeem">٤ شروط + محترزات</string>
+        <string name="rulings_summary_takheer">شرطان لا ثالث لهما</string>
+        <string name="rulings_summary_comparison">مقارنة شاملة + الأفضلية</string>
+        <string name="rulings_summary_fasting">الحكم والشروط والقضاء</string>
+        <string name="rulings_summary_mash">٣ أيام للمسافر، يوم للمقيم</string>
+        <string name="rulings_condition_1">١ – الصلاة رباعية مؤداة</string>
+        <string name="rulings_condition_1_detail">يُقصَر الظهر والعصر والعشاء فقط (من ٤ إلى ٢). الفجر والمغرب لا يُقصَران. يُشترط أن تكون مؤداةً لا مقضية: فلو قضى في السفر صلاةً فاتته في الحضر أتمّها، ولو قضى في الحضر ما فاته في السفر أتمّه أيضاً.</string>
+        <string name="rulings_condition_2">٢ – السفر الطويل (≥ ٨٢ كم)</string>
+        <string name="rulings_condition_2_detail">مرحلتان فأكثر = حوالي ٨٢ كيلومتراً بسير الأثقال المحمّلة مسيرة يوم وليلة. العبرة بقطع المسافة لا بالزمن، فلو قطعها بطائرة أو سفينة في لحظة جاز القصر.</string>
+        <string name="rulings_condition_3">٣ – السفر مباح (غير معصية)</string>
+        <string name="rulings_condition_3_detail">الواجب والمندوب والمباح والمكروه: يجوز فيها القصر. أما الحرام فلا قصر. لو تاب العاصي في أثناء سفره وبقي أمامه مرحلتان فأكثر جاز له القصر، وإلا فلا.</string>
+        <string name="rulings_condition_4">٤ – قصد مكان معلوم</string>
+        <string name="rulings_condition_4_detail">يجب أن يعلم أن مسافته مرحلتان فأكثر. الهائم لا يعرف وجهته لا يقصر. لو طلب عبداً آبقاً لا يعرف موضعه لم يجز إلا إذا علم أنه لا يجده إلا بعد مرحلتين.</string>
+        <string name="rulings_condition_5">٥ – مجاوزة عمران البلد</string>
+        <string name="rulings_condition_5_detail">إن كان للبلد سور → قصر بمجرد مجاوزة السور (حتى وإن وُجد عمران خارجه). إن لم يكن للبلد سور → يجب مجاوزة العمران كله حتى وإن تخلّله خراب. المزارع والبساتين والمقابر وراء البلد لا يجب مجاوزتها. البدوي يبدأ سفره بمفارقة خيام قومه لا خيمته وحدها.</string>
+        <string name="rulings_condition_6">٦ – دوام السفر إلى تمام الصلاة</string>
+        <string name="rulings_condition_6_detail">لو نوى الإقامة في أثناء الصلاة أو أقام فعلاً وجب الإتمام. نية إقامة ٤ أيام كاملة غير يومَي الدخول والخروج تُسقط الرخصة من لحظة النية.</string>
+        <string name="rulings_condition_7">٧ – نية القصر في تكبيرة الإحرام</string>
+        <string name="rulings_condition_7_detail">يجب اقتران نية القصر بتكبيرة الإحرام يقيناً. لو تأخرت أو تقدّمت وجب الإتمام. (المزني: يجوز النية في أثناء الصلاة. أبو حنيفة: القصر عزيمة لا تحتاج نية).</string>
+        <string name="rulings_condition_8">٨ – ألّا يقتدي بمتمّ في جزء من صلاته</string>
+        <string name="rulings_condition_8_detail">لو ائتمّ المسافر بمقيم في أي جزء من صلاته ولو في التشهد الأخير أو السلام وجب الإتمام. لو جهل نية إمامه وعلّق نيته عليها صحّ: إن قصر الإمام قصر، وإن أتمّ أتمّ.</string>
+        <string name="rulings_conditions_required_completion">⚠️ حالات يجب فيها الإتمام</string>
+        <string name="rulings_conditions_required_completion_detail">• نوى الإقامة في أثناء الصلاة\n• شكّ هل نوى القصر أم لا\n• تردّد هل يُتمّ أم يقصر\n• فرّ من سفره في أثناء الصلاة</string>
+        <string name="rulings_qasr_default">الأصل: الإتمام أفضل</string>
+        <string name="rulings_qasr_default_detail">في غير الحالات المذكورة الإتمام أفضل للمسافر؛ خروجاً من الخلاف. مثاله: الملاح الذي معه أهله في سفينته، الإمام مالك لا يُجيز له القصر فالأولى له الإتمام.</string>
+        <string name="rulings_qasr_better_4">القصر أفضل في ٤ حالات</string>
+        <string name="rulings_qasr_better_4_detail">١) إذا بلغت المسافة ≥ ١٢٣ كم (٣ مراحل)؛ خروجاً من خلاف أبي حنيفة الذي أوجبه.\n٢) إذا وجد في نفسه كراهية القصر.\n٣) إذا شكّ في دليل جواز القصر.\n٤) إذا كان ممّن يُقتدى به أمام الناس.</string>
+        <string name="rulings_qasr_obligatory_one">القصر واجب في حالة واحدة</string>
+        <string name="rulings_qasr_obligatory_one_detail">إذا ضاق الوقت عن الإتمام في حال السفر وجب القصر؛ حتى لا يخرج جزء من الصلاة عن الوقت.</string>
+        <string name="rulings_end_scenario1">الصورة الأولى: الوصول إلى الوطن</string>
+        <string name="rulings_end_scenario1_detail">بمجرد وصوله إلى سور وطنه (إن كان مسوّراً) أو إلى عمرانه (إن لم يكن مسوّراً) انقطع سفره حتى وإن لم يدخله.</string>
+        <string name="rulings_end_scenario2">الصورة الثانية: نية إقامة ٤ أيام</string>
+        <string name="rulings_end_scenario2_detail">نية إقامة ٤ أيام كاملة بلياليها غير يومَي الدخول والخروج تُصيّره مقيماً من لحظة النية. دليله: «يمكث المهاجر بعد قضاء نُسكه ثلاثاً» فثلاثة أيام لا تُصيّره مقيماً وما فوقها يُصيّره. تثبت الإقامة في كل مكان حتى الصحراء.</string>
+        <string name="rulings_end_scenario3">الصورة الثالثة: الإقامة الفعلية ٤ أيام</string>
+        <string name="rulings_end_scenario3_detail">إذا أقام فعلاً ٤ أيام غير يومَي الدخول والخروج وجب الإتمام حتى وإن لم ينوِ الإقامة؛ لأن الإقامة الفعلية أولى من النية.</string>
+        <string name="rulings_end_exception">استثناء: المقيم لحاجة ينتظر إنجازها</string>
+        <string name="rulings_end_exception_detail">إذا أقام لحاجة يتوقع إنجازها في كل وقت وينوي الارتحال متى انقضت، جاز له القصر إلى ١٨ يوماً كاملة. دليله: إقامة النبي ﷺ في حرب هوازن ١٨ يوماً يقصر ينتظر انجلاء الحرب. فإن تأخّرت حاجته أكثر من ذلك أتمّ.</string>
+        <string name="rulings_end_day_rule">📌 قاعدة يومَي الدخول والخروج</string>
+        <string name="rulings_end_day_rule_detail">• يوم الدخول ويوم الخروج لا يُحسبان من الأيام الأربعة.\n• لو دخل ليلاً لم يُحسب بقية الليل ويُحسب اليوم الذي يليه.\n• أبو حنيفة: ١٥ يوماً (مع يومَي الدخول والخروج) يُوجب الإتمام.</string>
+        <string name="rulings_sinners_category1">القسم الأول: العاصي بالسفر</string>
+        <string name="rulings_sinners_category1_detail">أنشأ سفره معصيةً من أوله (مثل: سافر ليسرق أو ليشرب الخمر). لا يجوز له القصر. لو تاب وبقي أمامه مرحلتان فأكثر جاز القصر، وإلا فلا.</string>
+        <string name="rulings_sinners_category2">القسم الثاني: قلب سفره معصية</string>
+        <string name="rulings_sinners_category2_detail">أنشأ سفره لغرض مباح ثم قلبه معصية. لو تاب جاز له القصر مطلقاً بغض النظر عن المسافة المتبقية؛ لأن نشأة سفره كانت مباحة.</string>
+        <string name="rulings_sinners_category3">القسم الثالث: العاصي في السفر</string>
+        <string name="rulings_sinners_category3_detail">أنشأ سفره مباحاً ووقعت منه معصية عارضة في أثنائه. لا يُمنع من القصر؛ لأنه لا يخلو أحد من الذنب.</string>
+        <string name="rulings_sinners_note">📌 رأي المخالفين</string>
+        <string name="rulings_sinners_note_detail">أبو حنيفة والثوري والأوزاعي والمزني: يجوز للعاصي الترخص بجميع رخص السفر. المعتمد في المذهب الشافعي: لا رخصة في سفر المعصية.</string>
+        <string name="rulings_taqdeem_condition1">الشرط الأول: الترتيب</string>
+        <string name="rulings_taqdeem_condition1_detail">يبدأ بالأولى: الظهر قبل العصر، المغرب قبل العشاء. لو عكس: صحّت الأولى دون الثانية، وتقع الثانية نفلاً مطلقاً للجاهل أو الناسي.</string>
+        <string name="rulings_taqdeem_condition2">الشرط الثاني: نية الجمع قبل فراغ الأولى</string>
+        <string name="rulings_taqdeem_condition2_detail">ينوي جمع التقديم في أثناء الصلاة الأولى ولو مع السلام منها. الأفضل أن تكون النية مع تكبيرة الإحرام. (المزني: لا تُشترط النية. معتمد المذهب: تُشترط).\nالفرق عن القصر: في القصر لا بد أن تقترن النية بالإحرام؛ لأن تأخيرها يُؤدّي جزءاً منها تاماً.</string>
+        <string name="rulings_taqdeem_condition3">الشرط الثالث: الموالاة</string>
+        <string name="rulings_taqdeem_condition3_detail">لا يطول الفصل بين الصلاتين عرفاً. الضابط: أقل من ركعتين خفيفتين عند بعضهم. يُغتفر للمتيمم طلب خفيف؛ لأنه يحتاج إلى تيمم جديد للثانية.</string>
+        <string name="rulings_taqdeem_condition4">الشرط الرابع: دوام السفر إلى تمام الإحرام بالثانية</string>
+        <string name="rulings_taqdeem_condition4_detail">يستمر عذر السفر إلى نهاية تكبيرة الإحرام بالصلاة الثانية. لو أقام أو نوى الإقامة قبل ذلك لم يجز الجمع.</string>
+        <string name="rulings_taqdeem_caveats">محترزات: متى تبطل أو يجب التأخير؟</string>
+        <string name="rulings_taqdeem_caveats_detail">• قدّم الثانية على الأولى → الثانية باطلة.\n• لم ينوِ الجمع في الأولى → يجب تأخير الثانية إلى وقتها.\n• فرّق بينهما تفريقاً كثيراً → يجب تأخير الثانية إلى وقتها.\n• أقام قبل الشروع في الثانية → يجب تأخيرها.\n• أقام بعد فراغهما أو في أثناء الثانية → مضتا على الصحة.</string>
+        <string name="rulings_taqdeem_sunnah_note">📌 الرواتب مع جمع التقديم</string>
+        <string name="rulings_taqdeem_sunnah_note_detail">سنة الظهر القبلية، ثم الفرضان، ثم سنة الظهر البعدية، ثم سنة العصر. لا يجوز تقديم راتبة الثانية قبل الفرضين.</string>
+        <string name="rulings_takheer_condition1">الشرط الأول: نية التأخير قبل خروج وقت الأولى</string>
+        <string name="rulings_takheer_condition1_detail">ينوي تأخيرها إلى وقت الثانية قبل أن يخرج وقت الأولى. الرملي والخطيب: يمتد وقت النية حتى يبقى ما يسع الصلاة كاملةً. ابن حجر: يكفي أن يبقى ما يسع ركعة واحدة. لو أخّر الأولى بلا نية جمع تأخير → أثم وكانت قضاءً.</string>
+        <string name="rulings_takheer_condition2">الشرط الثاني: دوام السفر إلى تمام الصلاتين</string>
+        <string name="rulings_takheer_condition2_detail">يستمر السفر إلى نهاية الصلاة الثانية. لو أقام قبل فعلهما بطل الجمع وصارت التابعة قضاءً لا إثم فيه.</string>
+        <string name="rulings_takheer_diff_from_taqdeem">الفارق عن التقديم: الترتيب والموالاة مندوبان</string>
+        <string name="rulings_takheer_diff_from_taqdeem_detail">في جمع التأخير:\n• الترتيب (الأولى قبل الثانية): مندوب لا واجب.\n• الموالاة بين الصلاتين: مندوبة لا واجبة.\n• نية الجمع في الأولى: مندوبة.</string>
+        <string name="rulings_comparison_time_of_intention">وقت النية</string>
+        <string name="rulings_comparison_time_of_intention_taqdeem">التقديم: من الإحرام إلى السلام من الأولى</string>
+        <string name="rulings_comparison_time_of_intention_takheer">التأخير: من دخول وقت الأولى إلى أن يبقى ما يسع الصلاة</string>
+        <string name="rulings_comparison_duration_of_excuse">دوام العذر</string>
+        <string name="rulings_comparison_duration_of_excuse_taqdeem">التقديم: إلى تمام الإحرام بالثانية</string>
+        <string name="rulings_comparison_duration_of_excuse_takheer">التأخير: إلى تمام الصلاة الثانية كاملةً</string>
+        <string name="rulings_comparison_consecutiveness_order">الموالاة والترتيب</string>
+        <string name="rulings_comparison_consecutiveness_order_taqdeem">التقديم: واجبان</string>
+        <string name="rulings_comparison_consecutiveness_order_takheer">التأخير: مندوبان</string>
+        <string name="rulings_comparison_which_better">أيهما أفضل للمسافر؟</string>
+        <string name="rulings_comparison_which_better_detail">• سائر في وقت الأولى ونازل في وقت الثانية → التأخير أفضل (أيسر عليه).\n• نازل في وقت الأولى وسائر في وقت الثانية → التقديم أفضل.\n• نازل في وقتهما أو سائر فيهما → خلاف: ابن حجر: التقديم أفضل (براءة ذمة). الرملي: التأخير أفضل (وقت الثانية وقت للأولى).</string>
+        <string name="rulings_fasting_permits">يجوز الفطر بشروط</string>
+        <string name="rulings_fasting_permits_detail">يجوز الفطر إذا بلغت المسافة الحدّ الشرعي وخرج من بلده قبل طلوع الفجر. الصيام أفضل إن لم يَشقّ عليه.</string>
+        <string name="rulings_fasting_makeup">القضاء والكفارة</string>
+        <string name="rulings_fasting_makeup_detail">يجب القضاء بعدد الأيام التي أفطرها. لا كفارة على المسافر الذي أفطر.</string>
+        <string name="rulings_fasting_start_then_travel">لو شرع في الصيام ثم سافر</string>
+        <string name="rulings_fasting_start_then_travel_detail">جاز له الفطر في ذلك اليوم.</string>
+        <string name="rulings_mash_duration">مدة المسح</string>
+        <string name="rulings_mash_duration_detail">المسافر: ٣ أيام بلياليها (٧٢ ساعة). المقيم: يوم وليلة (٢٤ ساعة).</string>
+        <string name="rulings_mash_start">بداية الحساب وشروط اللبس</string>
+        <string name="rulings_mash_start_detail">تُحسب المدة من أول مسح بعد الحدث لا من وقت اللبس. يُشترط لبس الخف على طهارة كاملة.</string>
+        <string name="rulings_mash_invalidators">نواقض المسح</string>
+        <string name="rulings_mash_invalidators_detail">الجنابة، أو نزع الخف، أو انتهاء المدة.</string>
+
+        <!-- Tree Screen -->
+        <string name="tree_title">شجرة الأجر</string>
+        <string name="tree_greeting_fajr">الفجر ينير الدرب</string>
+        <string name="tree_greeting_morning">صباح النور والبركة</string>
+        <string name="tree_greeting_afternoon">نهارك مبارك ومنير</string>
+        <string name="tree_greeting_maghrib">المغرب يُقبل بالرحمة</string>
+        <string name="tree_greeting_night">ليلة مباركة هادئة</string>
+        <string name="tree_level">المستوى %d</string>
+        <string name="tree_points">%d نقطة</string>
+        <string name="tree_total_points">إجمالي النقاط</string>
+        <string name="tree_leaves">أوراق</string>
+        <string name="tree_flowers">زهور</string>
+        <string name="tree_fruits">ثمار</string>
+        <string name="tree_branch_strength">قوة الأغصان</string>
+        <string name="tree_branch_strength_detail">كل ٣ حوقلات تُقوّي غصناً جديداً</string>
+        <string name="tree_progress_to_next">%d نقطة للمستوى التالي</string>
+        <string name="tree_prayer_hint_fajr">🕌 وقت صلاة الفجر</string>
+        <string name="tree_prayer_hint_morning">🌅 بعد صلاة الفجر</string>
+        <string name="tree_prayer_hint_afternoon">🕌 قريباً وقت العصر</string>
+        <string name="tree_prayer_hint_maghrib">🕌 وقت صلاة المغرب</string>
+        <string name="tree_prayer_hint_night">🕌 وقت صلاة العشاء</string>
+        <string name="tree_dhikr_prompt">سبّح لتنمو شجرتك</string>
+        <string name="tree_each_dhikr_bears_fruit">🌿 كل تسبيحة تُثمر</string>
+        <string name="tree_total_dhikr">إجمالي التسبيح</string>
+        <string name="tree_times">مرة</string>
+        <string name="tree_group_leaves">🍃 تُنمي الأوراق</string>
+        <string name="tree_group_flowers">🌸 تُفتح الزهور</string>
+        <string name="tree_group_fruits">🍎 تُثمر الشجرة</string>
+        <string name="tree_group_branches">🌿 تُقوّي الأغصان</string>
+        <string name="tree_hint_subhanallah">كل ٥ = ورقة</string>
+        <string name="tree_hint_alhamdulillah">كل ٥ = زهرة</string>
+        <string name="tree_hint_allahuakbar">كل ١٠ = ثمرة</string>
+        <string name="tree_hint_lailaha">كل ٤ = ورقتان</string>
+        <string name="tree_hint_astaghfirullah">كل ٥ = ورقة جديدة</string>
+        <string name="tree_hint_bismillah">كل ٨ = زهرة</string>
+        <string name="tree_hint_mashallah">كل ٨ = زهرة</string>
+        <string name="tree_hint_salawat">كل ٥ = ثمرتان</string>
+        <string name="tree_hint_hawqala">كل ٣ = غصن أقوى</string>
+        <string name="tree_activities">آخر الأنشطة</string>
+        <string name="tree_level_up">ارتقت شجرتك! %s</string>
+        <string name="tree_level_up_detail">بارك الله فيك، وصلت للمستوى %d</string>
+        <string name="tree_level_up_continue">استمر في الذكر لتنمو شجرتك وتُزهر وتُثمر</string>
+        <string name="tree_level_up_button">بإذن الله نكمل 🌿</string>
+        <string name="tree_reset_title">إعادة تعيين الشجرة؟</string>
+        <string name="tree_reset_message">ستُحذف جميع نقاطك وتسبيحاتك ومستواك نهائياً. هذا الإجراء لا يمكن التراجع عنه.</string>
+        <string name="tree_reset_confirm">نعم، إعادة تعيين</string>
+        <string name="tree_stage_seed">🌱 بذرة</string>
+        <string name="tree_stage_sapling">🌿 شتلة</string>
+        <string name="tree_stage_tree">🌳 شجرة</string>
+        <string name="tree_stage_blooming">🌸 مزهرة</string>
+        <string name="tree_stage_fruiting">🍎 مثمرة</string>
+        <string name="tree_stage_towering">✨ باسقة</string>
+
+        <!-- Onboarding -->
+        <string name="onboarding_welcome_title">أهلاً بك في سبعون مرة 🌙</string>
+        <string name="onboarding_welcome_subtitle">رفيقك اليومي للذكر والعبادة</string>
+        <string name="onboarding_welcome_description">تطبيق إسلامي صُمِّم ليكون معك في كل وقت،\nيذكّرك بمواقيت الصلاة و بأذكار الصباح والمساء، ويعينك على\nإحياء السنن والعبادات اليومية بسهولة.</string>
+        <string name="onboarding_welcome_tip">دعنا نريك ما يمكنك فعله 👇</string>
+        <string name="onboarding_azkar_title">الأذكار</string>
+        <string name="onboarding_azkar_subtitle">أذكار الصباح والمساء والنوم</string>
+        <string name="onboarding_azkar_description">مكتبة شاملة من أذكار الصباح والمساء\nوأذكار النوم والاستيقاظ، مع العدد المطلوب\nلكل ذكر وبيان فضله.</string>
+        <string name="onboarding_azkar_tip">💡 اضغط على الذكر للعدّ، واضغط مطولاً لرؤية التفاصيل</string>
+        <string name="onboarding_hijri_title">التاريخ الهجري</string>
+        <string name="onboarding_hijri_subtitle">ابقَ على اطلاع بالتاريخ الإسلامي</string>
+        <string name="onboarding_hijri_description">يعرض التاريخ الهجري الحالي بدقة،\nمع المناسبات الإسلامية والأيام الفضيلة\nكأيام البيض وعاشوراء وغيرها.</string>
+        <string name="onboarding_hijri_tip">💡 التاريخ يتحدث تلقائياً كل يوم</string>
+        <string name="onboarding_location_title">تحديد الموقع</string>
+        <string name="onboarding_location_subtitle">حدد مدينتك لدقة المواقيت والقبلة</string>
+        <string name="onboarding_location_description">اضبط موقعك الجغرافي مرة واحدة\nليحسب التطبيق مواقيت الصلاة واتجاه القبلة\nبدقة عالية لأي مدينة في العالم.</string>
+        <string name="onboarding_location_tip">⚠️ مهم: ابدأ بتحديد موقعك لتعمل باقي الخدمات بشكل صحيح</string>
+        <string name="onboarding_prayer_times_title">مواقيت الصلاة</string>
+        <string name="onboarding_prayer_times_subtitle">لا تفوّت وقت صلاة</string>
+        <string name="onboarding_prayer_times_description">مواقيت الصلوات الخمس محسوبة بدقة\nحسب موقعك، مع تنبيهات قابلة للتخصيص\nوعرض جدول الشهر كاملاً.</string>
+        <string name="onboarding_prayer_times_tip">💡 فعّل التنبيهات من الإعدادات لتُذكَّر قبل كل صلاة</string>
+        <string name="onboarding_tasbih_title">المسبحة الرقمية</string>
+        <string name="onboarding_tasbih_subtitle">سبّح في أي وقت وأي مكان</string>
+        <string name="onboarding_tasbih_description">مسبحة رقمية أنيقة تعدّ تسبيحاتك،\nيمكنك تخصيص الهدف وإعادة التعيين،\nمع حفظ إجمالي التسبيحات اليومي.</string>
+        <string name="onboarding_tasbih_tip">💡 اضغط في أي مكان على الشاشة للعدّ</string>
+        <string name="onboarding_qibla_title">اتجاه القبلة</string>
+        <string name="onboarding_qibla_subtitle">اعرف اتجاه الكعبة أينما كنت</string>
+        <string name="onboarding_qibla_description">بوصلة دقيقة تُظهر اتجاه القبلة\nبناءً على موقعك الحالي، مع عرض\nالمسافة إلى مكة المكرمة.</string>
+        <string name="onboarding_qibla_tip">💡 تأكد من تفعيل الموقع لدقة أفضل</string>
+        <string name="onboarding_tree_title">شجرة الأجر</string>
+        <string name="onboarding_tree_subtitle">حوّل أذكارك إلى أجر متصاعد</string>
+        <string name="onboarding_tree_description">تصوّر ثواب ذكرك بشكل مرئي جميل،\nكلما أكثرت من الذكر كلما نمت شجرتك\nوازداد أجرك إن شاء الله.</string>
+        <string name="onboarding_tree_tip">💡 ذكر واحد قد يزن الجبال — لا تستهن</string>
+        <string name="onboarding_travel_title">دليل المسافر</string>
+        <string name="onboarding_travel_subtitle">أذكار وأحكام المسافر</string>
+        <string name="onboarding_travel_description">دليلك الشامل في السفر: أذكار السفر،\nأحكام قصر الصلاة والجمع،\nوآداب السفر الإسلامية.</string>
+        <string name="onboarding_travel_tip">💡 احفظه قبل سفرك لتصفحه بدون إنترنت</string>
+        <string name="onboarding_garden_title">غراس الجنة</string>
+        <string name="onboarding_garden_subtitle">ازرع في جنتك كل يوم</string>
+        <string name="onboarding_garden_description">الكلمات الأربع الأحب إلى الله:\nسبحان الله، والحمد لله،\nولا إله إلا الله، والله أكبر.\nواظب عليها وتتبع تقدمك.</string>
+        <string name="onboarding_garden_tip">💡 \"كلمتان خفيفتان على اللسان، ثقيلتان في الميزان\"</string>
+
+        <!-- Garden Screen -->
+        <string name="garden_title">روضة الذاكرين</string>
+        <string name="garden_anwar">%d نور</string>
+        <string name="garden_today_awrad">%d ورد اليوم</string>
+        <string name="garden_combo_excellent">ممتاز</string>
+        <string name="garden_combo_amazing">رائع!</string>
+        <string name="garden_combo_brilliant">مبهر!</string>
+        <string name="garden_combo_mashaAllah">ماشاء الله</string>
+        <string name="garden_combo_x">×%d</string>
+        <string name="garden_wird">ورد: %d</string>
+        <string name="garden_nur">%d نور</string>
+        <string name="garden_wird_complete">ورد مكتمل</string>
+        <string name="garden_wird_complete_message">اللهم تقبل منا — الورد رقم %d</string>
+        <string name="garden_wird_complete_hadith">«لا يزال لسانك رطباً من ذكر الله»</string>
+        <string name="garden_wird_reward">+%d نور  ·  مكافأة الورد</string>
+        <string name="garden_plant_empty">فارغة</string>
+        <string name="garden_plant_seed">بذرة</string>
+        <string name="garden_plant_sprout">شتلة</string>
+        <string name="garden_plant_young">ناشئة</string>
+        <string name="garden_plant_mature">ناضجة</string>
+        <string name="garden_plant_blooming">مزهرة</string>
+        <string name="garden_plant_jasmine">ياسمين</string>
+        <string name="garden_plant_sunflower">عباد الشمس</string>
+        <string name="garden_plant_rose">وردة</string>
+        <string name="garden_plant_lotus">لوتس</string>
+        <string name="garden_plant_lavender">خزامى</string>
+        <string name="garden_plant_mint">نعناع</string>
+        <string name="garden_plant_tulip">زنبق</string>
+        <string name="garden_plant_chamomile">بابونج</string>
+        <string name="garden_anwar_base">%d نور</string>
+    <!-- Garden Screen -->
+    <string name="garden_session_info">%1$d نور · %2$d ورد اليوم</string>
+    <string name="garden_plus_anwar">+%d نور</string>
+    <string name="garden_combo_format">×%1$d %2$s</string>
+    <string name="garden_wird_count">ورد: %d</string>
+
+        <!-- Dhikr phrases (full) -->
+        <string name="dhikr_subhanallah">سُبْحَانَ اللَّهِ</string>
+        <string name="dhikr_alhamdulillah">الْحَمْدُ لِلَّهِ</string>
+        <string name="dhikr_allahuakbar">اللَّهُ أَكْبَرُ</string>
+        <string name="dhikr_astaghfirullah">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</string>
+        <string name="dhikr_salawat">اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ ﷺ</string>
+        <string name="dhikr_tahleel">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</string>
+        <string name="dhikr_hawqala">لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ الْعَلِيِّ الْعَظِيمِ</string>
+        <string name="dhikr_hasbiyallah">حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ</string>
+        <string name="dhikr_short_subhanallah">سبحان الله</string>
+        <string name="dhikr_short_hamd">الحمد لله</string>
+        <string name="dhikr_short_akbar">الله أكبر</string>
+        <string name="dhikr_short_istighfar">أستغفر الله</string>
+        <string name="dhikr_short_salah">صلِّ على النبي</string>
+        <string name="dhikr_short_tahleel">لا إله إلا الله</string>
+        <string name="dhikr_short_hawqala">لا حول ولا قوة إلا بالله</string>
+        <string name="dhikr_short_hasbiyallah">حسبي الله</string>
+        <string name="dhikr_plus_points">+%d</string>
+
+        <!-- Prayer names -->
+        <string name="prayer_fajr">الفجر</string>
+        <string name="prayer_dhuhr">الظهر</string>
+        <string name="prayer_asr">العصر</string>
+        <string name="prayer_maghrib">المغرب</string>
+        <string name="prayer_isha">العشاء</string>
+
+        <!-- Travel status -->
+        <string name="travel_status_active_train">🚂  وضع السفر نشط</string>
+        <string name="travel_status_active_plane">✈️  وضع السفر نشط</string>
+        <string name="travel_status_departure">منطلق</string>
+        <string name="travel_status_destination">وجهة</string>
+        <string name="travel_status_current_location">موقعك الحالي</string>
+        <string name="travel_status_duration_unknown">—</string>
+
+        <!-- City search -->
+        <string name="city_search_hint">مثال: أسيوط / ليبيا / Cairo</string>
+        <string name="city_search_placeholder">ابحث عن مدينة</string>
+        <string name="city_search_no_results">لم يتم العثور على مدن</string>
+        <string name="city_search_error">حدث خطأ أثناء البحث</string>
+
+
+    <!-- Additional strings for TravelScreen -->
+    <string name="city_search_instruction">اكتب اسم المدينة بأي لغة</string>
+    <string name="travel_sharia">سفر شرعي</string>
+    <string name="travel_not_sharia">ليس سفراً شرعياً</string>
+    <string name="rulings_permitted_summary">✅ يجوز القصر والجمع والفطر</string>
+    <string name="rulings_not_permitted_summary">❌ المسافة (%d كم تقريبًا) دون الحد الشرعي (%d كم)</string>
+    <string name="rulings_qasr_label">القصر</string>
+    <string name="rulings_jam_label">الجمع</string>
+    <string name="rulings_fitr_label">فطر رمضان</string>
+    <string name="rulings_mash_label">مسح ٣ أيام</string>
+    <string name="hide_details">إخفاء التفاصيل</string>
+    <string name="show_details">عرض التفاصيل الفقهية</string>
+    <string name="change_destination_confirm_note">سيستمر وضع السفر نشطاً بالبيانات الجديدة.</string>
+    <string name="north_east">شمال شرق</string>
+    <string name="south_east">جنوب شرق</string>
+    <string name="south_west">جنوب غرب</string>
+    <string name="north_west">شمال غرب</string>
+
+
+
+    <!-- Islamic Rulings Card -->
+    <string name="rulings_subtitle">المذهب الشافعي – عمدة السالك</string>
+
+    <!-- 1. شروط جواز القصر -->
+    <string name="rulings_qasr_conditions_title">شروط جواز القصر</string>
+    <string name="rulings_qasr_conditions_summary">٨ شروط يجب توافرها</string>
+
+    <!-- 2. القصر أم الإتمام؟ -->
+    <string name="rulings_qasr_better_title">القصر أم الإتمام؟</string>
+    <string name="rulings_qasr_better_summary">الأصل، والأفضل، والواجب</string>
+
+    <!-- 3. متى ينتهي السفر؟ -->
+    <string name="rulings_end_title">متى ينتهي السفر؟</string>
+    <string name="rulings_end_summary">٣ صور لانقطاع رخصة السفر</string>
+
+    <!-- 4. أقسام العصاة في السفر -->
+    <string name="rulings_sinners_title">أقسام العصاة في السفر</string>
+    <string name="rulings_sinners_summary">٣ أقسام وأحكامها</string>
+
+    <!-- 5. شروط جمع التقديم -->
+    <string name="rulings_taqdeem_title">شروط جمع التقديم</string>
+    <string name="rulings_taqdeem_summary">٤ شروط + محترزات</string>
+
+    <!-- 6. شروط جمع التأخير -->
+    <string name="rulings_takheer_title">شروط جمع التأخير</string>
+    <string name="rulings_takheer_summary">شرطان لا ثالث لهما</string>
+
+    <!-- 7. مقارنة التقديم والتأخير -->
+    <string name="rulings_comparison_title">التقديم vs التأخير</string>
+    <string name="rulings_comparison_summary">مقارنة شاملة + الأفضلية</string>
+
+    <!-- 8. فطر رمضان -->
+    <string name="rulings_fitr_title">فطر رمضان للمسافر</string>
+    <string name="rulings_fitr_summary">الحكم والشروط والقضاء</string>
+
+    <string name="rulings_fitr_permits">يجوز الفطر بشروط</string>
+    <string name="rulings_fitr_permits_detail">يجوز الفطر إذا بلغت المسافة الحدّ الشرعي وخرج من بلده قبل طلوع الفجر. الصيام أفضل إن لم يَشقّ عليه.</string>
+    <string name="rulings_fitr_makeup">القضاء والكفارة</string>
+    <string name="rulings_fitr_makeup_detail">يجب القضاء بعدد الأيام التي أفطرها. لا كفارة على المسافر الذي أفطر.</string>
+    <string name="rulings_fitr_start_then_travel">لو شرع في الصيام ثم سافر</string>
+    <string name="rulings_fitr_start_then_travel_detail">جاز له الفطر في ذلك اليوم.</string>
+
+    <!-- 9. المسح على الخفين -->
+    <string name="rulings_mash_title">المسح على الخفين</string>
+    <string name="rulings_mash_summary">٣ أيام للمسافر، يوم للمقيم</string>
+
+    <string name="plus_d">+%d</string>
+
+    <!-- Tree Screen - إضافات جديدة -->
+    <string name="tree_times_format">%d مرة</string>
+    <string name="tree_branch_max">أقصى قوة ✨</string>
+    <string name="tree_branch_progress">%1$d / %2$d</string>
+    <string name="tree_times_x">%d×</string>
+
+    <!-- Dhikr short names (إضافة ما هو مفقود) -->
+    <string name="dhikr_short_bismillah">سبحان الله وبحمده</string>
+    <string name="dhikr_short_mashallah">سبحان الله العظيم</string>
+
+    <!-- Prayer hints -->
+    <string name="prayer_hint_fajr">🕌 وقت صلاة الفجر</string>
+    <string name="prayer_hint_morning">🌅 بعد صلاة الفجر</string>
+    <string name="prayer_hint_afternoon">🕌 قريباً وقت العصر</string>
+    <string name="prayer_hint_maghrib">🕌 وقت صلاة المغرب</string>
+    <string name="prayer_hint_night">🕌 وقت صلاة العشاء</string>
+    <string name="tree_level_points">المستوى %1$d · %2$d نقطة</string>
+
+    <string name="color_blue">أزرق</string>
+    <string name="color_red">أحمر</string>
+    <string name="color_green">أخضر</string>
+    <string name="color_purple">بنفسجي</string>
+    <string name="color_orange">برتقالي</string>
+    <string name="color_yellow">أصفر</string>
+    <string name="color_cyan">سماوي</string>
+    <string name="color_brown">بني</string>
+    <string name="color_gray">رمادي</string>
+
 
 </resources>

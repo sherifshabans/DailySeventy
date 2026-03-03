@@ -12,6 +12,22 @@ plugins {
 
 }
 
+
+tasks.register<Exec>("translateStrings") {
+    commandLine(
+        "C:\\Users\\ElSha\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        rootProject.projectDir.absolutePath + "\\translate_strings.py"
+    )
+    workingDir = rootProject.projectDir
+}
+
+tasks.whenTaskAdded {
+    if (name == "preBuild") {
+        dependsOn("translateStrings")
+    }
+}
+
+
 android {
     namespace = "com.elsharif.dailyseventy"
     compileSdk = 35
@@ -28,8 +44,8 @@ android {
         minSdk = 24
         targetSdk = 35
 
-        versionCode = 7
-        versionName = "1.6"
+        versionCode = 8
+        versionName = "1.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

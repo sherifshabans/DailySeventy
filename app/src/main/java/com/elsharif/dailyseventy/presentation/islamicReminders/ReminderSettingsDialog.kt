@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,12 +25,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.elsharif.dailyseventy.R
 import com.elsharif.dailyseventy.domain.data.preferences.IslamicReminderPreferences
 import com.elsharif.dailyseventy.domain.islamicReminder.IslamicReminderManager
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReminderSettingsDialog(
@@ -44,7 +48,6 @@ fun ReminderSettingsDialog(
 
     LaunchedEffect(showDialog) {
         if (showDialog) {
-            // إعادة تعيين القيم من Preferences عند فتح الدايلوج
             isFastingReminderEnabled = preferences.isFastingReminderEnabled
             isMondayThursdayEnabled = preferences.isMondayThursdayEnabled
             isWhiteDaysEnabled = preferences.isWhiteDaysEnabled
@@ -54,93 +57,114 @@ fun ReminderSettingsDialog(
     }
 
     if (showDialog) {
-        AlertDialog(
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
             onDismissRequest = onDismiss,
-            title = {
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surface,
+            tonalElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 40.dp)
+            ) {
+                // Header
                 Text(
                     text = stringResource(R.string.reminder_settings),
                     style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center
+                    fontWeight = FontWeight.ExtraBold,
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
-            },
-            text = {
-                Column {
-                    ReminderToggleItem(
-                        title = stringResource(R.string.fasting_reminders),
-                        subtitle = stringResource(R.string.fasting_reminders_subtitle),
-                        checked = isFastingReminderEnabled,
-                        onCheckedChange = {
-                            isFastingReminderEnabled = it
-                            // لا تحفظ هنا - فقط عدل الـ state
-                            if (!it) {
-                                isMondayThursdayEnabled = false
-                                isWhiteDaysEnabled = false
-                            }
+
+                // Content
+                ReminderToggleItem(
+                    title = stringResource(R.string.fasting_reminders),
+                    subtitle = stringResource(R.string.fasting_reminders_subtitle),
+                    checked = isFastingReminderEnabled,
+                    onCheckedChange = {
+                        isFastingReminderEnabled = it
+                        if (!it) {
+                            isMondayThursdayEnabled = false
+                            isWhiteDaysEnabled = false
                         }
-                    )
+                    }
+                )
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                    ReminderToggleItem(
-                        title = stringResource(R.string.monday_thursday),
-                        subtitle = stringResource(R.string.monday_thursday_subtitle),
-                        checked = isMondayThursdayEnabled,
-                        onCheckedChange = { isMondayThursdayEnabled = it },
-                        enabled = isFastingReminderEnabled
-                    )
+                ReminderToggleItem(
+                    title = stringResource(R.string.monday_thursday),
+                    subtitle = stringResource(R.string.monday_thursday_subtitle),
+                    checked = isMondayThursdayEnabled,
+                    onCheckedChange = { isMondayThursdayEnabled = it },
+                    enabled = isFastingReminderEnabled
+                )
 
-                    ReminderToggleItem(
-                        title = stringResource(R.string.white_days),
-                        subtitle = stringResource(R.string.white_days_subtitle),
-                        checked = isWhiteDaysEnabled,
-                        onCheckedChange = { isWhiteDaysEnabled = it },
-                        enabled = isFastingReminderEnabled
-                    )
+                ReminderToggleItem(
+                    title = stringResource(R.string.white_days),
+                    subtitle = stringResource(R.string.white_days_subtitle),
+                    checked = isWhiteDaysEnabled,
+                    onCheckedChange = { isWhiteDaysEnabled = it },
+                    enabled = isFastingReminderEnabled
+                )
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                    ReminderToggleItem(
-                        title = stringResource(R.string.eid_reminders),
-                        subtitle = stringResource(R.string.eid_reminders_subtitle),
-                        checked = isEidReminderEnabled,
-                        onCheckedChange = { isEidReminderEnabled = it }
-                    )
+                ReminderToggleItem(
+                    title = stringResource(R.string.eid_reminders),
+                    subtitle = stringResource(R.string.eid_reminders_subtitle),
+                    checked = isEidReminderEnabled,
+                    onCheckedChange = { isEidReminderEnabled = it }
+                )
 
-                    ReminderToggleItem(
-                        title = stringResource(R.string.religious_occasions),
-                        subtitle = stringResource(R.string.religious_occasions_subtitle),
-                        checked = isReligiousOccasionReminderEnabled,
-                        onCheckedChange = { isReligiousOccasionReminderEnabled = it }
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    // احفظ كل الإعدادات مرة واحدة عند الضغط على OK
-                    preferences.saveAllSettings(
-                        isFastingReminderEnabled,
-                        isEidReminderEnabled,
-                        isReligiousOccasionReminderEnabled,
-                        isMondayThursdayEnabled,
-                        isWhiteDaysEnabled
-                    )
+                ReminderToggleItem(
+                    title = stringResource(R.string.religious_occasions),
+                    subtitle = stringResource(R.string.religious_occasions_subtitle),
+                    checked = isReligiousOccasionReminderEnabled,
+                    onCheckedChange = { isReligiousOccasionReminderEnabled = it }
+                )
 
-                    // ✅ هنا - أعد جدولة التذكيرات بالإعدادات الجديدة
-                    IslamicReminderManager.scheduleAllReminders(context, preferences)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
-                    onDismiss()
-                }) {
-                    Text(stringResource(R.string.save)) // غير من OK إلى Save
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(stringResource(R.string.cancel)) // أضف زر إلغاء
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f),
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp)
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+
+                    Button(
+                        onClick = {
+                            preferences.saveAllSettings(
+                                isFastingReminderEnabled,
+                                isEidReminderEnabled,
+                                isReligiousOccasionReminderEnabled,
+                                isMondayThursdayEnabled,
+                                isWhiteDaysEnabled
+                            )
+                            IslamicReminderManager.scheduleAllReminders(context, preferences)
+                            onDismiss()
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp)
+                    ) {
+                        Text(stringResource(R.string.save), fontWeight = FontWeight.Bold)
+                    }
                 }
             }
-        )
+        }
     }
 }
+
 @Composable
 fun ReminderToggleItem(
     title: String,
@@ -155,9 +179,7 @@ fun ReminderToggleItem(
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,

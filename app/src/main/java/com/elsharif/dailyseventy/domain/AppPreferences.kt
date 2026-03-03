@@ -38,7 +38,14 @@ class AppPreferences(private val context: Context) {
     enum class SupportedLanguage(val code: String, val displayName: String) {
         ARABIC("ar", "العربية"),
         ENGLISH("en", "English"),
-        FRENCH("fr", "Français")
+        FRENCH("fr", "Français"),
+        SPANISH("es", "Español"),
+        GERMAN("de", "Deutsch"),
+        TURKISH("tr", "Türkçe"),
+        URDU("ur", "اردو"),
+        MALAY("ms", "Bahasa Melayu"),
+        INDONESIAN("in", "Bahasa Indonesia"),
+        BENGALI("bn", "বাংলা")
     }
 
     val currentLanguage: Flow<SupportedLanguage>
@@ -89,10 +96,11 @@ class AppPreferences(private val context: Context) {
 
     // Get saved language immediately (synchronous)
     fun getSavedLanguageCode(): String {
-        return preferences.getString(LANGUAGE_KEY, SupportedLanguage.ARABIC.code)
+        val code = preferences.getString(LANGUAGE_KEY, SupportedLanguage.ARABIC.code)
             ?: SupportedLanguage.ARABIC.code
+        // "in" هو نفس "id" في Android القديم
+        return if (code == "in") "id" else code
     }
-
     // Initialize app language on startup
     fun initializeLanguage() {
         try {

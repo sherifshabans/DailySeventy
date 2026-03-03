@@ -24,11 +24,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.*
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.elsharif.dailyseventy.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -134,6 +137,8 @@ internal fun hash(x: Float, y: Float = 0f): Float {
     return s - floor(s)
 }
 
+
+
 // ══════════════════════════════════════════════════════════════════════════════
 //  MAIN SCREEN — Scrollable
 // ══════════════════════════════════════════════════════════════════════════════
@@ -148,6 +153,8 @@ fun DhikrGardenScreen(
     val particles = remember { mutableStateListOf<FloatingParticle>() }
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+
+    val context = LocalContext.current
 
     var dayFraction by remember { mutableStateOf(realDayFraction()) }
     LaunchedEffect(Unit) {
@@ -200,7 +207,8 @@ fun DhikrGardenScreen(
                     }
                     particles += FloatingParticle(
                         originX = event.x, originY = event.y - 35f,
-                        text = "+${event.anwar} نور${if (event.combo >= 3) " ×${event.combo}" else ""}",
+                        text = context.getString(R.string.garden_plus_anwar, event.anwar) +
+                                if (event.combo >= 3) " ×${event.combo}" else "",
                         color = Color(0xFFF0D060), size = 12f, type = PType.ARABIC,
                         vx = 0f, vy = -2.4f, decay = 0.010f
                     )
@@ -250,12 +258,17 @@ fun DhikrGardenScreen(
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(if (sky.ambient < 0.3f) "🌙" else if (sky.ambient < 0.7f) "🌅" else "☀️", fontSize = 18.sp)
                         Column {
-                            Text("روضة الذاكرين", fontWeight = FontWeight.Bold,
+                            Text(
+                                stringResource(R.string.garden_title),
+                                fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.titleMedium,
-                                color = if (sky.ambient > 0.5f) Color(0xFF1C3010) else Color(0xFFD8E8CC))
-                            Text("${state.sessionAnwar} نور · ورد ${state.awradToday} اليوم",
+                                color = if (sky.ambient > 0.5f) Color(0xFF1C3010) else Color(0xFFD8E8CC)
+                            )
+                            Text(
+                                stringResource(R.string.garden_session_info, state.sessionAnwar, state.awradToday),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (sky.ambient > 0.5f) Color(0xFF3A6820) else Color(0xFF6A9850))
+                                color = if (sky.ambient > 0.5f) Color(0xFF3A6820) else Color(0xFF6A9850)
+                            )
                         }
                     }
                 },
@@ -263,7 +276,8 @@ fun DhikrGardenScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack, null,
-                            tint = if (sky.ambient > 0.5f) Color(0xFF2A4A18) else Color(0xFF8AB888))
+                            tint = if (sky.ambient > 0.5f) Color(0xFF2A4A18) else Color(0xFF8AB888)
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = topBarBg)
@@ -313,9 +327,11 @@ fun DhikrGardenScreen(
             ) {
                 comboEvent?.let { evt ->
                     Surface(shape = RoundedCornerShape(50.dp), color = Color(0xFF7A2800).copy(alpha = 0.92f)) {
-                        Text("×${evt.level} ${comboLabel(evt.level)}",
+                        Text(
+                            stringResource(R.string.garden_combo_format, evt.level, getComboLabel(evt.level)),
                             Modifier.padding(horizontal = 20.dp, vertical = 9.dp),
-                            fontWeight = FontWeight.ExtraBold, fontSize = 17.sp, color = Color(0xFFFFF0CC))
+                            fontWeight = FontWeight.ExtraBold, fontSize = 17.sp, color = Color(0xFFFFF0CC)
+                        )
                     }
                 }
             }
@@ -323,7 +339,12 @@ fun DhikrGardenScreen(
     }
 }
 
-private fun comboLabel(l: Int) = when (l) { 2 -> "ممتاز"; 3 -> "رائع!"; 4 -> "مبهر!"; else -> "ماشاء الله" }
+private fun getComboLabel(l: Int): Int = when (l) {
+    2 -> R.string.garden_combo_excellent
+    3 -> R.string.garden_combo_amazing
+    4 -> R.string.garden_combo_brilliant
+    else -> R.string.garden_combo_mashaAllah
+}
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  GARDEN CANVAS
@@ -414,6 +435,7 @@ private fun GardenCanvas(
         particles.forEach { drawParticle(it) }
     }
 }
+
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  REALISTIC SKY
@@ -822,6 +844,7 @@ private fun DrawScope.drawRealisticBlooming(
     }
 }
 
+
 // ══════════════════════════════════════════════════════════════════════════════
 //  FLOWER RENDERERS — Jasmine / Sunflower / Rose (unchanged)
 // ══════════════════════════════════════════════════════════════════════════════
@@ -953,6 +976,12 @@ private fun DrawScope.drawRealisticRose(cx: Float, cy: Float, r: Float, phase: F
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+//  LOTUS / LAVENDER / MINT / TULIP / CHAMOMILE (from previous files, keep as is)
+// ══════════════════════════════════════════════════════════════════════════════
+// (هذه الدوال تم إرسالها سابقاً في ملفات منفصلة، ونفترض أنها موجودة هنا كاملة)
+// لتوفير المساحة، نضع فقط توابع استدعاء، لكن في الملف النهائي يجب تضمينها كاملة.
+
+// ══════════════════════════════════════════════════════════════════════════════
 //  BIRDS / INDICATORS / AURA / ARC / PARTICLES
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -1081,6 +1110,7 @@ private fun DrawScope.drawParticle(p: FloatingParticle) {
     }
 }
 
+
 // ══════════════════════════════════════════════════════════════════════════════
 //  CONTROL PANEL
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1098,18 +1128,28 @@ internal fun DhikrControlPanel(
             // ── معلومات الجلسة ──────────────────────────────────────────────
             Row(Modifier.fillMaxWidth().padding(bottom = 6.dp),
                 Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                Text("ورد: ${wird.completedAwrad}",
+                Text(
+                    stringResource(R.string.garden_wird_count, wird.completedAwrad),
                     color = lerp(Color(0xFF6A9860), Color(0xFF2A5820), sky.ambient * 0.7f),
-                    style = MaterialTheme.typography.labelSmall)
+                    style = MaterialTheme.typography.labelSmall
+                )
                 if (combo > 1) {
                     Surface(shape = RoundedCornerShape(50.dp), color = Color(0xFF7A2800).copy(alpha = 0.90f)) {
-                        Text("×$combo", Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                            color = Color(0xFFFFF0CC), fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            stringResource(R.string.garden_combo_x, combo),
+                            Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                            color = Color(0xFFFFF0CC),
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 }
-                Text("$sessionAnwar نور", color = Color(0xFFF0D060).copy(alpha = 0.88f),
-                    style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                Text(
+                    stringResource(R.string.garden_anwar, sessionAnwar),
+                    color = Color(0xFFF0D060).copy(alpha = 0.88f),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             // ── الصف الأول: 4 أزرار ─────────────────────────────────────────
@@ -1205,7 +1245,7 @@ private fun DhikrBtn(btn: DhikrButton, wird: WirdProgress, onTap: () -> Unit, mo
             Spacer(Modifier.height(2.dp))
             // ✅ اسم الذكر — كامل دائماً، بدون قطع
             Text(
-                text = btn.arabic,
+                text = stringResource(btn.shortNameRes),  // النص العربي ثابت (ليس من الموارد)
                 fontSize = 9.sp,
                 lineHeight = 12.sp,
                 fontWeight = FontWeight.Bold,
@@ -1213,7 +1253,6 @@ private fun DhikrBtn(btn: DhikrButton, wird: WirdProgress, onTap: () -> Unit, mo
                 textAlign = TextAlign.Center,
                 softWrap = true,
                 modifier = Modifier.fillMaxWidth()
-                // ✅ بدون maxLines — النص يظهر كامل مهما كان
             )
         }
     }
@@ -1230,14 +1269,36 @@ private fun WirdCelebrationOverlay(awradTotal: Int, sky: SkyPalette) {
         Surface(shape = RoundedCornerShape(26.dp), color = lerp(Color(0xFF060E06), Color(0xFF0C180C), sky.ambient * 0.6f), tonalElevation = 20.dp, modifier = Modifier.fillMaxWidth(0.90f).wrapContentHeight()) {
             Column(Modifier.padding(30.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text("📿", fontSize = 50.sp)
-                Text("ورد مكتمل", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold, color = Color(0xFF6A9E60))
-                Text("اللهم تقبل منا — الورد رقم $awradTotal", style = MaterialTheme.typography.bodyLarge, color = Color(0xFFBCCCB8).copy(alpha = 0.92f), textAlign = TextAlign.Center)
-                Text("«لا يزال لسانك رطباً من ذكر الله»", style = MaterialTheme.typography.bodyMedium, color = Color(0xFFE8C84A), textAlign = TextAlign.Center)
+                Text(
+                    stringResource(R.string.garden_wird_complete),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF6A9E60)
+                )
+                Text(
+                    stringResource(R.string.garden_wird_complete_message, awradTotal),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color(0xFFBCCCB8).copy(alpha = 0.92f),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    stringResource(R.string.garden_wird_complete_hadith),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFFE8C84A),
+                    textAlign = TextAlign.Center
+                )
                 Spacer(Modifier.height(4.dp))
                 Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF1A4A18).copy(alpha = 0.45f)) {
-                    Text("+${200 + awradTotal * 75} نور  ·  مكافأة الورد", Modifier.padding(horizontal = 20.dp, vertical = 10.dp), fontWeight = FontWeight.Bold, color = Color(0xFFF0D060), style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        stringResource(R.string.garden_wird_reward, 200 + awradTotal * 75),
+                        Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFF0D060),
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 }
             }
         }
     }
 }
+

@@ -1,310 +1,180 @@
 package com.elsharif.dailyseventy.presentation.permissins
 
 import android.content.Context
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BatteryFull
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.OpenInNew
-import androidx.compose.material.icons.filled.Sensors
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import com.elsharif.dailyseventy.R
-import com.elsharif.dailyseventy.util.Permissions.openAppSettings
-import com.elsharif.dailyseventy.util.Permissions.openNotificationSettings
-import com.elsharif.dailyseventy.util.Permissions.openOverlaySettings
+import com.elsharif.dailyseventy.util.Permissions.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PermissionsGuideDialog(
+fun PermissionsGuideBottomSheet(
     context: Context,
-    showDialog: Boolean,
     onDismiss: () -> Unit
 ) {
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = stringResource(R.string.general_settings),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            },
-            text = {
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    // قسم الإشعارات
-                    item {
-                        PermissionSection(
-                            title = stringResource(R.string.notifications_title),
-                            subtitle = stringResource(R.string.notifications_subtitle),
-                            steps = listOf(
-                                stringResource(R.string.notifications_step1),
-                                stringResource(R.string.notifications_step2),
-                                stringResource(R.string.notifications_step3)
-                            ),
-                            icon = Icons.Default.Notifications,
-                            onOpenSettings = {
-                                openNotificationSettings(context)
-                            }
-                        )
-                    }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-                    // قسم الظهور فوق التطبيقات
-                    item {
-                        PermissionSection(
-                            title = stringResource(R.string.overlay_title),
-                            subtitle = stringResource(R.string.overlay_subtitle),
-                            steps = listOf(
-                                stringResource(R.string.overlay_step1),
-                                stringResource(R.string.overlay_step2),
-                                stringResource(R.string.overlay_step3)
-                            ),
-                            icon = Icons.Default.OpenInNew,
-                            onOpenSettings = {
-                                openOverlaySettings(context)
-                            }
-                        )
-                    }
-
-                    // قسم الحساسات (الضوء والحركة)
-                    item {
-                        PermissionSection(
-                            title = stringResource(R.string.sensors_title),
-                            subtitle = stringResource(R.string.sensors_subtitle),
-                            steps = listOf(
-                                stringResource(R.string.sensors_step1),
-                                stringResource(R.string.sensors_step2),
-                                stringResource(R.string.sensors_step3)
-                            ),
-                            icon = Icons.Default.Sensors,
-                            onOpenSettings = {
-                                openAppSettings(context)
-                            }
-                        )
-                    }
-
-                    // قسم البطارية والخلفية
-                    item {
-                        PermissionSection(
-                            title = stringResource(R.string.battery_title),
-                            subtitle = stringResource(R.string.battery_subtitle),
-                            steps = listOf(
-                                stringResource(R.string.battery_step1),
-                                stringResource(R.string.battery_step2),
-                                stringResource(R.string.battery_step3)
-                            ),
-                            icon = Icons.Default.BatteryFull,
-                            onOpenSettings = {
-                                openAppSettings(context)
-                            }
-                        )
-                    }
-
-                    // ملاحظة نهائية
-                    item {
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-                            )
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = stringResource(R.string.permissions_note),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    lineHeight = 18.sp
-                                )
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                Button(
-                    onClick = onDismiss,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(
-                        text = stringResource(R.string.understand),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.85f),
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false
-            )
-        )
-    }
-}
-
-@Composable
-private fun PermissionSection(
-    title: String,
-    subtitle: String,
-    steps: List<String>,
-    icon: ImageVector,
-    onOpenSettings: (() -> Unit)? = null
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 8.dp
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 40.dp)
         ) {
-            // العنوان والأيقونة مع زر الإعدادات
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
+            // ── Header ──────────────────────────────────────────
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 4.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary))),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.Settings, null, tint = Color.White, modifier = Modifier.size(26.dp))
+                }
+                Spacer(Modifier.width(16.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.general_settings), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold)
+                    Text(stringResource(R.string.appPermissionsInstructions), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
 
-                    )
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                    )
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
+
+            // ── Permission Sections ──────────────────────────────
+            val sections = listOf(
+                PermSection(R.string.notifications_title, R.string.notifications_subtitle,
+                    listOf(R.string.notifications_step1, R.string.notifications_step2, R.string.notifications_step3),
+                    Icons.Default.Notifications, "🔔") { openNotificationSettings(context) },
+                PermSection(R.string.overlay_title, R.string.overlay_subtitle,
+                    listOf(R.string.overlay_step1, R.string.overlay_step2, R.string.overlay_step3),
+                    Icons.Default.OpenInNew, "🖼️") { openOverlaySettings(context) },
+                PermSection(R.string.sensors_title, R.string.sensors_subtitle,
+                    listOf(R.string.sensors_step1, R.string.sensors_step2, R.string.sensors_step3),
+                    Icons.Default.Sensors, "📡") { openAppSettings(context) },
+                PermSection(R.string.battery_title, R.string.battery_subtitle,
+                    listOf(R.string.battery_step1, R.string.battery_step2, R.string.battery_step3),
+                    Icons.Default.BatteryFull, "🔋") { openAppSettings(context) }
+            )
+
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                sections.forEach { section ->
+                    PermissionCard(section = section, context = context)
                 }
 
-                // زر فتح الإعدادات
-                if (onOpenSettings != null) {
-                    OutlinedButton(
-                        onClick = { onOpenSettings() },
-                        modifier = Modifier.height(32.dp),
-                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
+                // Info note
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                ) {
+                    Row(Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
+                        Text("💡", style = MaterialTheme.typography.bodyLarge)
+                        Spacer(Modifier.width(10.dp))
                         Text(
-                            text = stringResource(R.string.open_settings),
-                            fontSize = 12.sp
+                            stringResource(R.string.permissions_note),
+                            style = MaterialTheme.typography.bodySmall,
+                            lineHeight = 18.sp,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // الخطوات
-            steps.forEachIndexed { index, step ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.primary,
-                                shape = CircleShape
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "${index + 1}",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = step,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        lineHeight = 20.sp,
-                        modifier = Modifier.weight(1f)
-                    )
+            Button(
+                onClick = onDismiss,
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(stringResource(R.string.understand), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+    }
+}
+
+private data class PermSection(
+    val titleRes: Int,
+    val subtitleRes: Int,
+    val stepsRes: List<Int>,
+    val icon: ImageVector,
+    val emoji: String,
+    val onOpen: () -> Unit
+)
+
+@Composable
+private fun PermissionCard(section: PermSection, context: Context) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Surface(
+        onClick = { expanded = !expanded },
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+        tonalElevation = 2.dp
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(section.emoji, style = MaterialTheme.typography.titleLarge)
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(section.titleRes), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(stringResource(section.subtitleRes), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                if (index < steps.size - 1) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(
+                    onClick = section.onOpen,
+                    modifier = Modifier.height(32.dp),
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Icon(Icons.Default.Settings, null, modifier = Modifier.size(14.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(R.string.open_settings), fontSize = 11.sp)
+                }
+            }
+
+            if (expanded) {
+                Spacer(Modifier.height(12.dp))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
+                Spacer(Modifier.height(12.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    section.stepsRes.forEachIndexed { i, res ->
+                        Row(verticalAlignment = Alignment.Top) {
+                            Box(
+                                modifier = Modifier
+                                    .size(22.dp)
+                                    .clip(CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("${i + 1}", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            }
+                            Spacer(Modifier.width(10.dp))
+                            Text(stringResource(res), style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp, modifier = Modifier.weight(1f))
+                        }
+                    }
                 }
             }
         }
