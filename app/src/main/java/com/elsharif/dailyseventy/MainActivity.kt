@@ -87,11 +87,6 @@ class MainActivity : ComponentActivity() {
 
     private val prayerTimeViewModel: PrayerTimeViewModel by viewModels()
 
-    private lateinit var reminderManager: IslamicReminderManager
-    private lateinit var preferences: IslamicReminderPreferences
-
-
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val permissions = arrayOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,

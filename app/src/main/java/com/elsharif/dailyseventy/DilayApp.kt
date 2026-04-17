@@ -4,13 +4,15 @@ import android.app.Application
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import com.elsharif.dailyseventy.domain.AppPreferences
 import com.elsharif.dailyseventy.domain.azan.prayersnotification.AzanPrayersUtil
+import com.elsharif.dailyseventy.domain.mohamedlovers.MohamedLoversNetworkTimeProvider
 import com.elsharif.dailyseventy.util.UseCaseProvider
 import com.elsharif.dailyseventy.domain.azan.prayersnotification.updateAzanChannel
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.example.core.usecase.GetQuranPageAyaWithTafseerUseCase
 import com.example.core.usecase.GetSoraByPageNumberUseCase
 import dagger.hilt.EntryPoint
@@ -27,6 +29,9 @@ class DilayApp : Application() {
     @Inject
     lateinit var appPreferences: AppPreferences
 
+    @Inject
+    lateinit var mohamedLoversNetworkTimeProvider: MohamedLoversNetworkTimeProvider
+
 
     override fun onCreate() {
         super.onCreate()
@@ -34,6 +39,8 @@ class DilayApp : Application() {
 
         // Initialize Time4J
         ApplicationStarter.initialize(this, true)
+        mohamedLoversNetworkTimeProvider.prime()
+        initializeFirebaseSecurity()
 
 
         // Create notification channels
@@ -63,6 +70,18 @@ class DilayApp : Application() {
         // Initialize dark mode settings
         initializeDarkMode()
 
+    }
+
+    private fun initializeFirebaseSecurity() {
+        FirebaseApp.initializeApp(this) ?: return
+
+        val providerFactory = if (BuildConfig.DEBUG) {
+            DebugAppCheckProviderFactory.getInstance()
+        } else {
+            PlayIntegrityAppCheckProviderFactory.getInstance()
+        }
+
+        FirebaseAppCheck.getInstance().installAppCheckProviderFactory(providerFactory)
     }
 
     private fun initializeLanguage() {

@@ -37,5 +37,7 @@ sealed class Screen(val route: String, @StringRes val titleRes: Int) {
 
     object GardenScreenRoute :Screen("garden_screen", R.string.rawdat_al_dhakireen)
 
+    object MohamedLoversRoute : Screen("mohamed_lovers", R.string.screen_mohamed_lovers)
+
 
 }

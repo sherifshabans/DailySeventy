@@ -37,7 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
+import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
+import com.elsharif.dailyseventy.ui.theme.ThemeViewModel
 import com.elsharif.dailyseventy.util.Screen
 import com.elsharif.dailyseventy.util.workmanager.LocationManager
 
@@ -66,7 +69,7 @@ fun UnifiedNavigationScaffold(context: Context) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
     val mainScreens = listOf(
-        Screen.Home.route,
+        Screen.HomeScreen.route,
         Screen.Hijri.route,
         Screen.Qible.route,
     )
@@ -167,8 +170,10 @@ fun UnifiedNavigationScaffold(context: Context) {
             }
         }
     ){
+        val themeViewModel :ThemeViewModel = hiltViewModel()
+        val prayerTimeViewModel :PrayerTimeViewModel = hiltViewModel()
 
-      AppNavHost(navController,context)
+      AppNavHost(navController,context,themeViewModel,prayerTimeViewModel)
 
     }
 

@@ -20,6 +20,7 @@ import com.elsharif.dailyseventy.presentation.comingsoon.ComingSoonPage
 import com.elsharif.dailyseventy.presentation.garden.DhikrGardenScreen
 import com.elsharif.dailyseventy.presentation.hijriCalendar.HijriCalendar
 import com.elsharif.dailyseventy.presentation.home.view.HomePage
+import com.elsharif.dailyseventy.presentation.mohamedlovers.MohamedLoversScreen
 import com.elsharif.dailyseventy.presentation.home.view.SplashScreen
 import com.elsharif.dailyseventy.presentation.prayertimes.MonthlyPrayerTimesPage
 import com.elsharif.dailyseventy.presentation.prayertimes.PrayerTimeViewModel
@@ -169,6 +170,12 @@ fun AppNavHost(navController: NavHostController,context: Context,themeViewModel:
 
         composable(Screen.GardenScreenRoute.route) {
             DhikrGardenScreen(
+                onBackClick = { navController.navigateUp() }
+            )
+        }
+
+        composable(Screen.MohamedLoversRoute.route) {
+            MohamedLoversScreen(
                 onBackClick = { navController.navigateUp() }
             )
         }

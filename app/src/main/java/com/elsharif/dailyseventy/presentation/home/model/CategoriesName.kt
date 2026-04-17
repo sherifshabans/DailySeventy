@@ -68,5 +68,11 @@ internal val listOfCategories=listOf(
         routeInt = Screen.GardenScreenRoute.titleRes,
         route = Screen.GardenScreenRoute.route
     ),
+    CategoriesName(
+        title = "Mohamed lovers",
+        iconRes = R.drawable.trophy,
+        routeInt = Screen.MohamedLoversRoute.titleRes,
+        route = Screen.MohamedLoversRoute.route
+    ),
 
 )

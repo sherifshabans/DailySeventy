@@ -12,12 +12,18 @@ plugins {
 
 }
 
+val hasReleaseSigning = listOf("STORE_PASSWORD", "KEY_ALIAS", "KEY_PASSWORD")
+    .all { project.findProperty(it) != null }
+
+val pythonCommand = if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) {
+    "python"
+} else {
+    "python3"
+}
 
 tasks.register<Exec>("translateStrings") {
-    commandLine(
-        "C:\\Users\\ElSha\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
-        rootProject.projectDir.absolutePath + "\\translate_strings.py"
-    )
+    onlyIf { rootProject.file("translate_strings.py").exists() }
+    commandLine(pythonCommand, rootProject.file("translate_strings.py").absolutePath)
     workingDir = rootProject.projectDir
 }
 
@@ -68,11 +74,13 @@ android {
     }
 
     signingConfigs {
-        create("DailySeventy") {
-            storeFile = file("E:\\AndroidStudioProjects\\DailySeventy\\keystore\\my_release_key.jks")        // مكان ملف keystore
-            storePassword = project.property("STORE_PASSWORD") as String
-            keyAlias = project.property("KEY_ALIAS") as String
-            keyPassword = project.property("KEY_PASSWORD") as String
+        if (hasReleaseSigning) {
+            create("DailySeventy") {
+                storeFile = rootProject.file("keystore/my_release_key.jks")
+                storePassword = project.property("STORE_PASSWORD") as String
+                keyAlias = project.property("KEY_ALIAS") as String
+                keyPassword = project.property("KEY_PASSWORD") as String
+            }
         }
     }
 
@@ -82,7 +90,9 @@ android {
             isCrunchPngs = true
             isMinifyEnabled = true   // يفضل تعمل shrink/obfuscation
             isShrinkResources = true // يقلل حجم الـ APK/Bundle
-            signingConfig = signingConfigs.getByName("DailySeventy") // نعرّف تحت
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("DailySeventy")
+            }
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -273,6 +283,15 @@ dependencies {
 
     // Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    // Mohamed lovers competition
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+    debugImplementation("com.google.firebase:firebase-appcheck-debug")
+    implementation("com.lyft.kronos:kronos-android:0.0.1-alpha11")
 
 
     //Hilt Worker support
